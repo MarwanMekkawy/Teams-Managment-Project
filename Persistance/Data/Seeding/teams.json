@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "Backend Team",
+    "OrganizationId": 1
+  },
+  {
+    "Name": "Frontend Team",
+    "OrganizationId": 1
+  },
+  {
+    "Name": "Design Team",
+    "OrganizationId": 2
+  }
+]

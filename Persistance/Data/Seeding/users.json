@@ -1,0 +1,26 @@
+[
+  {
+    "Name": "Alice Johnson",
+    "Email": "alice@techcorp.com",
+    "Role": 0,
+    "OrganizationId": 1
+  },
+  {
+    "Name": "Bob Smith",
+    "Email": "bob@techcorp.com",
+    "Role": 1,
+    "OrganizationId": 1
+  },
+  {
+    "Name": "Charlie Davis",
+    "Email": "charlie@designstudio.com",
+    "Role": 0,
+    "OrganizationId": 2
+  },
+  {
+    "Name": "Dana Lee",
+    "Email": "dana@designstudio.com",
+    "Role": 1,
+    "OrganizationId": 2
+  }
+]

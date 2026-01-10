@@ -1,0 +1,30 @@
+[
+  {
+    "Title": "Setup Backend API",
+    "Description": "Create REST endpoints for authentication",
+    "Status": 0,
+    "ProjectId": 1,
+    "AssigneeId": 1
+  },
+  {
+    "Title": "Implement Frontend Layout",
+    "Description": "Design homepage UI",
+    "Status": 1,
+    "ProjectId": 2,
+    "AssigneeId": 2
+  },
+  {
+    "Title": "Logo Redesign",
+    "Description": "Update brand logo with new colors",
+    "Status": 0,
+    "ProjectId": 3,
+    "AssigneeId": 3
+  },
+  {
+    "Title": "Landing Page Update",
+    "Description": null,
+    "Status": 0,
+    "ProjectId": 1,
+    "AssigneeId": null
+  }
+]
