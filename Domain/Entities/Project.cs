@@ -16,6 +16,5 @@ namespace Domain.Entities
         // Navigation
         public Team Team { get; set; }
         public ICollection<TaskEntity> Tasks { get; set; } = new List<TaskEntity>();
-
     }
 }

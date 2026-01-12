@@ -9,7 +9,7 @@ namespace Services.Abstractions
 {
     public interface IOrganizationService
     {
-        Task<List<OrganizationDto>> GetAllAsync();
+        Task<IEnumerable<string>> GetAllAsync();
         Task<OrganizationDto> GetByIdAsync(int id);
         Task<OrganizationDto> CreateAsync(CreateOrganizationDto dto);
         Task<OrganizationDto> UpdateAsync(int id, UpdateOrganizationDto dto);

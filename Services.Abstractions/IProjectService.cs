@@ -10,9 +10,9 @@ namespace Services.Abstractions
     public interface IProjectService
     {
         Task<List<ProjectDto>> GetAllAsync();
-        Task<ProjectDto> GetByIdAsync(int id);
-        Task<ProjectDto> CreateAsync(CreateProjectDto dto);
-        Task<ProjectDto> UpdateAsync(int id, UpdateProjectDto dto);
+        Task<ProjectDto> GetByIdAsync(int id); //
+        Task<ProjectDto> CreateAsync(CreateProjectDto dto); //
+        Task<ProjectDto> UpdateAsync(int id, UpdateProjectDto dto); 
         Task DeleteAsync(int id);
 
         Task<List<ProjectDto>> GetProjectsByTeamAsync(int teamId);
