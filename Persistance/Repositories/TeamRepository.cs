@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,12 @@ namespace Persistance.Repositories
     public class TeamRepository : GenericRepository<Team , int> , ITeamRepository
     {
         public TeamRepository(AppDbContext context) : base(context) { }
+
+        public async Task<IEnumerable<Team>> GetByOrganizationAsync(int organizationId, bool tracked = false)
+        {
+            var query = _context.Teams.Where(t=>t.OrganizationId == organizationId);
+            if (tracked) query = query.AsNoTracking();
+            return await query.ToListAsync();
+        }
     }
 }

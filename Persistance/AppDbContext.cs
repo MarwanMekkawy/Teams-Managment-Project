@@ -14,7 +14,7 @@ namespace Persistance
 
         public DbSet<Organization> Organizations { get; set; }   
         public DbSet<Project> Projects { get; set; }    
-        public DbSet<Domain.Entities.TaskEntity> Tasks { get; set; }
+        public DbSet<TaskEntity> Tasks { get; set; }
         public DbSet <Team> Teams { get; set; } 
         public DbSet<TeamMember> TeamMembers { get; set; }  
         public DbSet<User> Users { get; set; }

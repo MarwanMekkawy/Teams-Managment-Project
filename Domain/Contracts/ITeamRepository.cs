@@ -9,6 +9,7 @@ namespace Domain.Contracts
 {
     public interface ITeamRepository : IGenericRepository<Team, int>
     {
+        // get list of teams by org id
         Task<IEnumerable<Team>> GetByOrganizationAsync(int organizationId, bool tracked = false);
     }
 }

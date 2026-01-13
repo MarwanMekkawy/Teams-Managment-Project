@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.Collections.Concurrent;
 
@@ -28,6 +29,19 @@ namespace Persistance.Repositories
         }
         public async Task<int> SaveChangesAsync()
         {
+            // update UpdatedAt time 
+            foreach (var entry in _context.ChangeTracker.Entries<BaseEntity<int>>())
+            {
+                if (entry.State == EntityState.Modified)
+                {
+                    entry.Entity.UpdatedAt = DateTime.UtcNow;
+                }
+                else if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.CreatedAt = DateTime.UtcNow;
+                    entry.Entity.UpdatedAt = null;
+                }
+            }
             return await _context.SaveChangesAsync();
         }
     }

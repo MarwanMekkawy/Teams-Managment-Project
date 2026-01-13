@@ -11,15 +11,19 @@ namespace Services
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        public OrganizationService(IUnitOfWork unitOfWork,IMapper mapper)
+        public OrganizationService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
+        public async Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)> GetStatsAsync(int id)
+        {
+            if (await unitOfWork.organizations.ExistsAsync(id)) throw new KeyNotFoundException($"Organization with ID {id} not found");
+            return await unitOfWork.organizations.GetOrganizationStatsAsync(id);         
+        }
 
         public async Task<IEnumerable<string>> GetAllAsync()
-        {
-         
+        {        
             return await unitOfWork.organizations.GetAllSelectedAsync(o => o.Name);
         }
 
@@ -56,5 +60,6 @@ namespace Services
             unitOfWork.organizations.Delete(existingOrganization);
             await unitOfWork.SaveChangesAsync();
         }
+
     }
 }

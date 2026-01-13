@@ -9,7 +9,7 @@ namespace Persistance.Repositories
 {
     public class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
-        readonly AppDbContext _context;
+        protected readonly AppDbContext _context;
         public GenericRepository(AppDbContext context)
         {
             _context = context;
@@ -42,10 +42,21 @@ namespace Persistance.Repositories
         {
             _context.Update(entity);
         }
-        //hard deleting entity
+        // hard deleting entity
         public void Delete(TEntity entity)
         {
             _context.Remove(entity);
+        }
+        // soft deleting entity
+        public void SoftDelete(TEntity entity)
+        {
+            throw new NotImplementedException(); ////////////////////////////
+        }
+        // check if entity exists
+        public async Task<bool> ExistsAsync(TKey id)
+        {
+            var exists = await _context.Set<TEntity>().FindAsync(id);
+            return exists != null;
         }
     }
 }

@@ -9,10 +9,15 @@ namespace Domain.Contracts
 {
     public interface ITeamMemberRepository 
     {
+        // adds entity teamid & userid to the table
         void AddMember(TeamMember entity);
-        void RemoveMember(int teamId, int userId);
-        Task<bool> ExistsAsync(int teamId, int userId);
+        // removes entity teamid & userid from the table
+        void RemoveMember(TeamMember entity);
+        // gets list of users ids in a certain team with team id
         Task<IEnumerable<int>> GetUserIdsByTeamAsync(int teamId);
+        // gets list of teams ids with certain users with user id
         Task<IEnumerable<int>> GetTeamIdsByUserAsync(int userId);
+        // checks if user with user id belongs to team with team id
+        Task<bool> ExistsAsync(int teamId, int userId);
     }
 }

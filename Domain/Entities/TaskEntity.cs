@@ -12,7 +12,7 @@ namespace Domain.Entities
         public int? AssigneeId { get; set; }
 
         // Navigation
-        public Project Project { get; private set; }
-        public User Assignee { get; private set; }
+        public Project Project { get; set; }
+        public User Assignee { get; set; }
     }
 }

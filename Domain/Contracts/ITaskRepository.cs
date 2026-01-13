@@ -10,19 +10,22 @@ namespace Domain.Contracts
 {
     public interface ITaskRepository : IGenericRepository<TaskEntity, int>
     {
-        // Project related
+        // Project related //
+        // get tasks count in a project
         Task<int> CountOpenTasksByProjectAsync(int projectId);
-        Task<IEnumerable<TaskEntity>> GetByProjectAsync(int projectId, bool tracked = false);
+        // get list of tasks in project by project id with optional task status filter
         Task<IEnumerable<TaskEntity>> GetByProjectAndStatusAsync(int projectId, TaskEntityStatus? status = null, bool tracked = false);
 
-        // User/Assignee related
-        Task<IEnumerable<TaskEntity>> GetByAssigneeAsync(int userId, bool tracked = false);
+        // User/Assignee related //
+        // get list of tasks in project by assignee id with optional task status filter
         Task<IEnumerable<TaskEntity>> GetByAssigneeAndStatusAsync(int userId, TaskEntityStatus? status = null, bool tracked = false);
 
-        // Global
-        Task<IEnumerable<TaskEntity>> GetOverdueAsync(int organizationId);
+        // Global //
+        // get overdue tasks by org id
+        Task<IEnumerable<TaskEntity>> GetoverdueAsync(int organizationId);
     }
 }
+
 
 
 
