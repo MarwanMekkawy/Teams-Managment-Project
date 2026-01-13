@@ -4,11 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistance.Repositories;
 using Services.MappingProfiles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Persistance.Extentions
 {
@@ -21,6 +17,14 @@ namespace Persistance.Extentions
 
             // Unit of work service
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // repositories
+            //services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            //services.AddScoped<IProjectRepository, ProjectRepository>();
+            //services.AddScoped<ITaskRepository, TaskRepository>();
+            //services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
+            //services.AddScoped<ITeamRepository, TeamRepository>();
+            //services.AddScoped<IUserRepository, UserRepository>();
 
             // Auto mapper service
             services.AddAutoMapper(cfg =>{cfg.AddMaps(typeof(AutoMapperMarker).Assembly);});

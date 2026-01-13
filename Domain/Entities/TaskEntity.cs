@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Enums;
 
 namespace Domain.Entities
 {
@@ -11,7 +7,7 @@ namespace Domain.Entities
         public string Title { get; set; }
         public string? Description { get; set; }
         public DateTime? DueDate { get; set; }
-        public TaskStatus Status { get; set; }
+        public TaskEntityStatus Status { get; set; }
         public int ProjectId { get; set; }
         public int? AssigneeId { get; set; }
 

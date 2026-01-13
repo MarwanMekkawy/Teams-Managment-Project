@@ -11,6 +11,6 @@ namespace Domain.Entities
         public TKey Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }
-        public bool IsDEleted { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
     }
 }

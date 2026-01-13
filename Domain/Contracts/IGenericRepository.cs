@@ -16,5 +16,7 @@ namespace Domain.Contracts
         Task AddAsync(TEntity entity);
         void Update(TEntity entity);
         void Delete(TEntity entity); 
+        void SoftDelete(TEntity entity);
+        Task<bool> ExistsAsync(TKey id);
     }
 }

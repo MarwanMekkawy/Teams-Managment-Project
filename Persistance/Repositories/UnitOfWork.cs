@@ -5,21 +5,27 @@ using System.Collections.Concurrent;
 
 namespace Persistance.Repositories
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork 
     {
         private readonly AppDbContext _context;
-        private ConcurrentDictionary<string, object> _repositories;
+        public IOrganizationRepository organizations { get; }
+        public IProjectRepository projects { get; }
+        public ITaskRepository tasks { get; }
+        public ITeamMemberRepository teamMembers { get; }
+        public ITeamRepository teams { get; }
+        public IUserRepository users { get; }
 
-        public UnitOfWork(AppDbContext context)
+        public UnitOfWork(AppDbContext context, IOrganizationRepository organizationRepo, IProjectRepository projectRepo, ITaskRepository taskRepo,
+                          ITeamMemberRepository teamMemberRepo, ITeamRepository teamRepo, IUserRepository userRepo)
         {
-            _context=context;
-            _repositories = new ConcurrentDictionary<string, object>();
+            _context = context;
+            organizations = organizationRepo;
+            projects = projectRepo;
+            tasks = taskRepo;
+            teamMembers = teamMemberRepo;
+            teams = teamRepo;
+            users = userRepo;
         }
-        public IGenericRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
-        {
-           return (IGenericRepository < TEntity, TKey>)_repositories.GetOrAdd(typeof(TEntity).Name, _ => new GenericRepository<TEntity, TKey>(_context));
-        }
-
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

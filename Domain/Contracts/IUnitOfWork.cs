@@ -9,7 +9,12 @@ namespace Domain.Contracts
 {
     public interface IUnitOfWork
     {
-        IGenericRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>;
+        public IOrganizationRepository organizations { get; }
+        public IProjectRepository projects { get; }
+        public ITaskRepository tasks { get; }
+        public ITeamMemberRepository teamMembers { get; }
+        public ITeamRepository teams { get; }
+        public IUserRepository users { get; }
         public Task<int> SaveChangesAsync();
     }
 }
