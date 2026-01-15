@@ -11,5 +11,7 @@ namespace Domain.Contracts
     {
         // get list of teams by org id
         Task<IEnumerable<Team>> GetByOrganizationAsync(int organizationId, bool tracked = false);
+        // get list of teams by user id
+        Task<IEnumerable<Team>> GetByUserAsync(int userId, bool tracked = false);
     }
 }

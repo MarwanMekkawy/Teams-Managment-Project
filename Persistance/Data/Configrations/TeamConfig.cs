@@ -31,6 +31,9 @@ namespace Persistance.Data.Configrations
                    .WithOne(p => p.Team)
                    .HasForeignKey(p => p.TeamId)
                    .OnDelete(DeleteBehavior.Cascade);
+
+            // Apply soft delete filter 
+            builder.HasQueryFilter(t => !t.IsDeleted);
         }
     }
 }

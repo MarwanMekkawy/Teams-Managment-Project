@@ -18,13 +18,15 @@ namespace Persistance.Extentions
             // Unit of work service
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            // repositories
-            //services.AddScoped<IOrganizationRepository, OrganizationRepository>();
-            //services.AddScoped<IProjectRepository, ProjectRepository>();
-            //services.AddScoped<ITaskRepository, TaskRepository>();
-            //services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
-            //services.AddScoped<ITeamRepository, TeamRepository>();
-            //services.AddScoped<IUserRepository, UserRepository>();
+            // repositories registering
+            services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
+            services.AddScoped<ITeamRepository, TeamRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            // services registering
 
             // Auto mapper service
             services.AddAutoMapper(cfg =>{cfg.AddMaps(typeof(AutoMapperMarker).Assembly);});

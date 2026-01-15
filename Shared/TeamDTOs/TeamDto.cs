@@ -8,9 +8,12 @@ namespace Shared.TeamDTOs
 {
     public class TeamDto                
     {
-        public string Name { get; set; }
-        public string OrganizationName { get; set; }
-        public List<string>? MemberNames { get; set; }
-        public List<string>? ProjectNames { get; set; }
+        public int Id { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; }
+
+        public string Name { get; set; } 
+        public int OrganizationId { get; set; }
     }
 }

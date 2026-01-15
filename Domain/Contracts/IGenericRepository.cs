@@ -13,10 +13,10 @@ namespace Domain.Contracts
         Task<IEnumerable<TEntity>> GetAllAsync(bool Tracked = false);
         Task<IEnumerable<TResult>> GetAllSelectedAsync<TResult>(Expression<Func<TEntity,TResult>> expression,bool Tracked = false);
         Task<TEntity?> GetAsync(TKey id);
-        Task AddAsync(TEntity entity);
+        void Add(TEntity entity);
         void Update(TEntity entity);
         void Delete(TEntity entity); 
-        void SoftDelete(TEntity entity);
         Task<bool> ExistsAsync(TKey id);
+        Task<TEntity?> GetIncludingDeletedAsync(TKey id);
     }
 }

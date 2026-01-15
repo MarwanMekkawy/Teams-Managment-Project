@@ -5,11 +5,16 @@ namespace Shared.TaskDTOs
 {
     public class TaskDto                 
     {
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public TaskEntityStatus Status { get; set; }
-        public string ProjectName { get; set; }
-        public string? AssigneeEmail { get; set; }
+        public int Id { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; }
+
+        public string Title { get; set; } = string.Empty;
+        public string? Description { get; set; }
         public DateTime? DueDate { get; set; }
+        public TaskEntityStatus Status { get; set; }
+        public int ProjectId { get; set; }
+        public int? AssigneeId { get; set; }
     }
 }

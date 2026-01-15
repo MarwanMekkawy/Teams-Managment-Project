@@ -8,7 +8,7 @@ namespace Shared.TeamMemberDTOs
 {
     public class CreateTeamMemberDto    
     {
-        public string UserEmail { get; set; }
-        public string TeamName { get; set; }
+        public int TeamId { get; set; }
+        public int UserId { get; set; }
     }
 }

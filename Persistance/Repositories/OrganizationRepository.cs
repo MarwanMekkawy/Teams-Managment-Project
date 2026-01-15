@@ -10,7 +10,7 @@ namespace Persistance.Repositories
     {
         public OrganizationRepository(AppDbContext context):base(context) {}
 
-        public async Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)>
+        public async Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)?>
         GetOrganizationStatsAsync(int organizationId)
         {          
             var stats = await _context.Organizations
@@ -26,7 +26,7 @@ namespace Persistance.Repositories
                                    .Count(t => t.Status != TaskEntityStatus.Done && t.DueDate.HasValue && t.DueDate.Value < DateTime.Now),
                 }).FirstOrDefaultAsync();
 
-            if (stats == null) return (0, 0, 0, 0, 0, 0, 0);
+            if (stats == null) return null;
             return (stats.TotalUsers, stats.TotalTeams, stats.ActiveProjects, stats.ArchivedProjects, stats.TotalTasks, stats.CompletedTasks, stats.OverdueTasks);
         }
     }

@@ -33,9 +33,9 @@ namespace Persistance.Repositories
             return await _context.Set<TEntity>().FindAsync(id);
         }
         // adding entity
-        public async Task AddAsync(TEntity entity)
+        public void  Add(TEntity entity)
         {
-            await _context.AddAsync(entity);
+            _context.Add(entity);
         }
         // updating entity
         public void Update(TEntity entity)
@@ -46,17 +46,16 @@ namespace Persistance.Repositories
         public void Delete(TEntity entity)
         {
             _context.Remove(entity);
-        }
-        // soft deleting entity
-        public void SoftDelete(TEntity entity)
-        {
-            throw new NotImplementedException(); ////////////////////////////
-        }
+        }        
         // check if entity exists
         public async Task<bool> ExistsAsync(TKey id)
         {
-            var exists = await _context.Set<TEntity>().FindAsync(id);
-            return exists != null;
+            return await _context.Set<TEntity>().AnyAsync(e => e.Id!.Equals(id));
+        }
+        // gets soft deleted entities
+        public async Task<TEntity?> GetIncludingDeletedAsync(TKey id)
+        {
+            return await _context.Set<TEntity>().IgnoreQueryFilters().FirstOrDefaultAsync(e => e.Id.Equals(id));
         }
     }
 }

@@ -10,14 +10,14 @@ namespace Services.Abstractions
 {
     public interface ITeamService
     {
-        Task<List<TeamDto>> GetAllAsync();
         Task<TeamDto> GetByIdAsync(int id);
         Task<TeamDto> CreateAsync(CreateTeamDto dto);
         Task<TeamDto> UpdateAsync(int id, UpdateTeamDto dto);
         Task DeleteAsync(int id);
+        Task SoftDeleteAsync(int id);
+        Task RestoreAsync(int id);
 
-        Task<List<TeamDto>> GetTeamsByOrganizationAsync(int organizationId);
-        Task<List<TeamMemberDto>> GetTeamMembersAsync(int teamId);
+        Task<List<TeamDto>> GetTeamsByOrganizationAsync(int organizationId);      
+        Task<List<TeamDto>> GetTeamsByUserAsync(int userId);
     }
-
 }

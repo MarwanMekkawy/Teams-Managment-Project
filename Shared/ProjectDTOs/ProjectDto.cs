@@ -3,11 +3,15 @@
 
 namespace Shared.ProjectDTOs
 {
-    public class ProjectDto              // GET /projects
+    public class ProjectDto              
     {
-        public string Name { get; set; }
+        public int Id { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; }
+
+        public string Name { get; set; } = string.Empty;
         public ProjectStatus Status { get; set; }
-        public string TeamName { get; set; }
-        public List<string>? TaskTitles { get; set; }
+        public int TeamId { get; set; }
     }
 }

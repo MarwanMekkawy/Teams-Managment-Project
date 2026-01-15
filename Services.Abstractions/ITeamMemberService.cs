@@ -11,8 +11,7 @@ namespace Services.Abstractions
     {
         Task AddMemberAsync(CreateTeamMemberDto dto);
         Task RemoveMemberAsync(int teamId, int userId);
-        Task<List<TeamMemberDto>> GetMembersByTeamAsync(int teamId);
-        Task<List<TeamMemberDto>> GetTeamsByUserAsync(int userId);
+        Task<bool> IsMemberAsync(int teamId, int userId);
     }
-
 }
+

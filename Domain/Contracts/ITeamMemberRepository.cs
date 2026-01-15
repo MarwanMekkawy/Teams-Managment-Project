@@ -9,6 +9,8 @@ namespace Domain.Contracts
 {
     public interface ITeamMemberRepository 
     {
+        // gets team membership entity
+        Task<TeamMember> GetByTeamAndUserAsync(int teamId, int userId);
         // adds entity teamid & userid to the table
         void AddMember(TeamMember entity);
         // removes entity teamid & userid from the table

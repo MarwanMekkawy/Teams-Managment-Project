@@ -1,4 +1,5 @@
-﻿using Shared.UserDTOs;
+﻿using Domain.Enums;
+using Shared.UserDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +10,16 @@ namespace Services.Abstractions
 {
     public interface IUserService
     {
-        Task<List<UserDto>> GetAllAsync();
         Task<UserDto> GetByIdAsync(int id);
         Task<UserDto> CreateAsync(CreateUserDto dto);
         Task<UserDto> UpdateAsync(int id, UpdateUserDto dto);
         Task DeleteAsync(int id);
+        Task SoftDeleteAsync(int id);
+        Task RestoreAsync(int id);
 
-        Task<List<UserDto>> GetUsersByOrganizationAsync(int organizationId);
+
+        Task<UserDto> GetByEmailAsync(string email);
+        Task<List<UserDto>> GetUsersByOrganizationAsync(int organizationId, UserRole? role = null);
         Task<List<UserDto>> GetUsersByTeamAsync(int teamId);
     }
-
 }

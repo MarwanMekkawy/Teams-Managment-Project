@@ -37,6 +37,9 @@ namespace Persistance.Data.Configrations
                    .WithOne(t => t.Assignee)
                    .HasForeignKey(t => t.AssigneeId)
                    .OnDelete(DeleteBehavior.SetNull);
+
+            // Apply soft delete filter 
+            builder.HasQueryFilter(u => !u.IsDeleted);
         }
     }
 }

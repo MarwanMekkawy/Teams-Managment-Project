@@ -16,15 +16,15 @@ namespace Services
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
-        public async Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)> GetStatsAsync(int id)
+        public async Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)?> GetStatsAsync(int id)
         {
-            if (await unitOfWork.organizations.ExistsAsync(id)) throw new KeyNotFoundException($"Organization with ID {id} not found");
+            if (await unitOfWork.organizations.GetOrganizationStatsAsync(id) == null) throw new KeyNotFoundException($"Organization with ID {id} not found");
             return await unitOfWork.organizations.GetOrganizationStatsAsync(id);         
         }
 
-        public async Task<IEnumerable<string>> GetAllAsync()
+        public async Task<List<string>> GetAllAsync()
         {        
-            return await unitOfWork.organizations.GetAllSelectedAsync(o => o.Name);
+            return (await unitOfWork.organizations.GetAllSelectedAsync(o => o.Name)).ToList();
         }
 
         public async Task<OrganizationDto> GetByIdAsync(int id)
@@ -38,7 +38,7 @@ namespace Services
         public async Task<OrganizationDto> CreateAsync(CreateOrganizationDto dto)
         {
             var organization = mapper.Map<Organization>(dto);
-            await unitOfWork.organizations.AddAsync(organization);
+            unitOfWork.organizations.Add(organization);
             await unitOfWork.SaveChangesAsync();
             return mapper.Map<OrganizationDto>(organization);
         }
@@ -47,7 +47,7 @@ namespace Services
         {
             var existingOrganization = await unitOfWork.organizations.GetAsync(id);
             if (existingOrganization == null) throw new KeyNotFoundException($"Organization with ID {id} not found");
-            mapper.Map<OrganizationDto>(existingOrganization);
+            existingOrganization.Name = dto.Name ?? existingOrganization.Name;
             unitOfWork.organizations.Update(existingOrganization);
             await unitOfWork.SaveChangesAsync();
             return mapper.Map<OrganizationDto>(existingOrganization);
@@ -60,6 +60,22 @@ namespace Services
             unitOfWork.organizations.Delete(existingOrganization);
             await unitOfWork.SaveChangesAsync();
         }
+        public async Task SoftDeleteAsync(int id)
+        {
+            var existingOrganization = await unitOfWork.organizations.GetAsync(id);
+            if (existingOrganization == null) throw new KeyNotFoundException($"Organization with ID {id} not found");
+            existingOrganization.IsDeleted = true;
+            unitOfWork.organizations.Update(existingOrganization);
+            await unitOfWork.SaveChangesAsync();
+        }
+        public async Task RestoreAsync(int id)
+        {
+            var organization = await unitOfWork.organizations.GetIncludingDeletedAsync(id);
+            if (organization == null)  throw new KeyNotFoundException($"Organization with ID {id} not found");
+            if (!organization.IsDeleted) throw new InvalidOperationException("Not deleted Entity");
 
+            organization.IsDeleted = false;
+            await unitOfWork.SaveChangesAsync();
+        }
     }
 }

@@ -19,5 +19,11 @@ namespace Persistance.Repositories
             if (tracked) query = query.AsNoTracking();
             return await query.ToListAsync();
         }
+        public async Task<IEnumerable<Team>> GetByUserAsync(int userId, bool tracked = false)
+        {
+            var query = _context.Teams.Where(t => t.Members.Any(m=>m.UserId == userId));
+            if (tracked) query = query.AsNoTracking();
+            return await query.ToListAsync();
+        }
     }
 }

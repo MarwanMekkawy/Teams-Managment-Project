@@ -6,10 +6,7 @@ public class TeamMemberProfile : Profile
 {
     public TeamMemberProfile()
     {
-        CreateMap<TeamMember, TeamMemberDto>()
-            .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.User.Email))
-            .ForMember(dest => dest.TeamName, opt => opt.MapFrom(src => src.Team.Name));
-
+        CreateMap<TeamMember, TeamMemberDto>();
         CreateMap<CreateTeamMemberDto, TeamMember>();
     }
 }

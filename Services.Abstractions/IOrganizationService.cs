@@ -9,12 +9,14 @@ namespace Services.Abstractions
 {
     public interface IOrganizationService
     {
-        Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)>GetStatsAsync(int Id);
-        Task<IEnumerable<string>> GetAllAsync();
+        Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)?>GetStatsAsync(int Id);
+        Task<List<string>> GetAllAsync();
         Task<OrganizationDto> GetByIdAsync(int id);
         Task<OrganizationDto> CreateAsync(CreateOrganizationDto dto);
         Task<OrganizationDto> UpdateAsync(int id, UpdateOrganizationDto dto);
         Task DeleteAsync(int id);
+        Task SoftDeleteAsync(int id);
+        Task RestoreAsync(int id);
     }
 }
 

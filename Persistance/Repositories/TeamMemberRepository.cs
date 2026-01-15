@@ -16,10 +16,15 @@ namespace Persistance.Repositories
         {
             _context = context;
         }
+        public async Task<TeamMember> GetByTeamAndUserAsync(int teamId, int userId)
+        {
+            var teamMember = await _context.TeamMembers.FirstOrDefaultAsync(tm => tm.TeamId == teamId && tm.UserId == userId);
+            return teamMember;
+        }
 
         public void AddMember(TeamMember entity)
         {
-            _context.TeamMembers.Add(entity);
+            _context.TeamMembers.AddAsync(entity);
         }
 
         public void RemoveMember(TeamMember entity)

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,6 +29,9 @@ namespace Persistance.Data.Configrations
                    .WithOne(t => t.Project)
                    .HasForeignKey(t => t.ProjectId)
                    .OnDelete(DeleteBehavior.Cascade);
+
+            // Apply soft delete filter 
+            builder.HasQueryFilter(p => !p.IsDeleted);           
         }
     }
 }

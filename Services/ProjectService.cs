@@ -1,4 +1,8 @@
-﻿using Services.Abstractions;
+﻿using AutoMapper;
+using Domain.Contracts;
+using Domain.Entities;
+using Domain.Enums;
+using Services.Abstractions;
 using Shared.ProjectDTOs;
 using System;
 using System.Collections.Generic;
@@ -10,34 +14,86 @@ namespace Services
 {
     public class ProjectService : IProjectService
     {
-        public Task<ProjectDto> CreateAsync(CreateProjectDto dto)
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
+        public ProjectService(IMapper mapper, IUnitOfWork unitOfWork)
         {
-            throw new NotImplementedException();
+            this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
         }
 
-        public Task DeleteAsync(int id)
+        public async Task<ProjectDto> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var project = await unitOfWork.projects.GetAsync(id);
+            if (project == null) throw new KeyNotFoundException($"Project with ID {id} not found");
+            return mapper.Map<ProjectDto>(project);
         }
 
-        public Task<List<ProjectDto>> GetAllAsync()
+        public async Task<ProjectDto> CreateAsync(CreateProjectDto dto)
         {
-            throw new NotImplementedException();
+            var project = mapper.Map<Project>(dto);
+            unitOfWork.projects.Add(project);
+            await unitOfWork.SaveChangesAsync();
+            return mapper.Map<ProjectDto>(project);
         }
 
-        public Task<ProjectDto> GetByIdAsync(int id)
+        public async Task<ProjectDto> UpdateAsync(int id, UpdateProjectDto dto)
         {
-            throw new NotImplementedException();
+            var project = await unitOfWork.projects.GetAsync(id);
+            if (project == null) throw new KeyNotFoundException($"Project with ID {id} not found");
+            project.Status = dto.Status ?? project.Status;
+            project.Name = dto.Name ?? project.Name;
+            unitOfWork.projects.Update(project);
+            await unitOfWork.SaveChangesAsync();
+            return mapper.Map<ProjectDto>(project);
         }
 
-        public Task<List<ProjectDto>> GetProjectsByTeamAsync(int teamId)
+        public async Task ChangeStatusAsync(int id, ProjectStatus newStatus)
         {
-            throw new NotImplementedException();
+            var project = await unitOfWork.projects.GetAsync(id);
+            if (project == null) throw new KeyNotFoundException($"Project with ID {id} not found");
+            project.Status = newStatus;
+            unitOfWork.projects.Update(project);
+            await unitOfWork.SaveChangesAsync();
         }
 
-        public Task<ProjectDto> UpdateAsync(int id, UpdateProjectDto dto)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var project = await unitOfWork.projects.GetAsync(id);
+            if (project == null) throw new KeyNotFoundException($"Project with ID {id} not found");
+            unitOfWork.projects.Delete(project);
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task SoftDeleteAsync(int id)
+        {
+            var project = await unitOfWork.projects.GetAsync(id);
+            if (project == null) throw new KeyNotFoundException($"Project with ID {id} not found");
+            project.IsDeleted = true;
+            unitOfWork.projects.Update(project);
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task RestoreAsync(int id)
+        {
+            var project = await unitOfWork.projects.GetIncludingDeletedAsync(id);
+            if (project == null) throw new KeyNotFoundException($"project with ID {id} not found");
+            if (!project.IsDeleted) throw new InvalidOperationException("Not deleted Entity");
+
+            project.IsDeleted = false;
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<List<ProjectDto>> GetByTeamAsync(int teamId)
+        {
+            var projects =await unitOfWork.projects.GetByTeamAsync(teamId);
+            return mapper.Map<List<ProjectDto>>(projects);
+        }
+
+        public async Task<List<ProjectDto>> GetByOrganizationAsync(int organizationId)
+        {
+            var projects = await unitOfWork.projects.GetByOrganizationAndStatusAsync(organizationId);
+            return mapper.Map<List<ProjectDto>>(projects);
         }
     }
 }

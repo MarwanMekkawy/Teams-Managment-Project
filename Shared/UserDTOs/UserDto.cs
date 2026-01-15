@@ -9,10 +9,14 @@ namespace Shared.UserDTOs
 {
     public class UserDto                
     {
-        public string Name { get; set; }
-        public string Email { get; set; }
+        public int Id { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public UserRole Role { get; set; }
-        public string OrganizationName { get; set; }
-        public List<string>? TeamNames { get; set; }
+        public int OrganizationId { get; set; }
     }
 }

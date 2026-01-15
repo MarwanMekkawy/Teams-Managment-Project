@@ -8,6 +8,6 @@ namespace Shared.OrganizationDTOs
 {
     public class UpdateOrganizationDto  
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 }
