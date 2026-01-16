@@ -1,4 +1,5 @@
-﻿using Shared.TeamDTOs;
+﻿using Shared.OrganizationDTOs;
+using Shared.TeamDTOs;
 using Shared.TeamMemberDTOs;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Services.Abstractions
         Task DeleteAsync(int id);
         Task SoftDeleteAsync(int id);
         Task RestoreAsync(int id);
+        Task<List<TeamDto>> GetAllDeletedTeamsAsync();
 
         Task<List<TeamDto>> GetTeamsByOrganizationAsync(int organizationId);      
         Task<List<TeamDto>> GetTeamsByUserAsync(int userId);

@@ -18,7 +18,7 @@ namespace Services
         }
         public async Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)?> GetStatsAsync(int id)
         {
-            if (await unitOfWork.organizations.GetOrganizationStatsAsync(id) == null) throw new KeyNotFoundException($"Organization with ID {id} not found");
+            if (await unitOfWork.organizations.GetOrganizationStatsAsync(id) == null) return (0, 0, 0, 0, 0, 0, 0);                 //empty tuple
             return await unitOfWork.organizations.GetOrganizationStatsAsync(id);         
         }
 
@@ -76,6 +76,11 @@ namespace Services
 
             organization.IsDeleted = false;
             await unitOfWork.SaveChangesAsync();
+        }
+        public async Task<List<OrganizationDto>> GetAllDeletedOrganizationsAsync()
+        {
+            var deletedOrgs = await unitOfWork.organizations.GetAllSoftDeletedAsync();
+            return mapper.Map<List<OrganizationDto>>(deletedOrgs);
         }
     }
 }

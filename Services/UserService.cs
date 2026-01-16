@@ -86,16 +86,15 @@ namespace Services
         public async Task<List<UserDto>> GetUsersByOrganizationAsync(int organizationId, UserRole? role = null)
         {
             var users = await unitOfWork.users.GetByOrganizationAndRoleAsync(organizationId, role);
-            if (users == null) throw new KeyNotFoundException($"User with Org ID {organizationId} not found");
+            if (users == null) return new List<UserDto>();                     // empty list
             return mapper.Map<List<UserDto>>(users);
         }
 
         public async Task<List<UserDto>> GetUsersByTeamAsync(int teamId)
         {
             var users = await unitOfWork.users.GetByTeamAsync(teamId);
-            if (users == null) throw new KeyNotFoundException($"User with team ID {teamId} not found");
+            if (users == null) return new List<UserDto>();                     // empty list
             return mapper.Map<List<UserDto>>(users);
         }
-
     }
 }

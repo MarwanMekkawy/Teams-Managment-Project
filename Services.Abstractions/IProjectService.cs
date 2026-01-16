@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Shared.OrganizationDTOs;
 using Shared.ProjectDTOs;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Services.Abstractions
         Task DeleteAsync(int id);
         Task SoftDeleteAsync(int id);
         Task RestoreAsync(int id);
+        Task<List<ProjectDto>> GetAllDeletedProjectsAsync();
 
         Task<List<ProjectDto>> GetByTeamAsync(int teamId);
         Task<List<ProjectDto>> GetByOrganizationAsync( int organizationId);

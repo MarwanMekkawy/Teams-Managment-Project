@@ -15,9 +15,9 @@ namespace Persistance.Repositories
             _context = context;
         }
         // getting list of all entities <TEntity> as tracked/not tracked
-        public async Task<IEnumerable<TEntity>> GetAllAsync(bool Tracked = false)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(bool tracked = false)
         {
-            if (Tracked) return await _context.Set<TEntity>().ToListAsync();
+            if (tracked) return await _context.Set<TEntity>().ToListAsync();
             else         return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
         }
         // getting list of certain properties of all entities <TEntity> tracked/not tracked
@@ -52,10 +52,17 @@ namespace Persistance.Repositories
         {
             return await _context.Set<TEntity>().AnyAsync(e => e.Id!.Equals(id));
         }
-        // gets soft deleted entities
+        // gets soft deleted entities by id
         public async Task<TEntity?> GetIncludingDeletedAsync(TKey id)
         {
             return await _context.Set<TEntity>().IgnoreQueryFilters().FirstOrDefaultAsync(e => e.Id.Equals(id));
+        }
+        // gets all soft deleted entities
+        public async Task<List<TEntity>> GetAllSoftDeletedAsync(bool tracked = false)
+        {
+            var query = _context.Set<TEntity>().IgnoreQueryFilters().Where(e => e.IsDeleted);
+            if (!tracked) query = query.AsNoTracking();
+            return await query.ToListAsync();
         }
     }
 }

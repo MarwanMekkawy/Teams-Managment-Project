@@ -35,7 +35,7 @@ namespace Persistance.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<TaskEntity>> GetoverdueAsync(int organizationId)
+        public async Task<IEnumerable<TaskEntity>> GetOverdueAsync(int organizationId)
         {
             return await _context.Tasks
                 .Where(t => t.Assignee.OrganizationId == organizationId && (t.Status == TaskEntityStatus.Todo || t.Status == TaskEntityStatus.InProgress)

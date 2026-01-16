@@ -93,7 +93,7 @@ namespace Services
 
         public async Task<List<TaskDto>> GetOverdueTasksAsync(int organizationId)
         {
-            var overDueTasks = await unitOfWork.tasks.GetoverdueAsync(organizationId);
+            var overDueTasks = await unitOfWork.tasks.GetOverdueAsync(organizationId);
             if (overDueTasks == null) throw new KeyNotFoundException($"Organization with ID {organizationId} not found");
             return mapper.Map<List<TaskDto>>(overDueTasks);
         }
@@ -117,6 +117,5 @@ namespace Services
             unitOfWork.tasks.Update(task);
             await unitOfWork.SaveChangesAsync();
         }
-
     }
 }

@@ -24,7 +24,7 @@ namespace Persistance.Repositories
 
         public void AddMember(TeamMember entity)
         {
-            _context.TeamMembers.AddAsync(entity);
+            _context.TeamMembers.Add(entity);
         }
 
         public void RemoveMember(TeamMember entity)

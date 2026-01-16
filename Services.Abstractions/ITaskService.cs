@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Shared.OrganizationDTOs;
 using Shared.TaskDTOs;
 
 
@@ -12,12 +13,13 @@ namespace Services.Abstractions
         Task DeleteAsync(int id);
         Task SoftDeleteAsync(int id);
         Task RestoreAsync(int id);
+        Task<List<TaskDto>> GetAllDeletedTasksAsync();
 
         Task<List<TaskDto>> GetTasksByProjectAsync(int projectId);
         Task<List<TaskDto>> GetTasksByUserAsync(int userId);
         Task<List<TaskDto>> GetOverdueTasksAsync(int organizationId);
 
-        Task ChangeStatusAsync(int id, TaskEntityStatus status);
+        Task ChangeStatusAsync(int id, TaskEntityStatus? status);
         Task AssignToUserAsync(int taskId, int userId);
     }
 }

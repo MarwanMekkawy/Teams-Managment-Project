@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Shared.OrganizationDTOs;
 using Shared.UserDTOs;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Services.Abstractions
         Task DeleteAsync(int id);
         Task SoftDeleteAsync(int id);
         Task RestoreAsync(int id);
+        Task<List<UserDto>> GetAllDeletedUsersAsync();
 
 
         Task<UserDto> GetByEmailAsync(string email);
