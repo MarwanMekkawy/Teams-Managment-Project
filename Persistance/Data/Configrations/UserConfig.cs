@@ -38,6 +38,11 @@ namespace Persistance.Data.Configrations
                    .HasForeignKey(t => t.AssigneeId)
                    .OnDelete(DeleteBehavior.SetNull);
 
+            builder.Property(u => u.PasswordHash)
+                   .IsRequired()
+                   .HasMaxLength(256);
+                   
+
             // Apply soft delete filter 
             builder.HasQueryFilter(u => !u.IsDeleted);
         }

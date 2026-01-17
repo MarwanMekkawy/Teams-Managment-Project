@@ -20,18 +20,19 @@ namespace TeamsManagmentProject
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             var app = builder.Build();
-
-            // seeding data //
-            using (var scope = app.Services.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                var seeder = new DbInitializer(db);
-                await seeder.InitializeAsync();
-            }
+            
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                // seeding data //
+                using (var scope = app.Services.CreateScope())
+                {
+                    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    var seeder = new DbInitializer(db);
+                    await seeder.InitializeAsync();
+                }
+
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }

@@ -16,12 +16,14 @@ namespace Services
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
+        // Get status //
         public async Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)?> GetStatsAsync(int id)
         {
             if (await unitOfWork.organizations.GetOrganizationStatsAsync(id) == null) return (0, 0, 0, 0, 0, 0, 0);                 //empty tuple
             return await unitOfWork.organizations.GetOrganizationStatsAsync(id);         
         }
 
+        // Crud methods //
         public async Task<List<string>> GetAllAsync()
         {        
             return (await unitOfWork.organizations.GetAllSelectedAsync(o => o.Name)).ToList();
@@ -60,6 +62,8 @@ namespace Services
             unitOfWork.organizations.Delete(existingOrganization);
             await unitOfWork.SaveChangesAsync();
         }
+
+        // Soft Delete methods //
         public async Task SoftDeleteAsync(int id)
         {
             var existingOrganization = await unitOfWork.organizations.GetAsync(id);
@@ -68,6 +72,7 @@ namespace Services
             unitOfWork.organizations.Update(existingOrganization);
             await unitOfWork.SaveChangesAsync();
         }
+
         public async Task RestoreAsync(int id)
         {
             var organization = await unitOfWork.organizations.GetIncludingDeletedAsync(id);

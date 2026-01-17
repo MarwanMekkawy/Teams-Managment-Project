@@ -1,6 +1,5 @@
 ﻿using Domain.Enums;
 
-
 namespace Domain.Entities
 {
     public class Project:BaseEntity<int>

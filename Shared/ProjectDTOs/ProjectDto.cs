@@ -1,6 +1,5 @@
 ﻿using Domain.Enums;
 
-
 namespace Shared.ProjectDTOs
 {
     public class ProjectDto              

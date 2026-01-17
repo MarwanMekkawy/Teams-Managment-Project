@@ -21,6 +21,7 @@ namespace Services
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
+        // Crud methods //
         public async Task<UserDto> GetByIdAsync(int id)
         {
             var user = await unitOfWork.users.GetAsync(id);
@@ -56,6 +57,7 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
         }
 
+        // Soft Delete methods //
         public async Task SoftDeleteAsync(int id)
         {
             var user = await unitOfWork.users.GetAsync(id);
@@ -75,6 +77,13 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
         }
 
+        public async Task<List<UserDto>> GetAllDeletedUsersAsync()
+        {
+            var deletedUsers = await unitOfWork.users.GetAllSoftDeletedAsync();
+            return mapper.Map<List<UserDto>>(deletedUsers);
+        }
+
+        // get methods related to another entity //
         public async Task<UserDto> GetByEmailAsync(string email)
         {
             var user = await unitOfWork.users.GetByEmailAsync(email);

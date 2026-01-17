@@ -21,7 +21,7 @@ namespace Services
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
         }
-
+        // Crud methods //
         public async Task<ProjectDto> GetByIdAsync(int id)
         {
             var project = await unitOfWork.projects.GetAsync(id);
@@ -65,6 +65,7 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
         }
 
+        // Soft Delete methods //
         public async Task SoftDeleteAsync(int id)
         {
             var project = await unitOfWork.projects.GetAsync(id);
@@ -84,6 +85,13 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
         }
 
+        public async Task<List<ProjectDto>> GetAllDeletedProjectsAsync()
+        {
+            var deletedProjects = await unitOfWork.projects.GetAllSoftDeletedAsync();
+            return mapper.Map<List<ProjectDto>>(deletedProjects);
+        }
+
+        // get methods related to another entity //
         public async Task<List<ProjectDto>> GetByTeamAsync(int teamId)
         {
             var projects =await unitOfWork.projects.GetByTeamAsync(teamId);
@@ -94,6 +102,6 @@ namespace Services
         {
             var projects = await unitOfWork.projects.GetByOrganizationAndStatusAsync(organizationId);
             return mapper.Map<List<ProjectDto>>(projects);
-        }
+        }       
     }
 }

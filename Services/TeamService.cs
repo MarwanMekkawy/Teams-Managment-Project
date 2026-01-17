@@ -21,12 +21,30 @@ namespace Services
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
+        // Crud methods //
+        public async Task<TeamDto> GetByIdAsync(int id)
+        {
+            var team = await unitOfWork.teams.GetAsync(id);
+            if (team == null) throw new KeyNotFoundException($"Team with ID {id} not found");
+            return mapper.Map<TeamDto>(team);
+        }
+
         public async Task<TeamDto> CreateAsync(CreateTeamDto dto)
         {
             var newTeam = mapper.Map<Team>(dto);
             unitOfWork.teams.Add(newTeam);
             await unitOfWork.SaveChangesAsync();
             return mapper.Map<TeamDto>(newTeam);
+        }
+
+        public async Task<TeamDto> UpdateAsync(int id, UpdateTeamDto dto)
+        {
+            var existingTeam = await unitOfWork.teams.GetAsync(id);
+            if (existingTeam == null) throw new KeyNotFoundException($"Team with ID {id} not found");
+            existingTeam.Name = dto.Name ?? existingTeam.Name;
+            unitOfWork.teams.Update(existingTeam);
+            await unitOfWork.SaveChangesAsync();
+            return mapper.Map<TeamDto>(existingTeam);
         }
 
         public async Task DeleteAsync(int id)
@@ -37,6 +55,7 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
         }
 
+        // Soft Delete methods //
         public async Task SoftDeleteAsync(int id)
         {
             var team = await unitOfWork.teams.GetAsync(id);
@@ -55,13 +74,13 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<TeamDto> GetByIdAsync(int id)
+        public async Task<List<TeamDto>> GetAllDeletedTeamsAsync()
         {
-            var team = await unitOfWork.teams.GetAsync(id);
-            if (team == null) throw new KeyNotFoundException($"Team with ID {id} not found");
-            return mapper.Map<TeamDto>(team);
+            var deletedTeams = await unitOfWork.teams.GetAllSoftDeletedAsync();
+            return mapper.Map<List<TeamDto>>(deletedTeams);
         }
 
+        // get methods related to another entity //
         public async Task<List<TeamDto>> GetTeamsByOrganizationAsync(int organizationId)
         {
             var teams= await unitOfWork.teams.GetByOrganizationAsync(organizationId);
@@ -74,16 +93,6 @@ namespace Services
             var teams = await unitOfWork.teams.GetByUserAsync(userId);
             if (teams == null) return new List<TeamDto>();                     // empty list
             return mapper.Map<List<TeamDto>>(teams);
-        }
-
-        public async Task<TeamDto> UpdateAsync(int id, UpdateTeamDto dto)
-        {
-            var existingTeam = await unitOfWork.teams.GetAsync(id);
-            if (existingTeam == null) throw new KeyNotFoundException($"Team with ID {id} not found");
-            existingTeam.Name = dto.Name ?? existingTeam.Name;
-            unitOfWork.teams.Update(existingTeam);
-            await unitOfWork.SaveChangesAsync();
-            return mapper.Map<TeamDto>(existingTeam);
         }
     }
 }

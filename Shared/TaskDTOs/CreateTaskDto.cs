@@ -1,6 +1,5 @@
 ﻿using Domain.Enums;
 
-
 namespace Shared.TaskDTOs
 {
     public class CreateTaskDto          

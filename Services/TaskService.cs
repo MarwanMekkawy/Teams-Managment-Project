@@ -21,6 +21,7 @@ namespace Services
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
+        // Crud methods //
         public async Task<TaskDto> GetByIdAsync(int id)
         {
             var task = await unitOfWork.tasks.GetAsync(id);
@@ -58,6 +59,7 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
         }
 
+        // Soft Delete methods //
         public async Task SoftDeleteAsync(int id)
         {
             var task = await unitOfWork.tasks.GetAsync(id);
@@ -77,6 +79,13 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
         }
 
+        public async Task<List<TaskDto>> GetAllDeletedTasksAsync()
+        {
+            var deletedTasks = await unitOfWork.tasks.GetAllSoftDeletedAsync();
+            return mapper.Map<List<TaskDto>>(deletedTasks);
+        }
+
+        // get methods related to another entity //
         public async Task<List<TaskDto>> GetTasksByProjectAsync(int projectId)
         {
             var tasks = await unitOfWork.tasks.GetByProjectAndStatusAsync(projectId);
@@ -98,6 +107,7 @@ namespace Services
             return mapper.Map<List<TaskDto>>(overDueTasks);
         }
 
+        // Specific update methods //
         public async Task AssignToUserAsync(int taskId, int userId)
         {
             var task = await unitOfWork.tasks.GetAsync(taskId);
@@ -116,6 +126,6 @@ namespace Services
             task.Status = status ?? task.Status;
             unitOfWork.tasks.Update(task);
             await unitOfWork.SaveChangesAsync();
-        }
+        }      
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
 
-
 namespace Domain.Contracts
 {
     public interface IUserRepository : IGenericRepository<User, int>
