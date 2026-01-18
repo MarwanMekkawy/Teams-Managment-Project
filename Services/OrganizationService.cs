@@ -17,10 +17,9 @@ namespace Services
             this.mapper = mapper;
         }
         // Get status //
-        public async Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)?> GetStatsAsync(int id)
+        public async Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)> GetStatsAsync(int id)
         {
-            if (await unitOfWork.organizations.GetOrganizationStatsAsync(id) == null) return (0, 0, 0, 0, 0, 0, 0);                 //empty tuple
-            return await unitOfWork.organizations.GetOrganizationStatsAsync(id);         
+            return await unitOfWork.organizations.GetOrganizationStatsAsync(id) ?? (0, 0, 0, 0, 0, 0, 0);              //empty tuple
         }
 
         // Crud methods //

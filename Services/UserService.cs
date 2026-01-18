@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Contracts;
+using Domain.Contracts.Security;
 using Domain.Entities;
 using Domain.Enums;
 using Services.Abstractions;
@@ -16,22 +17,25 @@ namespace Services
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IPasswordHasher Hasher;
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IPasswordHasher hasher)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.Hasher = hasher;
         }
         // Crud methods //
         public async Task<UserDto> GetByIdAsync(int id)
         {
-            var user = await unitOfWork.users.GetAsync(id);
+            var user = await unitOfWork.users.GetUserWithTeamsEntityAsync(id);
             if (user == null) throw new KeyNotFoundException($"User with ID {id} not found");
             return mapper.Map<UserDto>(user);
         }
 
         public async Task<UserDto> CreateAsync(CreateUserDto dto)
-        {
+        {          
             var newUser = mapper.Map<User>(dto);
+            newUser.PasswordHash = Hasher.Hash(dto.Password);
             unitOfWork.users.Add(newUser);
             await unitOfWork.SaveChangesAsync();
             return mapper.Map<UserDto>(newUser);

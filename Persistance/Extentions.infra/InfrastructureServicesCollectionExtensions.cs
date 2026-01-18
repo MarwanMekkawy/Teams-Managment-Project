@@ -1,18 +1,18 @@
 ﻿using Domain.Contracts;
+using Domain.Contracts.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistance.Repositories;
-using Services;
-using Services.Abstractions;
-using Services.MappingProfiles;
+using Persistance.Repositories.Hash;
+
 
 
 namespace Persistance.Extentions
 {
-    public static class ServiceCollectionExtensions
+    public static class InfrastructureServicesCollectionExtensions
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config) 
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration config) 
         {
             //DbContext Connection String 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
@@ -28,16 +28,8 @@ namespace Persistance.Extentions
             // Unit of work service
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            // services registering
-            services.AddScoped<IOrganizationService,OrganizationService>();
-            services.AddScoped<IProjectService, ProjectService>();
-            services.AddScoped<ITaskService, TaskService>();          
-            services.AddScoped<ITeamMemberService, TeamMemberService>();
-            services.AddScoped<ITeamService, TeamService>();
-            services.AddScoped<IUserService, UserService>();
-
-            // Auto mapper service
-            services.AddAutoMapper(cfg =>{cfg.AddMaps(typeof(AutoMapperMarker).Assembly);});
+            // Hasher service
+            services.AddSingleton<IPasswordHasher, AppPasswordHasher>();
 
             return services;
         }

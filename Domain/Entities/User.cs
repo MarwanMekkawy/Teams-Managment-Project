@@ -17,7 +17,7 @@ namespace Domain.Entities
 
         public int OrganizationId { get; set; }
 
-        public string PasswordHash { get; set; } = string.Empty;
+        public string PasswordHash { get; set; }
 
         // Navigation
         public Organization Organization { get; set; }

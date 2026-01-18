@@ -1,4 +1,6 @@
-﻿using Domain.Enums;
+﻿using Domain.Entities;
+using Domain.Enums;
+using Shared.TeamMemberDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +20,8 @@ namespace Shared.UserDTOs
         public string Email { get; set; } = string.Empty;
         public UserRole Role { get; set; }
         public int OrganizationId { get; set; }
+        public IReadOnlyCollection<int> TeamIds { get; init; } = [];
+        public IReadOnlyCollection<string> TeamNames { get; init; } = [];
+
     }
 }

@@ -2,6 +2,8 @@
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using Shared.TeamMemberDTOs;
+using Shared.UserDTOs;
 
 
 namespace Persistance.Repositories
@@ -29,6 +31,12 @@ namespace Persistance.Repositories
             var query = _context.Users.Where(u=>u.TeamMemberships.Any(t=>t.TeamId == teamId)).AsQueryable();
             if (!tracked) query = query.AsNoTracking();
             return await query.ToListAsync();
+        }
+
+        public async Task<User?> GetUserWithTeamsEntityAsync(int userId)
+        {
+            return await _context.Users
+            .Include(u => u.TeamMemberships).ThenInclude(tm => tm.Team).Where(u => u.Id == userId).AsNoTracking().FirstOrDefaultAsync();
         }
     }
 }

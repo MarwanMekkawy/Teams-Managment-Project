@@ -3,24 +3,28 @@
     "Name": "Alice Johnson",
     "Email": "alice@techcorp.com",
     "Role": 0,
-    "OrganizationId": 1
+    "OrganizationId": 1,
+    "PasswordHash": "saddddddddjbkasjfbsanfa5s4d65a4sd"
   },
   {
     "Name": "Bob Smith",
     "Email": "bob@techcorp.com",
     "Role": 1,
-    "OrganizationId": 1
+    "OrganizationId": 1,
+    "PasswordHash": "saddddddddjbkasjfbsanfa5s4d65a4sd"
   },
   {
     "Name": "Charlie Davis",
     "Email": "charlie@designstudio.com",
     "Role": 0,
-    "OrganizationId": 2
+    "OrganizationId": 2,
+    "PasswordHash": "saddddddddjbkasjfbsanfa5s4d65a4sd"
   },
   {
     "Name": "Dana Lee",
     "Email": "dana@designstudio.com",
     "Role": 1,
-    "OrganizationId": 2
+    "OrganizationId": 2,
+    "PasswordHash": "saddddddddjbkasjfbsanfa5s4d65a4sd"
   }
 ]

@@ -9,7 +9,9 @@ namespace Domain.Contracts
         Task<IEnumerable<User>> GetByOrganizationAndRoleAsync(int organizationId,UserRole? role = null, bool tracked = false);
         // get users by email
         Task<User?> GetByEmailAsync(string email, bool tracked = false);
-        // // get users by team id
+        // get users by team id
         Task<IEnumerable<User>> GetByTeamAsync(int teamId, bool tracked = false);
+        // get users by id with teams info
+        Task<User?> GetUserWithTeamsEntityAsync(int userId);
     }
 }

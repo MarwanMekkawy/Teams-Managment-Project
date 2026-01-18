@@ -7,7 +7,7 @@ namespace Shared.TaskDTOs
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
         public DateTime? DueDate { get; set; }
-        public TaskEntityStatus Status { get; set; } = TaskEntityStatus.ToDo;
+        public TaskEntityStatus Status { get; set; } = TaskEntityStatus.Todo;
         public int ProjectId { get; set; }
         public int? AssigneeId { get; set; }
     }
