@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistance.Repositories;
 using Persistance.Repositories.Hash;
+using Persistance.Security;
+using Services.Abstractions.Security;
 
 
 
@@ -30,6 +32,9 @@ namespace Persistance.Extentions
 
             // Hasher service
             services.AddSingleton<IPasswordHasher, AppPasswordHasher>();
+
+            // Token service
+            services.AddSingleton<ITokenService, JwtTokenService>();
 
             return services;
         }

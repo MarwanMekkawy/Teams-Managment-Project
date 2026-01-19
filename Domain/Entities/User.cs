@@ -13,7 +13,7 @@ namespace Domain.Entities
 
         public string Email { get; set; }
 
-        public UserRole Role { get; set; }
+        public UserRole Role { get; set; } = UserRole.Member;
 
         public int OrganizationId { get; set; }
 

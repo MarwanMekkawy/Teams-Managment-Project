@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AuthServices\**" />
+    <EmbeddedResource Remove="AuthServices\**" />
+    <None Remove="AuthServices\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.0.0" />
   </ItemGroup>
 

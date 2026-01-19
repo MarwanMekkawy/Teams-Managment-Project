@@ -17,6 +17,7 @@ namespace Persistance.Extentions
             services.AddScoped<ITeamMemberService, TeamMemberService>();
             services.AddScoped<ITeamService, TeamService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             // Auto mapper service
             services.AddAutoMapper(cfg =>{cfg.AddMaps(typeof(AutoMapperMarker).Assembly);});

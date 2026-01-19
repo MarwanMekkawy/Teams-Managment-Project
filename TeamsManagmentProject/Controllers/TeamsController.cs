@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using Shared.TeamDTOs;
 
@@ -19,6 +20,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Team retrieved successfully.</response>
         /// <response code="404">Team not found.</response>
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Manager,Member")]
         public async Task<ActionResult<TeamDto>> GetById(int id)
             => Ok(await _service.GetByIdAsync(id));
 
@@ -30,6 +32,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="201">Team created successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult<TeamDto>> Create(CreateTeamDto dto)
         {
             var createdTeam = await _service.CreateAsync(dto);
@@ -45,6 +48,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Team updated successfully.</response>
         /// <response code="404">Team not found.</response>
         [HttpPut("{id}")]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult<TeamDto>> Update(int id, UpdateTeamDto dto)
             => Ok(await _service.UpdateAsync(id, dto));
 
@@ -55,6 +59,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Team deleted successfully.</response>
         /// <response code="404">Team not found.</response>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteAsync(id);
@@ -68,6 +73,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Team soft-deleted successfully.</response>
         /// <response code="404">Team not found.</response>
         [HttpPatch("{id}/soft-delete")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> SoftDelete(int id)
         {
             await _service.SoftDeleteAsync(id);
@@ -81,6 +87,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Team restored successfully.</response>
         /// <response code="404">Team not found.</response>
         [HttpPatch("{id}/restore")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Restore(int id)
         {
             await _service.RestoreAsync(id);
@@ -93,6 +100,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <returns>A list of soft-deleted teams.</returns>
         /// <response code="200">Soft-deleted teams retrieved successfully.</response>
         [HttpGet("soft-deleted")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<TeamDto>>> GetDeleted()
             => Ok(await _service.GetAllDeletedTeamsAsync());
 
@@ -103,6 +111,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <returns>A list of teams for the organization.</returns>
         /// <response code="200">Teams retrieved successfully.</response>
         [HttpGet("by-organization/{organizationId}")]
+        [Authorize(Roles = "Admin,Manager,Member")]
         public async Task<ActionResult<List<TeamDto>>> GetByOrganization(int organizationId)
             => Ok(await _service.GetTeamsByOrganizationAsync(organizationId));
 
@@ -113,6 +122,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <returns>A list of teams for the user.</returns>
         /// <response code="200">Teams retrieved successfully.</response>
         [HttpGet("by-user/{userId}")]
+        [Authorize(Roles = "Admin,Manager,Member")]
         public async Task<ActionResult<List<TeamDto>>> GetByUser(int userId)
             => Ok(await _service.GetTeamsByUserAsync(userId));
     }
