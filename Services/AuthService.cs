@@ -20,8 +20,8 @@ namespace Services
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly IPasswordHasher hasher;
-        private readonly ITokenService token;
-        public AuthService(IUnitOfWork unitOfWork, IMapper mapper, IPasswordHasher hasher, ITokenService token)
+        private readonly IJwtTokenService token;
+        public AuthService(IUnitOfWork unitOfWork, IMapper mapper, IPasswordHasher hasher, IJwtTokenService token)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;

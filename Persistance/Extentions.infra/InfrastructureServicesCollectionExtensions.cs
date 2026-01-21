@@ -1,11 +1,14 @@
 ﻿using Domain.Contracts;
+using Domain.Contracts.IRefreshTokens;
 using Domain.Contracts.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistance.Repositories;
 using Persistance.Repositories.Hash;
+using Persistance.Repositories.RefreshTokens;
 using Persistance.Security;
+using Persistance.Security.Jwt;
 using Services.Abstractions.Security;
 
 
@@ -26,6 +29,8 @@ namespace Persistance.Extentions
             services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
             services.AddScoped<ITeamRepository, TeamRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();        // refresh token repo
+
 
             // Unit of work service
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -33,8 +38,8 @@ namespace Persistance.Extentions
             // Hasher service
             services.AddSingleton<IPasswordHasher, AppPasswordHasher>();
 
-            // Token service
-            services.AddSingleton<ITokenService, JwtTokenService>();
+            // Jwt Token service
+            services.AddSingleton<IJwtTokenService, JwtTokenService>();
 
             return services;
         }

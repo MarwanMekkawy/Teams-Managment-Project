@@ -23,5 +23,6 @@ namespace Domain.Entities
         public Organization Organization { get; set; }
         public ICollection<TeamMember> TeamMemberships { get; set; } = new List<TeamMember>();
         public ICollection<TaskEntity> AssignedTasks { get; set; } = new List<TaskEntity>();
+        public ICollection<RefreshTokenEntity> RefreshTokens { get; set; } = new List<RefreshTokenEntity>();
     }
 }

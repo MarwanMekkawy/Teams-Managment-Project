@@ -4,16 +4,15 @@ using Microsoft.IdentityModel.Tokens;
 using Services.Abstractions.Security;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Persistance.Security
+namespace Persistance.Security.Jwt
 {
-    public class JwtTokenService(IConfiguration configuration) : ITokenService
+    public class JwtTokenService(IConfiguration configuration) : IJwtTokenService
     {
         // token creating method
         public string CreateToken(User user)
@@ -40,7 +39,7 @@ namespace Persistance.Security
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        
+
         // token validating method just in case
         public (bool IsValid, ClaimsPrincipal? Principal) ValidateToken(string token)
         {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Services.Abstractions.Security
 {
-    public interface ITokenService
+    public interface IJwtTokenService
     {
         string CreateToken(User user);
         (bool IsValid, ClaimsPrincipal? Principal) ValidateToken(string token);

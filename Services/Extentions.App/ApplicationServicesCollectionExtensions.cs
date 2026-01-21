@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Services;
 using Services.Abstractions;
+using Services.Abstractions.RefreshTokenAbstraction;
 using Services.MappingProfiles;
+using Services.RefreshToken;
 
 
 namespace Persistance.Extentions
@@ -17,7 +19,8 @@ namespace Persistance.Extentions
             services.AddScoped<ITeamMemberService, TeamMemberService>();
             services.AddScoped<ITeamService, TeamService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAuthService, AuthService>();                  // auth service
+            services.AddScoped<IRefreshTokenService, RefreshTokenService>();  // refresh token service
 
             // Auto mapper service
             services.AddAutoMapper(cfg =>{cfg.AddMaps(typeof(AutoMapperMarker).Assembly);});
