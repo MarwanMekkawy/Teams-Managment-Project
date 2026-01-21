@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.Abstractions.RefreshTokenAbstraction
+namespace Services.Abstractions.Security
 {
     public interface IRefreshTokenService
     {

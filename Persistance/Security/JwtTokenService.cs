@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Persistance.Security.Jwt
+namespace Persistance.Security
 {
     public class JwtTokenService(IConfiguration configuration) : IJwtTokenService
     {

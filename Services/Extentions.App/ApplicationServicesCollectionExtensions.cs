@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Services;
 using Services.Abstractions;
-using Services.Abstractions.RefreshTokenAbstraction;
+using Services.Abstractions.Security;
 using Services.MappingProfiles;
 using Services.RefreshToken;
 

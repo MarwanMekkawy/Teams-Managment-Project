@@ -9,8 +9,10 @@ namespace Services.Abstractions
 {
     public interface IAuthService
     {
-        Task<(bool Success, string? Token)> LoginAsync(LoginDto dto);
-        Task<(bool Success, string? Token)> RegisterAsync(RegisterDto dto);
+        Task<(bool Success, string? JwtToken, string? RefreshToken)> RegisterAsync(RegisterDto dto);
+        Task<(bool Success, string? JwtToken, string? RefreshToken)> LoginAsync(LoginDto dto);
         Task ChangePasswordAsync(int userId, string oldPassword, string newPassword);
+        Task LogoutAsync(string refreshToken);
+        Task<(bool Success, string? JwtToken, string? RefreshToken)> RefreshSession(string refreshToken);
     }
 }

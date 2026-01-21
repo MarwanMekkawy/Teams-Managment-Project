@@ -3,7 +3,7 @@ using Domain.Contracts.IRefreshTokens;
 using Domain.Contracts.Security;
 using Domain.Entities;
 using Microsoft.Extensions.Configuration;
-using Services.Abstractions.RefreshTokenAbstraction;
+using Services.Abstractions.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +25,8 @@ namespace Services.RefreshToken
             Hasher = hasher;
             RefreshTokenRepo = refreshTokenRepo;
         }
+
+
         private string GenerateRefreshToken()
         {
             var bytes = RandomNumberGenerator.GetBytes(32);
@@ -60,8 +62,10 @@ namespace Services.RefreshToken
 
             if (existingToken == null)  return null;
 
+            // check if refresh token used is valid 
             if (!existingToken.IsActive)
             {
+                // check if refresh token used was replaced before
                 if (existingToken.ReplacedByTokenHash != null)
                 {
                     await RefreshTokenRepo.RevokeAllUserTokensAsync(userId);

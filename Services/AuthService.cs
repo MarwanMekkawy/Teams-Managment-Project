@@ -21,15 +21,45 @@ namespace Services
         private readonly IMapper mapper;
         private readonly IPasswordHasher hasher;
         private readonly IJwtTokenService token;
-        public AuthService(IUnitOfWork unitOfWork, IMapper mapper, IPasswordHasher hasher, IJwtTokenService token)
+        private readonly IRefreshTokenService refreshToken;
+        public AuthService(IUnitOfWork unitOfWork, IMapper mapper, IPasswordHasher hasher, IJwtTokenService token, IRefreshTokenService refreshToken)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
             this.hasher = hasher;
             this.token = token;
+            this.refreshToken = refreshToken;
         }
 
-        public async Task<(bool Success, string? Token)> RegisterAsync(RegisterDto dto)
+        // Check if password strong [helper]
+        private bool IsStrongPassword(string password)
+        {
+            return password.Length >= 8 && password.Any(char.IsUpper) &&
+                   password.Any(char.IsLower) && password.Any(char.IsDigit);
+        }
+
+        // Normalize email [helper]
+        private string NormalizeEmail(string email)
+        {
+            return email?.Trim().ToLowerInvariant() ?? string.Empty;
+        }
+
+        // Validate email [helper]
+        private bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email)) return false;
+            try
+            {
+                var pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+                return Regex.IsMatch(email, pattern, RegexOptions.IgnoreCase);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<(bool Success, string? JwtToken, string? RefreshToken)> RegisterAsync(RegisterDto dto)
         {
             // Check if email format is valid
             var normalizedEmail = NormalizeEmail(dto.Email);
@@ -43,12 +73,10 @@ namespace Services
             var newPassword = dto.Password;
 
             // Validate password length
-            if (newPassword.Length < 8)
-                throw new ArgumentException("New password must be at least 8 characters");
+            if (newPassword.Length < 8) throw new ArgumentException("New password must be at least 8 characters");
 
             // Validate password strength
-            if (!IsStrongPassword(newPassword))
-                throw new ArgumentException("Password is too weak");
+            if (!IsStrongPassword(newPassword)) throw new ArgumentException("Password is too weak");
 
 
             var newUser = mapper.Map<User>(dto);
@@ -60,12 +88,15 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
 
             // Generate JWT token after user has ID
-            var newToken = token.CreateToken(newUser);
+            var newJwtToken = token.CreateToken(newUser);
 
-            return (true, newToken);
+            // Generate Refresh token
+            var newRefreshToken = await refreshToken.CreateAndStoreRefreshTokenAsync(newUser.Id);
+
+            return (true, newJwtToken, newRefreshToken.PlaintextToken);
         }
 
-        public async Task<(bool Success, string? Token)> LoginAsync(LoginDto dto)
+        public async Task<(bool Success, string? JwtToken, string? RefreshToken)> LoginAsync(LoginDto dto)
         {
             // Normalize email for consistent lookup
             var normalizedEmail = NormalizeEmail(dto.Email);
@@ -85,8 +116,10 @@ namespace Services
 
             // JWT token
             var newToken = token.CreateToken(existingUser!);
+            // refresh token
+            var newRefreshToken = await refreshToken.CreateAndStoreRefreshTokenAsync(existingUser!.Id);
 
-            return (true, newToken);
+            return (true, newToken, newRefreshToken.PlaintextToken);
         }
 
         public async Task ChangePasswordAsync(int userId, string oldPassword, string newPassword)
@@ -129,32 +162,32 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        // Check if password strong
-        private bool IsStrongPassword(string password)
+        public async Task LogoutAsync(string plainRefreshToken)
         {
-            return password.Length >= 8 && password.Any(char.IsUpper) &&
-                   password.Any(char.IsLower) && password.Any(char.IsDigit);
+           await refreshToken.RevokeRefreshTokenAsync(plainRefreshToken);
         }
-
-        // Normalize email 
-        private string NormalizeEmail(string email)
+        
+        public async Task<(bool Success, string? JwtToken, string? RefreshToken)> RefreshSession(string plainrefreshToken)
         {
-            return email?.Trim().ToLowerInvariant() ?? string.Empty;
-        }
+            // get token entity
+            var existingRefreshToken = await refreshToken.ValidateRefreshTokenAsync(plainrefreshToken);
 
-        // Validate email 
-        private bool IsValidEmail(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))return false;
-            try
-            {
-                var pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-                return Regex.IsMatch(email, pattern, RegexOptions.IgnoreCase);
-            }
-            catch
-            {
-                return false;
-            }
+            if (existingRefreshToken == null) throw new ArgumentException("Invalid refresh token"); 
+
+            // rotate token and creating new one
+            var rotatedNewRefreshToken = await refreshToken.RotateRefreshTokenAsync(plainrefreshToken, existingRefreshToken.UserId);
+
+            if (rotatedNewRefreshToken == null) throw new ArgumentException("Refresh token reuse detected"); // 🔥
+
+            // load user to issue new JWT
+            var user = await unitOfWork.users.GetAsync(existingRefreshToken.UserId);
+            if (user == null) throw new ArgumentException("User not found");
+
+            // creating new jwt
+            var newJwt = token.CreateToken(user);
+
+            return (true, newJwt, rotatedNewRefreshToken.Value.PlaintextToken);
+
         }
     }
 }
