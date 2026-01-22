@@ -41,7 +41,7 @@ namespace Persistance.Security
         }
 
         // token validating method just in case
-        public (bool IsValid, ClaimsPrincipal? Principal) ValidateToken(string token)
+        public ClaimsPrincipal?  ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!);
@@ -61,12 +61,12 @@ namespace Persistance.Security
 
                     ValidateLifetime = true
                 }, out _);
-
-                return (true, principal);
+               
+                return  principal;
             }
             catch
             {
-                return (false, null);
+                return  null;
             }
         }
     }

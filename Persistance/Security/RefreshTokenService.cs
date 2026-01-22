@@ -16,58 +16,69 @@ namespace Services.RefreshToken
     public class RefreshTokenService : IRefreshTokenService
     {
         public IConfiguration Configuration { get; }
-        public IPasswordHasher Hasher { get; }
         public IRefreshTokenRepository RefreshTokenRepo { get; }
 
-        public RefreshTokenService(IConfiguration configuration, IPasswordHasher hasher, IRefreshTokenRepository refreshTokenRepo)
+        public RefreshTokenService(IConfiguration configuration, IRefreshTokenRepository refreshTokenRepo)
         {
             Configuration = configuration;
-            Hasher = hasher;
             RefreshTokenRepo = refreshTokenRepo;
         }
 
-
+        // generate token byets [helper]
         private string GenerateRefreshToken()
         {
             var bytes = RandomNumberGenerator.GetBytes(32);
             return Convert.ToBase64String(bytes);
         }
-
-        public async Task<RefreshTokenEntity> CreateAndStoreRefreshTokenAsync(int userId)
+        // hash tokens [helper]
+        private string HashRefreshToken(string token)
         {
-            var refreshToken = new RefreshTokenEntity();
-            refreshToken.CreatedAt = DateTime.UtcNow;
-            refreshToken.ExpiresAt = DateTime.UtcNow.AddMinutes(int.Parse(Configuration["RefreshToken:ExpiryInMinutes"]!));
-            refreshToken.UserId = userId;
-            var tokenBytes = GenerateRefreshToken();
-            refreshToken.TokenHash = Hasher.Hash(tokenBytes);
+            var secret = Configuration["RefreshToken:HashSecret"]!;
+            using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
+            return Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(token)));
+        }
+
+        // create token
+        public async Task<(RefreshTokenEntity StoredToken, string PlaintextToken)>CreateAndStoreRefreshTokenAsync(int userId)
+        {
+            var rawToken = GenerateRefreshToken();
+
+            var refreshToken = new RefreshTokenEntity
+            {
+                UserId = userId,
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddMinutes(int.Parse(Configuration["RefreshToken:ExpiryInMinutes"]!)),
+                TokenHash = HashRefreshToken(rawToken)
+            };
+
             RefreshTokenRepo.AddToken(refreshToken);
-
             await RefreshTokenRepo.SaveChangesAsync();
-            return refreshToken;
+            
+            return (refreshToken, rawToken);
+        }       
+
+        // validat token
+        public async Task<RefreshTokenEntity?> ValidateRefreshTokenAsync(string refreshToken)
+        {
+            var hash = HashRefreshToken(refreshToken);
+            return await RefreshTokenRepo.GetActiveByHashAsync(hash);
         }
 
-        public async Task<(bool IsValid, RefreshTokenEntity? Token)> ValidateRefreshTokenAsync(string refreshToken)
+        //rotate token
+        public async Task<(RefreshTokenEntity StoredToken, string PlaintextToken)?>RotateRefreshTokenAsync(string refreshToken, int userId)
         {
-            var hash = Hasher.Hash(refreshToken);
-            var token = await RefreshTokenRepo.GetActiveByHashAsync(hash);
-            if (token == null) return (false, null);
-            return (true, token);
-        }
-
-        public async Task<RefreshTokenEntity?> RotateRefreshTokenAsync(string refreshToken, int userId)
-        {
-            var hash = Hasher.Hash(refreshToken);
+            var hash = HashRefreshToken(refreshToken);
             var existingToken = await RefreshTokenRepo.GetByHashAsync(hash);
 
-            if (existingToken == null)  return null;
+            if (existingToken == null)
+                return null;
 
-            // check if refresh token used is valid 
+            // reuse invalid token [not Atctive token - old token that is replaced]
             if (!existingToken.IsActive)
             {
-                // check if refresh token used was replaced before
                 if (existingToken.ReplacedByTokenHash != null)
                 {
+                    // the use of old token that is replaced
                     await RefreshTokenRepo.RevokeAllUserTokensAsync(userId);
                     await RefreshTokenRepo.SaveChangesAsync();
                 }
@@ -75,33 +86,38 @@ namespace Services.RefreshToken
             }
 
             var newRawToken = GenerateRefreshToken();
-            var newTokenHash = Hasher.Hash(newRawToken);
+            var newHash = HashRefreshToken(newRawToken);
+
             var newToken = new RefreshTokenEntity
             {
                 UserId = userId,
                 CreatedAt = DateTime.UtcNow,
                 ExpiresAt = DateTime.UtcNow.AddMinutes(int.Parse(Configuration["RefreshToken:ExpiryInMinutes"]!)),
-                TokenHash = newTokenHash
+                TokenHash = newHash
             };
 
-            RefreshTokenRepo.AddToken(newToken);
+            // revoke and replace old token
+            existingToken.RevokedAt = DateTime.UtcNow;
+            existingToken.ReplacedByTokenHash = newHash;
 
-            await RefreshTokenRepo.RotateTokenAsync(existingToken.TokenHash, newTokenHash);
+            RefreshTokenRepo.AddToken(newToken);
             await RefreshTokenRepo.SaveChangesAsync();
 
-            return newToken;
+            return (newToken, newRawToken);
         }
-
+         
+        //revoke all toekns
         public async Task RevokeAllUserRefreshTokensAsync(int userId)
         {
             await RefreshTokenRepo.RevokeAllUserTokensAsync(userId);
             await RefreshTokenRepo.SaveChangesAsync();
         }
 
+        //revoke 1 token
         public async Task RevokeRefreshTokenAsync(string refreshToken)
         {
-            refreshToken = Hasher.Hash(refreshToken);
-            await RefreshTokenRepo.RevokeTokenAsync(refreshToken);
+            var hashedRefreshToken = HashRefreshToken(refreshToken);
+            await RefreshTokenRepo.RevokeTokenAsync(hashedRefreshToken);
             await RefreshTokenRepo.SaveChangesAsync();
         }
     }

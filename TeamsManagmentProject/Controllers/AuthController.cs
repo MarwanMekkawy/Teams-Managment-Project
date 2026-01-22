@@ -47,6 +47,12 @@ namespace TeamsManagmentProject.API.Controllers
             return Ok(new { success = result.Success, token = result.Token });
         }
 
+        /// <summary>
+        /// Logs out the current user.
+        /// </summary>
+        /// <returns>No content if logout succeeds.</returns>
+        /// <response code="204">Logout successful.</response>
+        /// <response code="401">User is not authenticated.</response>
         [HttpPost("logout")]
         [Authorize]
         public async Task<IActionResult> logout(string refreshToken)
@@ -54,6 +60,13 @@ namespace TeamsManagmentProject.API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Refreshes the user session.
+        /// </summary>
+        /// <returns>New JWT and refresh token.</returns>
+        /// <response code="200">Session refreshed successfully.</response>
+        /// <response code="401">Invalid or expired refresh token.</response>
+        /// <response code="403">Refresh token reuse detected.</response>
         [HttpPost("refresh")]
         [AllowAnonymous]
         public async Task<IActionResult> Refresh([FromBody] string refreshToken)

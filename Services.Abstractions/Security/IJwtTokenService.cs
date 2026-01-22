@@ -11,6 +11,6 @@ namespace Services.Abstractions.Security
     public interface IJwtTokenService
     {
         string CreateToken(User user);
-        (bool IsValid, ClaimsPrincipal? Principal) ValidateToken(string token);
+        ClaimsPrincipal?  ValidateToken(string token);
     }
 }

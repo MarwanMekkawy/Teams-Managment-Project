@@ -9,9 +9,9 @@ namespace Services.Abstractions.Security
 {
     public interface IRefreshTokenService
     {
-        Task<RefreshTokenEntity> CreateAndStoreRefreshTokenAsync(int userId);
-        Task<(bool IsValid, RefreshTokenEntity? Token)> ValidateRefreshTokenAsync(string refreshToken);
-        Task<RefreshTokenEntity?> RotateRefreshTokenAsync(string refreshToken, int userId);
+        Task<(RefreshTokenEntity StoredToken, string PlaintextToken)> CreateAndStoreRefreshTokenAsync(int userId);
+        Task<RefreshTokenEntity?> ValidateRefreshTokenAsync(string refreshToken);
+        Task<(RefreshTokenEntity StoredToken, string PlaintextToken)?> RotateRefreshTokenAsync(string refreshToken, int userId);
         Task RevokeRefreshTokenAsync(string refreshToken);
         Task RevokeAllUserRefreshTokensAsync(int userId);
     }
