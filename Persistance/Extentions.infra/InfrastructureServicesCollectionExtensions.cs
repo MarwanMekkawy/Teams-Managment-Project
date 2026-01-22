@@ -8,8 +8,8 @@ using Persistance.Repositories;
 using Persistance.Repositories.Hash;
 using Persistance.Repositories.RefreshTokens;
 using Persistance.Security;
-using Persistance.Security.Jwt;
 using Services.Abstractions.Security;
+using Services.RefreshToken;
 
 
 
@@ -40,6 +40,9 @@ namespace Persistance.Extentions
 
             // Jwt Token service
             services.AddSingleton<IJwtTokenService, JwtTokenService>();
+
+            // refresh token service
+            services.AddScoped<IRefreshTokenService, RefreshTokenService>();  
 
             return services;
         }

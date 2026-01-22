@@ -59,7 +59,7 @@ namespace Services
             }
         }
 
-        public async Task<(bool Success, string? JwtToken, string? RefreshToken)> RegisterAsync(RegisterDto dto)
+        public async Task<(string? JwtToken, string? RefreshToken)> RegisterAsync(RegisterDto dto)
         {
             // Check if email format is valid
             var normalizedEmail = NormalizeEmail(dto.Email);
@@ -93,10 +93,10 @@ namespace Services
             // Generate Refresh token
             var newRefreshToken = await refreshToken.CreateAndStoreRefreshTokenAsync(newUser.Id);
 
-            return (true, newJwtToken, newRefreshToken.PlaintextToken);
+            return (newJwtToken, newRefreshToken.PlaintextToken);
         }
 
-        public async Task<(bool Success, string? JwtToken, string? RefreshToken)> LoginAsync(LoginDto dto)
+        public async Task<(string? JwtToken, string? RefreshToken)> LoginAsync(LoginDto dto)
         {
             // Normalize email for consistent lookup
             var normalizedEmail = NormalizeEmail(dto.Email);
@@ -119,7 +119,7 @@ namespace Services
             // refresh token
             var newRefreshToken = await refreshToken.CreateAndStoreRefreshTokenAsync(existingUser!.Id);
 
-            return (true, newToken, newRefreshToken.PlaintextToken);
+            return (newToken, newRefreshToken.PlaintextToken);
         }
 
         public async Task ChangePasswordAsync(int userId, string oldPassword, string newPassword)
@@ -134,25 +134,20 @@ namespace Services
 
             // Get user by ID
             var existingUser = await unitOfWork.users.GetAsync(userId);
-            if (existingUser == null)
-                throw new ArgumentException("User not found", nameof(userId));
+            if (existingUser == null) throw new ArgumentException("User not found", nameof(userId));
 
             // Verify current password
             var isOldPasswordValid = hasher.Verify(existingUser.PasswordHash, oldPassword);
-            if (!isOldPasswordValid)
-                throw new ArgumentException("Current password is incorrect");
+            if (!isOldPasswordValid) throw new ArgumentException("Current password is incorrect");
 
             // Check if new password is different from old
-            if (oldPassword == newPassword)
-                throw new ArgumentException("New password cannot be the same as old password");
+            if (oldPassword == newPassword) throw new ArgumentException("New password cannot be the same as old password");          
 
             // Validate new password length
-            if (newPassword.Length < 8)
-                throw new ArgumentException("New password must be at least 8 characters");
+            if (newPassword.Length < 8) throw new ArgumentException("New password must be at least 8 characters");
 
             // Validate new password strength
-            if (!IsStrongPassword(newPassword))
-                throw new ArgumentException("Password is too weak");
+            if (!IsStrongPassword(newPassword)) throw new ArgumentException("Password is too weak");
 
 
             existingUser.PasswordHash = hasher.Hash(newPassword);
@@ -167,7 +162,7 @@ namespace Services
            await refreshToken.RevokeRefreshTokenAsync(plainRefreshToken);
         }
         
-        public async Task<(bool Success, string? JwtToken, string? RefreshToken)> RefreshSession(string plainrefreshToken)
+        public async Task<(string? JwtToken, string? RefreshToken)> RefreshSessionAsync(string plainrefreshToken)
         {
             // get token entity
             var existingRefreshToken = await refreshToken.ValidateRefreshTokenAsync(plainrefreshToken);
@@ -177,7 +172,7 @@ namespace Services
             // rotate token and creating new one
             var rotatedNewRefreshToken = await refreshToken.RotateRefreshTokenAsync(plainrefreshToken, existingRefreshToken.UserId);
 
-            if (rotatedNewRefreshToken == null) throw new ArgumentException("Refresh token reuse detected"); // 🔥
+            if (rotatedNewRefreshToken == null) throw new ArgumentException("Refresh token reuse detected"); 
 
             // load user to issue new JWT
             var user = await unitOfWork.users.GetAsync(existingRefreshToken.UserId);
@@ -186,7 +181,7 @@ namespace Services
             // creating new jwt
             var newJwt = token.CreateToken(user);
 
-            return (true, newJwt, rotatedNewRefreshToken.Value.PlaintextToken);
+            return (newJwt, rotatedNewRefreshToken.Value.PlaintextToken);
 
         }
     }
