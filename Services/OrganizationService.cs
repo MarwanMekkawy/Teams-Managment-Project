@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
+using Domain.Exceptions;
 using Services.Abstractions;
 using Shared.OrganizationDTOs;
 
@@ -31,7 +32,7 @@ namespace Services
         public async Task<OrganizationDto> GetByIdAsync(int id)
         {
             var organization = await unitOfWork.organizations.GetAsync(id);
-            if (organization == null) throw new KeyNotFoundException($"Organization with ID {id} not found"); 
+            if (organization == null) throw new NotFoundException($"Organization with ID {id} not found"); 
             return mapper.Map<OrganizationDto>(organization);
 
         }
@@ -47,7 +48,7 @@ namespace Services
         public async Task<OrganizationDto> UpdateAsync(int id, UpdateOrganizationDto dto)
         {
             var existingOrganization = await unitOfWork.organizations.GetAsync(id);
-            if (existingOrganization == null) throw new KeyNotFoundException($"Organization with ID {id} not found");
+            if (existingOrganization == null) throw new NotFoundException($"Organization with ID {id} not found");
             existingOrganization.Name = dto.Name ?? existingOrganization.Name;
             unitOfWork.organizations.Update(existingOrganization);
             await unitOfWork.SaveChangesAsync();
@@ -57,7 +58,7 @@ namespace Services
         public async Task DeleteAsync(int id)
         {
             var existingOrganization = await unitOfWork.organizations.GetAsync(id);
-            if (existingOrganization == null) throw new KeyNotFoundException($"Organization with ID {id} not found");
+            if (existingOrganization == null) throw new NotFoundException($"Organization with ID {id} not found");
             unitOfWork.organizations.Delete(existingOrganization);
             await unitOfWork.SaveChangesAsync();
         }
@@ -66,7 +67,7 @@ namespace Services
         public async Task SoftDeleteAsync(int id)
         {
             var existingOrganization = await unitOfWork.organizations.GetAsync(id);
-            if (existingOrganization == null) throw new KeyNotFoundException($"Organization with ID {id} not found");
+            if (existingOrganization == null) throw new NotFoundException($"Organization with ID {id} not found");
             existingOrganization.IsDeleted = true;
             unitOfWork.organizations.Update(existingOrganization);
             await unitOfWork.SaveChangesAsync();
@@ -75,8 +76,8 @@ namespace Services
         public async Task RestoreAsync(int id)
         {
             var organization = await unitOfWork.organizations.GetIncludingDeletedAsync(id);
-            if (organization == null)  throw new KeyNotFoundException($"Organization with ID {id} not found");
-            if (!organization.IsDeleted) throw new InvalidOperationException("Not deleted Entity");
+            if (organization == null)  throw new NotFoundException($"Organization with ID {id} not found");
+            if (!organization.IsDeleted) throw new BadRequestException("The Entity is Not a deleted Entity");
 
             organization.IsDeleted = false;
             await unitOfWork.SaveChangesAsync();

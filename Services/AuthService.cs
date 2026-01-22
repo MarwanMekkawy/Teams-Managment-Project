@@ -2,6 +2,7 @@
 using Domain.Contracts;
 using Domain.Contracts.Security;
 using Domain.Entities;
+using Domain.Exceptions;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Services.Abstractions;
 using Services.Abstractions.Security;
@@ -63,20 +64,19 @@ namespace Services
         {
             // Check if email format is valid
             var normalizedEmail = NormalizeEmail(dto.Email);
-            if (!IsValidEmail(normalizedEmail))
-                throw new ArgumentException("Invalid email format");
+            if (!IsValidEmail(normalizedEmail)) throw new BadRequestException("Invalid email format");
 
             // Check if user already exists 
             var existingEmail = await unitOfWork.users.GetByEmailAsync(normalizedEmail);
-            if (existingEmail != null) throw new ArgumentException("Email is already in use");
+            if (existingEmail != null) throw new ConflictException("Email is already in use");
 
             var newPassword = dto.Password;
 
             // Validate password length
-            if (newPassword.Length < 8) throw new ArgumentException("New password must be at least 8 characters");
+            if (newPassword.Length < 8) throw new BadRequestException("New password must be at least 8 characters");
 
             // Validate password strength
-            if (!IsStrongPassword(newPassword)) throw new ArgumentException("Password is too weak");
+            if (!IsStrongPassword(newPassword)) throw new BadRequestException("Password is too weak");
 
 
             var newUser = mapper.Map<User>(dto);
@@ -112,7 +112,7 @@ namespace Services
 
             // Check if login is valid
             var isValidLogin = existingUser != null && isPasswordValid;
-            if (!isValidLogin) throw new ArgumentException($"Wrong password or Email");
+            if (!isValidLogin) throw new UnauthorizedException($"Wrong password or Email");
 
             // JWT token
             var newToken = token.CreateToken(existingUser!);
@@ -125,29 +125,27 @@ namespace Services
         public async Task ChangePasswordAsync(int userId, string oldPassword, string newPassword)
         {
             // Validate old password input
-            if (string.IsNullOrWhiteSpace(oldPassword))
-                throw new ArgumentException("Old password is required", nameof(oldPassword));
+            if (string.IsNullOrWhiteSpace(oldPassword)) throw new BadRequestException("Old password is required");
 
             // Validate new password input
-            if (string.IsNullOrWhiteSpace(newPassword))
-                throw new ArgumentException("New password is required", nameof(newPassword));
+            if (string.IsNullOrWhiteSpace(newPassword)) throw new BadRequestException("New password is required");
 
             // Get user by ID
             var existingUser = await unitOfWork.users.GetAsync(userId);
-            if (existingUser == null) throw new ArgumentException("User not found", nameof(userId));
+            if (existingUser == null) throw new UnauthorizedException("User not found");
 
             // Verify current password
             var isOldPasswordValid = hasher.Verify(existingUser.PasswordHash, oldPassword);
-            if (!isOldPasswordValid) throw new ArgumentException("Current password is incorrect");
+            if (!isOldPasswordValid) throw new UnauthorizedException("Current password is incorrect");
 
             // Check if new password is different from old
-            if (oldPassword == newPassword) throw new ArgumentException("New password cannot be the same as old password");          
+            if (oldPassword == newPassword) throw new BadRequestException("New password cannot be the same as old password");          
 
             // Validate new password length
-            if (newPassword.Length < 8) throw new ArgumentException("New password must be at least 8 characters");
+            if (newPassword.Length < 8) throw new BadRequestException("New password must be at least 8 characters");
 
             // Validate new password strength
-            if (!IsStrongPassword(newPassword)) throw new ArgumentException("Password is too weak");
+            if (!IsStrongPassword(newPassword)) throw new BadRequestException("Password is too weak");
 
 
             existingUser.PasswordHash = hasher.Hash(newPassword);
@@ -167,16 +165,16 @@ namespace Services
             // get token entity
             var existingRefreshToken = await refreshToken.ValidateRefreshTokenAsync(plainrefreshToken);
 
-            if (existingRefreshToken == null) throw new ArgumentException("Invalid refresh token"); 
+            if (existingRefreshToken == null) throw new UnauthorizedException("Invalid refresh token"); 
 
             // rotate token and creating new one
             var rotatedNewRefreshToken = await refreshToken.RotateRefreshTokenAsync(plainrefreshToken, existingRefreshToken.UserId);
 
-            if (rotatedNewRefreshToken == null) throw new ArgumentException("Refresh token reuse detected"); 
+            if (rotatedNewRefreshToken == null) throw new ConflictException("Refresh token reuse detected"); 
 
             // load user to issue new JWT
             var user = await unitOfWork.users.GetAsync(existingRefreshToken.UserId);
-            if (user == null) throw new ArgumentException("User not found");
+            if (user == null) throw new NotFoundException("User not found");
 
             // creating new jwt
             var newJwt = token.CreateToken(user);

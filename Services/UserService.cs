@@ -3,6 +3,7 @@ using Domain.Contracts;
 using Domain.Contracts.Security;
 using Domain.Entities;
 using Domain.Enums;
+using Domain.Exceptions;
 using Services.Abstractions;
 using Shared.UserDTOs;
 using System;
@@ -28,7 +29,7 @@ namespace Services
         public async Task<UserDto> GetByIdAsync(int id)
         {
             var user = await unitOfWork.users.GetUserWithTeamsEntityAsync(id);
-            if (user == null) throw new KeyNotFoundException($"User with ID {id} not found");
+            if (user == null) throw new NotFoundException($"User with ID {id} not found");
             return mapper.Map<UserDto>(user);
         }
 
@@ -44,7 +45,7 @@ namespace Services
         public async Task<UserDto> UpdateAsync(int id, UpdateUserDto dto)
         {
             var existingUser = await unitOfWork.users.GetAsync(id);
-            if (existingUser == null) throw new KeyNotFoundException($"User with ID {id} not found");
+            if (existingUser == null) throw new NotFoundException($"User with ID {id} not found");
             existingUser.Name = dto.Name ?? existingUser.Name;
             existingUser.Email = dto.Email ?? existingUser.Email;
             existingUser.Role = dto.Role ?? existingUser.Role;
@@ -56,7 +57,7 @@ namespace Services
         public async Task DeleteAsync(int id)
         {
             var user = await unitOfWork.users.GetAsync(id);
-            if (user == null) throw new KeyNotFoundException($"User with ID {id} not found");
+            if (user == null) throw new NotFoundException($"User with ID {id} not found");
             unitOfWork.users.Delete(user);
             await unitOfWork.SaveChangesAsync();
         }
@@ -65,7 +66,7 @@ namespace Services
         public async Task SoftDeleteAsync(int id)
         {
             var user = await unitOfWork.users.GetAsync(id);
-            if (user == null) throw new KeyNotFoundException($"User with ID {id} not found");
+            if (user == null) throw new NotFoundException($"User with ID {id} not found");
             user.IsDeleted = true;
             unitOfWork.users.Update(user);
             await unitOfWork.SaveChangesAsync();
@@ -74,8 +75,8 @@ namespace Services
         public async Task RestoreAsync(int id)
         {
             var user = await unitOfWork.users.GetIncludingDeletedAsync(id);
-            if (user == null) throw new KeyNotFoundException($"user with ID {id} not found");
-            if (!user.IsDeleted) throw new InvalidOperationException("Not deleted Entity");
+            if (user == null) throw new NotFoundException($"user with ID {id} not found");
+            if (!user.IsDeleted) throw new BadRequestException("the entity is Not a deleted Entity");
 
             user.IsDeleted = false;
             await unitOfWork.SaveChangesAsync();
@@ -91,7 +92,7 @@ namespace Services
         public async Task<UserDto> GetByEmailAsync(string email)
         {
             var user = await unitOfWork.users.GetByEmailAsync(email);
-            if (user == null) throw new KeyNotFoundException($"User with Email {email} not found");
+            if (user == null) throw new NotFoundException($"User with Email {email} not found");
             return mapper.Map<UserDto>(user);
 
         }

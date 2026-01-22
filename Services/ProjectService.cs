@@ -2,6 +2,7 @@
 using Domain.Contracts;
 using Domain.Entities;
 using Domain.Enums;
+using Domain.Exceptions;
 using Services.Abstractions;
 using Shared.ProjectDTOs;
 using System;
@@ -25,7 +26,7 @@ namespace Services
         public async Task<ProjectDto> GetByIdAsync(int id)
         {
             var project = await unitOfWork.projects.GetAsync(id);
-            if (project == null) throw new KeyNotFoundException($"Project with ID {id} not found");
+            if (project == null) throw new NotFoundException($"Project with ID {id} not found");
             return mapper.Map<ProjectDto>(project);
         }
 
@@ -40,7 +41,7 @@ namespace Services
         public async Task<ProjectDto> UpdateAsync(int id, UpdateProjectDto dto)
         {
             var project = await unitOfWork.projects.GetAsync(id);
-            if (project == null) throw new KeyNotFoundException($"Project with ID {id} not found");
+            if (project == null) throw new NotFoundException($"Project with ID {id} not found");
             project.Status = dto.Status ?? project.Status;
             project.Name = dto.Name ?? project.Name;
             unitOfWork.projects.Update(project);
@@ -51,7 +52,7 @@ namespace Services
         public async Task ChangeStatusAsync(int id, ProjectStatus newStatus)
         {
             var project = await unitOfWork.projects.GetAsync(id);
-            if (project == null) throw new KeyNotFoundException($"Project with ID {id} not found");
+            if (project == null) throw new NotFoundException($"Project with ID {id} not found");
             project.Status = newStatus;
             unitOfWork.projects.Update(project);
             await unitOfWork.SaveChangesAsync();
@@ -60,7 +61,7 @@ namespace Services
         public async Task DeleteAsync(int id)
         {
             var project = await unitOfWork.projects.GetAsync(id);
-            if (project == null) throw new KeyNotFoundException($"Project with ID {id} not found");
+            if (project == null) throw new NotFoundException($"Project with ID {id} not found");
             unitOfWork.projects.Delete(project);
             await unitOfWork.SaveChangesAsync();
         }
@@ -69,7 +70,7 @@ namespace Services
         public async Task SoftDeleteAsync(int id)
         {
             var project = await unitOfWork.projects.GetAsync(id);
-            if (project == null) throw new KeyNotFoundException($"Project with ID {id} not found");
+            if (project == null) throw new NotFoundException($"Project with ID {id} not found");
             project.IsDeleted = true;
             unitOfWork.projects.Update(project);
             await unitOfWork.SaveChangesAsync();
@@ -78,8 +79,8 @@ namespace Services
         public async Task RestoreAsync(int id)
         {
             var project = await unitOfWork.projects.GetIncludingDeletedAsync(id);
-            if (project == null) throw new KeyNotFoundException($"project with ID {id} not found");
-            if (!project.IsDeleted) throw new InvalidOperationException("Not deleted Entity");
+            if (project == null) throw new NotFoundException($"project with ID {id} not found");
+            if (!project.IsDeleted) throw new BadRequestException("the Entity is Not a deleted Entity");
 
             project.IsDeleted = false;
             await unitOfWork.SaveChangesAsync();
