@@ -12,7 +12,7 @@ This project is designed to be **CV‑ready**: clean architecture, scalable stru
 * Rich domain model (Organizations, Teams, Projects, Tasks, Users)
 * **Soft delete & restore** across all aggregates
 * Repository + Unit of Work patterns
-* DTO-based API contracts (no domain leakage)
+* DTO-based API contracts 
 * EF Core code-first with migrations
 * Designed for extensibility and testability
 
@@ -164,4 +164,5 @@ Update the connection string in `appsettings.json` before running migrations.
 ## 👨‍💻 Author
 
 **Marwan** – Software Engineer (.NET)
+
 
