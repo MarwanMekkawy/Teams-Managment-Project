@@ -17,7 +17,7 @@ namespace Persistance.Data.Seeding
             _context = context; 
         }
 
-        public async System.Threading.Tasks.Task InitializeAsync()
+        public async Task InitializeAsync()
         {
             if (!_context.Organizations.Any())
             {
@@ -81,7 +81,7 @@ namespace Persistance.Data.Seeding
             if (!_context.Tasks.Any())
             {
                 var tasksData = File.ReadAllText(@"../Persistance/Data/Seeding/tasks.json");
-                var tasks = JsonSerializer.Deserialize<List<Domain.Entities.TaskEntity>>(tasksData);
+                var tasks = JsonSerializer.Deserialize<List<TaskEntity>>(tasksData);
 
                 if (tasks is not null && tasks.Any())
                 {

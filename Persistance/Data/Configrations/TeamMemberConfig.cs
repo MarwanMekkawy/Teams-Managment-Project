@@ -20,12 +20,12 @@ namespace Persistance.Data.Configrations
             builder.HasOne(tm => tm.Team)
                    .WithMany(t => t.Members)
                    .HasForeignKey(tm => tm.TeamId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .OnDelete(DeleteBehavior.Cascade).IsRequired(false);
 
             builder.HasOne(tm => tm.User)
                    .WithMany(u => u.TeamMemberships)
                    .HasForeignKey(tm => tm.UserId)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .OnDelete(DeleteBehavior.Cascade).IsRequired(false);
         }
     }
 }
