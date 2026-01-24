@@ -22,8 +22,8 @@ namespace Persistance.Security
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Name),
             new Claim(ClaimTypes.Role, user.Role.ToString()),
-            new Claim("creationDate", user.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")),
-            new Claim("OrgId" , user.OrganizationId.ToString())
+            new Claim("OrgId" , user.OrganizationId.ToString()),
+            new Claim("creationDate", user.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"))
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!));
