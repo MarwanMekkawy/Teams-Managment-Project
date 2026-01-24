@@ -23,52 +23,6 @@ This project is designed to be **CV‑ready**: clean architecture, scalable stru
 This project follows **Onion Architecture**, where **dependencies always point inward** toward the domain. The domain layer is completely independent of frameworks and infrastructure concerns.
 ---
 
-## 📦 Solution Structure
-
-```text
-TeamsManagementProject
-│
-├── Core
-│   └── Domain
-│       ├── Entities
-│       ├── Enums
-│       └── Contracts
-│           ├── Repositories
-│           ├── Security
-│           └── IUnitOfWork
-│
-├── Application
-│   ├── Services
-│   ├── Services.Abstractions
-│   ├── MappingProfiles
-│   └── Extensions
-│
-├── Infrastructure
-│   └── Persistence
-│       ├── Data
-│       │   ├── Configurations
-│       │   ├── Migrations
-│       │   └── Seeding
-│       ├── Repositories
-│       ├── Hash
-│       └── AppDbContext
-│
-├── Shared
-│   └── DTOs
-│       ├── OrganizationDTOs
-│       ├── TeamDTOs
-│       ├── ProjectDTOs
-│       ├── TaskDTOs
-│       └── UserDTOs
-│
-└── TeamsManagementProject.API
-    ├── Controllers
-    ├── Program.cs
-    └── appsettings.json
-````
-
----
-
 ## 🧠 Domain Model
 
 ### Core Entities
@@ -95,11 +49,7 @@ All main entities inherit:
 * `PATCH /soft-delete` → sets `IsDeleted = true`
 * `PATCH /restore` → restores entity
 * `GET /deleted` → fetch soft‑deleted records
-
-✔ Prevents data loss
-✔ Enables auditing and recovery
-✔ Real‑world enterprise pattern
-
+* 
 ---
 
 ## 🔌 API Endpoints Overview
@@ -214,3 +164,4 @@ Update the connection string in `appsettings.json` before running migrations.
 ## 👨‍💻 Author
 
 **Marwan** – Software Engineer (.NET)
+
