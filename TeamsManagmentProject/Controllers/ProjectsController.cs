@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using Shared.ProjectDTOs;
@@ -20,6 +21,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Project retrieved successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Manager,Member")]
         public async Task<ActionResult<ProjectDto>> GetById(int id)
             => Ok(await _service.GetByIdAsync(id));
 
@@ -31,6 +33,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="201">Project created successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult<ProjectDto>> Create(CreateProjectDto dto)
         {
             var createdProject = await _service.CreateAsync(dto);
@@ -46,6 +49,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Project updated successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpPut("{id}")]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult<ProjectDto>> Update(int id, UpdateProjectDto dto)
             => Ok(await _service.UpdateAsync(id, dto));
 
@@ -57,6 +61,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Project status updated successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpPatch("{id}/status")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> ChangeStatus(int id, ProjectStatus status)
         {
             await _service.ChangeStatusAsync(id, status);
@@ -70,6 +75,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Project deleted successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteAsync(id);
@@ -83,6 +89,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Project soft-deleted successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpPatch("{id}/soft-delete")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> SoftDelete(int id)
         {
             await _service.SoftDeleteAsync(id);
@@ -96,6 +103,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Project restored successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpPatch("{id}/restore")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Restore(int id)
         {
             await _service.RestoreAsync(id);
@@ -108,6 +116,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <returns>A list of soft-deleted projects.</returns>
         /// <response code="200">Soft-deleted projects retrieved successfully.</response>
         [HttpGet("soft-deleted")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<ProjectDto>>> GetDeleted()
             => Ok(await _service.GetAllDeletedProjectsAsync());
 
@@ -118,6 +127,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <returns>A list of projects for the team.</returns>
         /// <response code="200">Projects retrieved successfully.</response>
         [HttpGet("by-team/{teamId}")]
+        [Authorize(Roles = "Admin,Manager,Member")]
         public async Task<ActionResult<List<ProjectDto>>> GetByTeam(int teamId)
             => Ok(await _service.GetByTeamAsync(teamId));
 
@@ -128,6 +138,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <returns>A list of projects for the organization.</returns>
         /// <response code="200">Projects retrieved successfully.</response>
         [HttpGet("by-organization/{organizationId}")]
+        [Authorize(Roles = "Admin,Manager,Member")]
         public async Task<ActionResult<List<ProjectDto>>> GetByOrganization(int organizationId)
             => Ok(await _service.GetByOrganizationAsync(organizationId));
     }

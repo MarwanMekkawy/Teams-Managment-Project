@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using Shared.OrganizationDTOs;
 using System.Text.Json;
@@ -23,6 +24,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Statistics retrieved successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpGet("{id}/stats")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetStats(int id)
         {
             var orgStats = await _service.GetStatsAsync(id);
@@ -45,6 +47,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <returns>A list of organizations.</returns>
         /// <response code="200">Organizations retrieved successfully.</response>
         [HttpGet]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<IEnumerable<string>>> GetAll()
             => Ok(await _service.GetAllAsync());
 
@@ -56,6 +59,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Organization retrieved successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<string>> GetById(int id)
             => Ok(await _service.GetByIdAsync(id));
 
@@ -67,6 +71,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="201">Organization created successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<OrganizationDto>> Create(CreateOrganizationDto dto)
         {
             var createdOrg = await _service.CreateAsync(dto);
@@ -82,6 +87,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Organization updated successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<OrganizationDto>> Update(int id, UpdateOrganizationDto dto)
             => Ok(await _service.UpdateAsync(id, dto));
 
@@ -92,6 +98,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Organization deleted successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteAsync(id);
@@ -105,6 +112,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Organization soft-deleted successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpPatch("{id}/soft-delete")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> SoftDelete(int id)
         {
             await _service.SoftDeleteAsync(id);
@@ -118,6 +126,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Organization restored successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpPatch("{id}/restore")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Restore(int id)
         {
             await _service.RestoreAsync(id);
@@ -130,6 +139,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <returns>A list of soft-deleted organizations.</returns>
         /// <response code="200">Soft-deleted organizations retrieved successfully.</response>
         [HttpGet("soft-deleted")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<OrganizationDto>>> GetDeleted()
             => Ok(await _service.GetAllDeletedOrganizationsAsync());
     }

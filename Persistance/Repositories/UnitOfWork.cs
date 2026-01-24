@@ -29,7 +29,7 @@ namespace Persistance.Repositories
         }
         public async Task<int> SaveChangesAsync()
         {
-            // update UpdatedAt time 
+            // update UpdatedAt time with saving
             foreach (var entry in _context.ChangeTracker.Entries<BaseEntity<int>>())
             {
                 if (entry.State == EntityState.Modified)

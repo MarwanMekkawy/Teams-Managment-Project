@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using Shared.UserDTOs;
 
@@ -19,6 +20,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">User retrieved successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Manager,Member")]
         public async Task<ActionResult<UserDto>> GetById(int id)
             => Ok(await _service.GetByIdAsync(id));
 
@@ -30,6 +32,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">User retrieved successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpGet("by-email")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<UserDto>> GetByEmail([FromQuery] string email)
             => Ok(await _service.GetByEmailAsync(email));
 
@@ -41,6 +44,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="201">User created successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<UserDto>> Create(CreateUserDto dto)
         {
             var createdUser = await _service.CreateAsync(dto);
@@ -56,6 +60,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">User updated successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<UserDto>> Update(int id, UpdateUserDto dto)
             => Ok(await _service.UpdateAsync(id, dto));
 
@@ -66,6 +71,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">User deleted successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteAsync(id);
@@ -79,6 +85,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">User soft-deleted successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpPatch("{id}/soft-delete")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> SoftDelete(int id)
         {
             await _service.SoftDeleteAsync(id);
@@ -92,6 +99,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">User restored successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpPatch("{id}/restore")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Restore(int id)
         {
             await _service.RestoreAsync(id);
@@ -104,6 +112,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <returns>A list of soft-deleted users.</returns>
         /// <response code="200">Soft-deleted users retrieved successfully.</response>
         [HttpGet("soft-deleted")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<UserDto>>> GetDeleted()
             => Ok(await _service.GetAllDeletedUsersAsync());
     }
