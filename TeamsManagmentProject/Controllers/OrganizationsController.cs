@@ -42,14 +42,14 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// Retrieves all organizations.
+        /// Retrieves organizations with pagination.
         /// </summary>
-        /// <returns>A list of organizations.</returns>
+        /// <returns>A paginated list of organizations.</returns>
         /// <response code="200">Organizations retrieved successfully.</response>
         [HttpGet]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult<IEnumerable<string>>> GetAll()
-            => Ok(await _service.GetAllAsync());
+        public async Task<ActionResult<IEnumerable<string>>> GetAll(int pageNumber = 1, int pageSize = 5)
+            => Ok(await _service.GetAllAsync(pageNumber, pageSize));
 
         /// <summary>
         /// Retrieves a specific organization by its identifier.

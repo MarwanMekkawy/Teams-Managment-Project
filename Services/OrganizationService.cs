@@ -24,9 +24,9 @@ namespace Services
         }
 
         // Crud methods //
-        public async Task<List<string>> GetAllAsync()
+        public async Task<List<string>> GetAllAsync(int pageNumber, int pageSize)
         {        
-            return (await unitOfWork.organizations.GetAllSelectedAsync(o => o.Name)).ToList();
+            return (await unitOfWork.organizations.GetAllSelectedAsync(o => o.Name, pageNumber, pageSize)).ToList();
         }
 
         public async Task<OrganizationDto> GetByIdAsync(int id)

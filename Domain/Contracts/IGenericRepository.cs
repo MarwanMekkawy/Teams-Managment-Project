@@ -11,7 +11,7 @@ namespace Domain.Contracts
     public interface IGenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         Task<IEnumerable<TEntity>> GetAllAsync(bool Tracked = false);
-        Task<IEnumerable<TResult>> GetAllSelectedAsync<TResult>(Expression<Func<TEntity,TResult>> expression,bool Tracked = false);
+        Task<IEnumerable<TResult>> GetAllSelectedAsync<TResult>(Expression<Func<TEntity, TResult>> expression, int pageNumber, int pageSize, bool Tracked = false);
         Task<TEntity?> GetAsync(TKey id);
         void Add(TEntity entity);
         void Update(TEntity entity);
