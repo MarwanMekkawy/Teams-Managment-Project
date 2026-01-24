@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
+using Domain.Exceptions;
 using Services.Abstractions;
 using Shared.TeamDTOs;
 using System;
@@ -25,7 +26,7 @@ namespace Services
         public async Task<TeamDto> GetByIdAsync(int id)
         {
             var team = await unitOfWork.teams.GetAsync(id);
-            if (team == null) throw new KeyNotFoundException($"Team with ID {id} not found");
+            if (team == null) throw new NotFoundException($"Team with ID {id} not found");
             return mapper.Map<TeamDto>(team);
         }
 
@@ -40,7 +41,7 @@ namespace Services
         public async Task<TeamDto> UpdateAsync(int id, UpdateTeamDto dto)
         {
             var existingTeam = await unitOfWork.teams.GetAsync(id);
-            if (existingTeam == null) throw new KeyNotFoundException($"Team with ID {id} not found");
+            if (existingTeam == null) throw new NotFoundException($"Team with ID {id} not found");
             existingTeam.Name = dto.Name ?? existingTeam.Name;
             unitOfWork.teams.Update(existingTeam);
             await unitOfWork.SaveChangesAsync();
@@ -50,7 +51,7 @@ namespace Services
         public async Task DeleteAsync(int id)
         {
             var team = await unitOfWork.teams.GetAsync(id);
-            if (team == null) throw new KeyNotFoundException($"Team with ID {id} not found");
+            if (team == null) throw new NotFoundException($"Team with ID {id} not found");
             unitOfWork.teams.Delete(team);
             await unitOfWork.SaveChangesAsync();
         }
@@ -59,7 +60,7 @@ namespace Services
         public async Task SoftDeleteAsync(int id)
         {
             var team = await unitOfWork.teams.GetAsync(id);
-            if (team == null) throw new KeyNotFoundException($"Team with ID {id} not found");
+            if (team == null) throw new NotFoundException($"Team with ID {id} not found");
             team.IsDeleted = true;
             unitOfWork.teams.Update(team);
             await unitOfWork.SaveChangesAsync();
@@ -67,8 +68,8 @@ namespace Services
         public async Task RestoreAsync(int id)
         {
             var team = await unitOfWork.teams.GetIncludingDeletedAsync(id);
-            if (team == null) throw new KeyNotFoundException($"team with ID {id} not found");
-            if (!team.IsDeleted) throw new InvalidOperationException("Not deleted Entity");
+            if (team == null) throw new NotFoundException($"team with ID {id} not found");
+            if (!team.IsDeleted) throw new BadRequestException("the entity is Not a deleted Entity");
 
             team.IsDeleted = false;
             await unitOfWork.SaveChangesAsync();

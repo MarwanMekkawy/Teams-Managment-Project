@@ -2,6 +2,7 @@
 using Domain.Contracts;
 using Domain.Entities;
 using Domain.Enums;
+using Domain.Exceptions;
 using Services.Abstractions;
 using Shared.TaskDTOs;
 using System;
@@ -25,7 +26,7 @@ namespace Services
         public async Task<TaskDto> GetByIdAsync(int id)
         {
             var task = await unitOfWork.tasks.GetAsync(id);
-            if (task == null) throw new KeyNotFoundException($"Task with ID {id} not found");
+            if (task == null) throw new NotFoundException($"Task with ID {id} not found");
             return mapper.Map<TaskDto>(task);
         }
 
@@ -40,7 +41,7 @@ namespace Services
         public async Task<TaskDto> UpdateAsync(int id, UpdateTaskDto dto)
         {
             var task = await unitOfWork.tasks.GetAsync(id);
-            if (task == null) throw new KeyNotFoundException($"Task with ID {id} not found");
+            if (task == null) throw new NotFoundException($"Task with ID {id} not found");
             task.Title = dto.Title ?? task.Title;
             task.Description = dto.Description ?? task.Description;
             task.DueDate = dto.DueDate ?? task.DueDate;
@@ -54,7 +55,7 @@ namespace Services
         public async Task DeleteAsync(int id)
         {
             var task = await unitOfWork.tasks.GetAsync(id);
-            if (task == null) throw new KeyNotFoundException($"Task with ID {id} not found");
+            if (task == null) throw new NotFoundException($"Task with ID {id} not found");
             unitOfWork.tasks.Delete(task);
             await unitOfWork.SaveChangesAsync();
         }
@@ -63,7 +64,7 @@ namespace Services
         public async Task SoftDeleteAsync(int id)
         {
             var task = await unitOfWork.tasks.GetAsync(id);
-            if (task == null) throw new KeyNotFoundException($"Task with ID {id} not found");
+            if (task == null) throw new NotFoundException($"Task with ID {id} not found");
             task.IsDeleted = true;
             unitOfWork.tasks.Update(task);
             await unitOfWork.SaveChangesAsync();
@@ -72,8 +73,8 @@ namespace Services
         public async Task RestoreAsync(int id)
         {
             var task = await unitOfWork.tasks.GetIncludingDeletedAsync(id);
-            if (task == null) throw new KeyNotFoundException($"Task with ID {id} not found");
-            if (!task.IsDeleted) throw new InvalidOperationException("Not deleted Entity");
+            if (task == null) throw new NotFoundException($"Task with ID {id} not found");
+            if (!task.IsDeleted) throw new BadRequestException("the entity is Not a deleted Entity");
 
             task.IsDeleted = false;
             await unitOfWork.SaveChangesAsync();
@@ -89,21 +90,21 @@ namespace Services
         public async Task<List<TaskDto>> GetTasksByProjectAsync(int projectId)
         {
             var tasks = await unitOfWork.tasks.GetByProjectAndStatusAsync(projectId);
-            if (tasks == null) throw new KeyNotFoundException($"Project with ID {projectId} not found");
+            if (tasks == null) throw new NotFoundException($"Project with ID {projectId} not found");
             return mapper.Map<List<TaskDto>>(tasks);
         }
 
         public async Task<List<TaskDto>> GetTasksByUserAsync(int userId)
         {
             var tasks = await unitOfWork.tasks.GetByAssigneeAndStatusAsync(userId);
-            if (tasks == null) throw new KeyNotFoundException($"User with ID {userId} not found");
+            if (tasks == null) throw new NotFoundException($"User with ID {userId} not found");
             return mapper.Map<List<TaskDto>>(tasks);
         }
 
         public async Task<List<TaskDto>> GetOverdueTasksAsync(int organizationId)
         {
             var overDueTasks = await unitOfWork.tasks.GetOverdueAsync(organizationId);
-            if (overDueTasks == null) throw new KeyNotFoundException($"Organization with ID {organizationId} not found");
+            if (overDueTasks == null) throw new NotFoundException($"Organization with ID {organizationId} not found");
             return mapper.Map<List<TaskDto>>(overDueTasks);
         }
 
@@ -111,9 +112,9 @@ namespace Services
         public async Task AssignToUserAsync(int taskId, int userId)
         {
             var task = await unitOfWork.tasks.GetAsync(taskId);
-            if (task == null) throw new KeyNotFoundException($"Task with ID {taskId} not found");
+            if (task == null) throw new NotFoundException($"Task with ID {taskId} not found");
             var userExists  = await unitOfWork.users.ExistsAsync(userId);
-            if (!userExists) throw new KeyNotFoundException($"User with ID {userId} not found");
+            if (!userExists) throw new NotFoundException($"User with ID {userId} not found");
             task.AssigneeId = userId;
             unitOfWork.tasks.Update(task);
             await unitOfWork.SaveChangesAsync();
@@ -122,7 +123,7 @@ namespace Services
         public async Task ChangeStatusAsync(int id, TaskEntityStatus? status)
         {
             var task = await unitOfWork.tasks.GetAsync(id);
-            if (task == null) throw new KeyNotFoundException($"Task with ID {id} not found");
+            if (task == null) throw new NotFoundException($"Task with ID {id} not found");
             task.Status = status ?? task.Status;
             unitOfWork.tasks.Update(task);
             await unitOfWork.SaveChangesAsync();

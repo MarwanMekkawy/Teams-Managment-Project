@@ -1,11 +1,12 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Persistance;
 using Persistance.Data.Seeding;
 using Persistance.Extentions;
 using System.Reflection;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
+using TeamsManagmentProject.API.Middleware;
 
 namespace TeamsManagmentProject
 {
@@ -73,6 +74,7 @@ namespace TeamsManagmentProject
             }
 
             app.UseHttpsRedirection();
+            app.UseMiddleware<GlobalHandlingMiddleware>();     // global Exception middleware
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
