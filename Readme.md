@@ -1,4 +1,4 @@
-> 🚧 **Status:** Work in Progress  
+> #🚧 **Status:** Work in Progress  
 > This project is under active development. Core features are implemented; additional features and refinements are ongoing.
 
 # Teams Management API
@@ -167,6 +167,7 @@ Update the connection string in `appsettings.json` before running migrations.
 ## 👨‍💻 Author
 
 **Marwan** – Software Engineer (.NET)
+
 
 
 
