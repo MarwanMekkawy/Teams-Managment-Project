@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
+using Shared.Claims;
 using Shared.OrganizationDTOs;
-using System.Text.Json;
-using TeamsManagmentProject.API.Claims;
+using TeamsManagmentProject.API.ApiClaimsFactory;
 
 namespace TeamsManagmentProject.API.Controllers
 {
@@ -28,7 +28,7 @@ namespace TeamsManagmentProject.API.Controllers
         public async Task<IActionResult> GetStats()
         {
             // extracting claims from requesting user
-            var ctx = UserClaims.From(User);
+            var ctx = UserClaimsFactory.From(User);
 
             var orgStats = await _service.GetStatsAsync(ctx.OrgId);
             var statsObject = new

@@ -1,9 +1,10 @@
 ﻿using Domain.Enums;
+using Shared.Claims;
 using System.Security.Claims;
 
-namespace TeamsManagmentProject.API.Claims
+namespace TeamsManagmentProject.API.ApiClaimsFactory
 {
-    public record UserClaims(int UserId, int OrgId, UserRole Role)
+    public static class UserClaimsFactory
     {
         public static UserClaims From(ClaimsPrincipal user)
         {
@@ -15,3 +16,4 @@ namespace TeamsManagmentProject.API.Claims
         }
     }
 }
+

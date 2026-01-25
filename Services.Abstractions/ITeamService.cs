@@ -1,4 +1,5 @@
-﻿using Shared.OrganizationDTOs;
+﻿using Shared.Claims;
+using Shared.OrganizationDTOs;
 using Shared.TeamDTOs;
 using Shared.TeamMemberDTOs;
 using System;
@@ -12,14 +13,15 @@ namespace Services.Abstractions
     public interface ITeamService
     {
         Task<TeamDto> GetByIdAsync(int id);
-        Task<TeamDto> CreateAsync(CreateTeamDto dto);
-        Task<TeamDto> UpdateAsync(int id, UpdateTeamDto dto);
+        Task<TeamDto> CreateAsync(CreateTeamDto dto, UserClaims userCredentials);
+        Task<TeamDto> UpdateAsync(int id, UpdateTeamDto dto, UserClaims userCredentials);
         Task DeleteAsync(int id);
-        Task SoftDeleteAsync(int id);
-        Task RestoreAsync(int id);
+        Task SoftDeleteAsync(int id, UserClaims userCredentials);
+        Task RestoreAsync(int id, UserClaims userCredentials);
         Task<List<TeamDto>> GetAllDeletedTeamsAsync();
 
-        Task<List<TeamDto>> GetTeamsByOrganizationAsync(int organizationId);      
-        Task<List<TeamDto>> GetTeamsByUserAsync(int userId);
+        Task<List<TeamDto>> GetTeamsByOrganizationAsync(int organizationId, UserClaims userCredentials);      
+        Task<List<TeamDto>> GetTeamsByUserAsync(int userId, UserClaims userCredentials);
+        Task<List<TeamDto>> GetTeamsByUserCredentialsAsync(UserClaims userCredentials);
     }
 }
