@@ -12,8 +12,8 @@ using Persistance;
 namespace Persistance.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260118095606_userPwAdded")]
-    partial class userPwAdded
+    [Migration("20260125103213_NewCreate")]
+    partial class NewCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,6 +85,46 @@ namespace Persistance.Data.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("Projects", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.RefreshTokenEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReplacedByTokenHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TaskEntity", b =>
@@ -204,7 +244,7 @@ namespace Persistance.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("OrganizationId")
+                    b.Property<int?>("OrganizationId")
                         .HasColumnType("int");
 
                     b.Property<string>("PasswordHash")
@@ -234,6 +274,16 @@ namespace Persistance.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RefreshTokenEntity", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.TaskEntity", b =>
@@ -270,14 +320,12 @@ namespace Persistance.Data.Migrations
                     b.HasOne("Domain.Entities.Team", "Team")
                         .WithMany("Members")
                         .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("TeamMemberships")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Team");
 
@@ -289,8 +337,7 @@ namespace Persistance.Data.Migrations
                     b.HasOne("Domain.Entities.Organization", "Organization")
                         .WithMany("Users")
                         .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Organization");
                 });
@@ -317,6 +364,8 @@ namespace Persistance.Data.Migrations
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Navigation("AssignedTasks");
+
+                    b.Navigation("RefreshTokens");
 
                     b.Navigation("TeamMemberships");
                 });

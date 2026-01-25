@@ -33,7 +33,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="201">Project created successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<ProjectDto>> Create(CreateProjectDto dto)
         {
             var createdProject = await _service.CreateAsync(dto);
@@ -49,7 +49,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Project updated successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpPut("{id}")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<ProjectDto>> Update(int id, UpdateProjectDto dto)
             => Ok(await _service.UpdateAsync(id, dto));
 
@@ -61,7 +61,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Project status updated successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpPatch("{id}/status")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> ChangeStatus(int id, ProjectStatus status)
         {
             await _service.ChangeStatusAsync(id, status);
@@ -89,7 +89,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Project soft-deleted successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpPatch("{id}/soft-delete")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> SoftDelete(int id)
         {
             await _service.SoftDeleteAsync(id);
@@ -103,7 +103,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Project restored successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpPatch("{id}/restore")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Restore(int id)
         {
             await _service.RestoreAsync(id);

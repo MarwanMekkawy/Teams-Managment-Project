@@ -14,19 +14,13 @@ namespace Persistance.Repositories
         {
             _context = context;
         }
-        // getting list of all entities <TEntity> as tracked/not tracked
-        public async Task<IEnumerable<TEntity>> GetAllAsync(bool tracked = false)
-        {
-            if (tracked) return await _context.Set<TEntity>().ToListAsync();
-            else         return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
-        }
-        // getting list of certain properties of all entities <TEntity> tracked/not tracked
-        public async Task<IEnumerable<TResult>> GetAllSelectedAsync<TResult>
-                    (Expression<Func<TEntity, TResult>> expression, int pageNumber, int pageSize, bool Tracked = false)
+
+        // getting list entities <TEntity> tracked/not tracked [paginated]
+        public async Task<IEnumerable<TEntity>> GetAllAsync(int pageNumber, int pageSize, bool Tracked = false)
         {
             var query = _context.Set<TEntity>().AsQueryable();
             if(!Tracked) query = query.AsNoTracking();         
-            return await query.OrderBy(e => e.Id).Select(expression).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return await query.OrderBy(e => e.Id).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         }
         // getting an entity <TEntity> by id
         public async Task<TEntity?> GetAsync(TKey id)

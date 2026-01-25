@@ -70,11 +70,16 @@ namespace Services
             var existingEmail = await unitOfWork.users.GetByEmailAsync(normalizedEmail);
             if (existingEmail != null) throw new ConflictException("Email is already in use");
 
-            var newPassword = dto.Password;
+            // PW validation //
 
+            // Check for null or empty
+            if (string.IsNullOrWhiteSpace(dto.Password)) throw new BadRequestException("Password Cant be empty");
+            // Check if confirm pw & pw match 
+            if (dto.ConfirmPassword != dto.Password) throw new BadRequestException("New password confirmation must match the password");
+
+            var newPassword = dto.Password;
             // Validate password length
             if (newPassword.Length < 8) throw new BadRequestException("New password must be at least 8 characters");
-
             // Validate password strength
             if (!IsStrongPassword(newPassword)) throw new BadRequestException("Password is too weak");
 
