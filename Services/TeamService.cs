@@ -112,11 +112,13 @@ namespace Services
 
         public async Task<List<TeamDto>> GetTeamsByUserAsync(int userId, UserClaims userCredentials)
         {
-            if(userCredentials.Role == UserRole.Member || userCredentials.Role == UserRole.TeamLeader) userId = userCredentials.UserId;
+            if ((userCredentials.Role == UserRole.Member || userCredentials.Role == UserRole.TeamLeader) && userId != userCredentials.UserId)
+                throw new ForbiddenException("can only acces your teams");
 
             if (userCredentials.Role == UserRole.Manager)
             {
                 var orgTeamsForId = await unitOfWork.teams.GetByUserAndOrganizationAsync(userCredentials.UserId, userCredentials.OrgId);
+                if(!orgTeamsForId.Any()) throw new ForbiddenException("User does not belong to your organization");
                 return mapper.Map<List<TeamDto>>(orgTeamsForId);
             }
             
