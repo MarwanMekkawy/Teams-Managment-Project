@@ -7,6 +7,7 @@
 
 # Teams Management API
 ![Status](https://img.shields.io/badge/status-work%20in%20progress-orange)
+
 A **production‑ready Team Management REST API** built with **ASP.NET Core (.NET 8)** following **Clean / Onion Architecture** principles. The API manages **organizations, teams, users, projects, and tasks** with full lifecycle support, **soft deletion**, and clear separation of concerns.
 
 This project is designed to be **CV‑ready**: clean architecture, scalable structure, and real‑world domain modeling.
@@ -171,6 +172,7 @@ Update the connection string in `appsettings.json` before running migrations.
 ## 👨‍💻 Author
 
 **Marwan** – Software Engineer (.NET)
+
 
 
 
