@@ -33,7 +33,7 @@ namespace Services.RefreshToken
         // hash tokens [helper]
         private string HashRefreshToken(string token)
         {
-            var secret = Configuration["RefreshToken:HashSecret"]!;
+            var secret = Configuration["RefreshToken:Secret"]!;
             using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
             return Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(token)));
         }
