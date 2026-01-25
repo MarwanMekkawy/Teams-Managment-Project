@@ -26,7 +26,7 @@ namespace Persistance.Security
             };
             // if org id is not null add it if not add palceholder
             if (user.OrganizationId.HasValue) claims.Add(new Claim("OrgId", user.OrganizationId.Value.ToString()));
-            else claims.Add(new Claim("OrgId", ""));
+            else claims.Add(new Claim("OrgId", "-1"));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

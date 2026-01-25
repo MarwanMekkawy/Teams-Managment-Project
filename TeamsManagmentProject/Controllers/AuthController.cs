@@ -109,7 +109,7 @@ namespace TeamsManagmentProject.API.Controllers
         {
             if (dto.NewPassword != dto.ConfirmNewPassword) return BadRequest("Passwords do not match");
             
-            if (! int.TryParse(User.FindFirstValue("id"), out var userId)) return Unauthorized();
+            if (! int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId)) return Unauthorized();
 
             await authService.ChangePasswordAsync(userId, dto.OldPassword, dto.NewPassword);
 
