@@ -9,21 +9,18 @@ namespace TeamsManagmentProject.API.Controllers
 {
 
     /// <summary>
-    /// Exposes endpoints for managing organizations and related operations.
+    /// Exposes endpoints for managing organizations and organization-level operations.
     /// </summary>
     [ApiController]
     [Route("api/v1/organizations")]
     public class OrganizationsController(IOrganizationService _service) : ControllerBase
     {
         /// <summary>
-        /// Retrieves aggregated statistics for a specific organization for the Authorized user.
+        /// Retrieves aggregated statistics for the organization associated with the authenticated manager.
         /// </summary>
-        /// <returns>
-        /// An object containing users, teams, projects, and task statistics.
-        /// </returns>
         /// <response code="200">Statistics retrieved successfully.</response>
         /// <response code="404">Organization not found.</response>
-        [HttpGet("/stats")]
+        [HttpGet("stats")]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetStats()
         {
@@ -47,10 +44,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// [Admin] Retrieves aggregated statistics for a specific organization.
         /// </summary>
-        /// <param name="id">The unique identifier of the organization.</param>
-        /// <returns>
-        /// An object containing users, teams, projects, and task statistics.
-        /// </returns>
+        /// <param name="id">The organization identifier.</param>
         /// <response code="200">Statistics retrieved successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpGet("{id}/stats")]
@@ -74,7 +68,8 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// [Admin] Retrieves organizations with pagination.
         /// </summary>
-        /// <returns>A paginated list of organizations.</returns>
+        /// <param name="pageNumber">Page number.</param>
+        /// <param name="pageSize">Number of items per page.</param>
         /// <response code="200">Organizations retrieved successfully.</response>
         [HttpGet]
         [Authorize(Roles = "Admin")]
@@ -84,8 +79,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// [Admin] Retrieves a specific organization by its identifier.
         /// </summary>
-        /// <param name="id">The unique identifier of the organization.</param>
-        /// <returns>The requested organization.</returns>
+        /// <param name="id">The organization identifier.</param>
         /// <response code="200">Organization retrieved successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpGet("{id}")]
@@ -96,8 +90,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// [Admin] Creates a new organization.
         /// </summary>
-        /// <param name="dto">The data required to create the organization.</param>
-        /// <returns>The newly created organization.</returns>
+        /// <param name="dto">Organization creation data.</param>
         /// <response code="201">Organization created successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
@@ -111,9 +104,8 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// [Admin] Updates an existing organization.
         /// </summary>
-        /// <param name="id">The unique identifier of the organization.</param>
-        /// <param name="dto">The updated organization data.</param>
-        /// <returns>The updated organization.</returns>
+        /// <param name="id">The organization identifier.</param>
+        /// <param name="dto">Updated organization data.</param>
         /// <response code="200">Organization updated successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpPut("{id}")]
@@ -124,7 +116,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// [Admin] Permanently deletes an organization.
         /// </summary>
-        /// <param name="id">The unique identifier of the organization.</param>
+        /// <param name="id">The organization identifier.</param>
         /// <response code="204">Organization deleted successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpDelete("{id}")]
@@ -136,9 +128,9 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// [Admin] Soft-deletes an organization without permanently removing it.
+        /// [Admin] Soft-deletes an organization.
         /// </summary>
-        /// <param name="id">The unique identifier of the organization.</param>
+        /// <param name="id">The organization identifier.</param>
         /// <response code="204">Organization soft-deleted successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpPatch("{id}/soft-delete")]
@@ -152,7 +144,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// [Admin] Restores a previously soft-deleted organization.
         /// </summary>
-        /// <param name="id">The unique identifier of the organization.</param>
+        /// <param name="id">The organization identifier.</param>
         /// <response code="204">Organization restored successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpPatch("{id}/restore")]
@@ -166,12 +158,10 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// [Admin] Retrieves all soft-deleted organizations.
         /// </summary>
-        /// <returns>A list of soft-deleted organizations.</returns>
         /// <response code="200">Soft-deleted organizations retrieved successfully.</response>
         [HttpGet("soft-deleted")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<OrganizationDto>>> GetDeleted()
             => Ok(await _service.GetAllDeletedOrganizationsAsync());
     }
-
 }

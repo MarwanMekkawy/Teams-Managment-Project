@@ -16,14 +16,12 @@ namespace TeamsManagmentProject.API.Controllers
     public class TeamsController(ITeamService _service) : ControllerBase
     {
         /// <summary>
-        /// Retrieves teams by request user role.
+        /// Retrieves teams accessible to the authenticated user based on role.
         /// </summary>
-        /// <returns>The requested team.</returns>
-        /// <response code="200">Team retrieved successfully.</response>
-        /// <response code="404">Team not found.</response>
+        /// <response code="200">Teams retrieved successfully.</response>
         [HttpGet]
         [Authorize(Roles = "Manager,Member")]
-        public async Task<ActionResult<TeamDto>> Get()
+        public async Task<ActionResult<List<TeamDto>>> Get()
         {
             var ctx = UserClaimsFactory.From(User);
             return Ok(await _service.GetTeamsByUserCredentialsAsync(ctx));
@@ -32,8 +30,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// [Admin] Retrieves a specific team by its identifier.
         /// </summary>
-        /// <param name="id">The unique identifier of the team.</param>
-        /// <returns>The requested team.</returns>
+        /// <param name="id">The team identifier.</param>
         /// <response code="200">Team retrieved successfully.</response>
         /// <response code="404">Team not found.</response>
         [HttpGet("{id}")]
@@ -44,8 +41,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Creates a new team.
         /// </summary>
-        /// <param name="dto">The data required to create the team.</param>
-        /// <returns>The newly created team.</returns>
+        /// <param name="dto">Team creation data.</param>
         /// <response code="201">Team created successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]                                       
@@ -60,9 +56,8 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Updates an existing team.
         /// </summary>
-        /// <param name="id">The unique identifier of the team.</param>
-        /// <param name="dto">The updated team data.</param>
-        /// <returns>The updated team.</returns>
+        /// <param name="id">The team identifier.</param>
+        /// <param name="dto">Updated team data.</param>
         /// <response code="200">Team updated successfully.</response>
         /// <response code="404">Team not found.</response>
         [HttpPut("{id}")]
@@ -76,7 +71,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// [Admin] Permanently deletes a team.
         /// </summary>
-        /// <param name="id">The unique identifier of the team.</param>
+        /// <param name="id">The team identifier.</param>
         /// <response code="204">Team deleted successfully.</response>
         /// <response code="404">Team not found.</response>
         [HttpDelete("{id}")]
@@ -88,9 +83,9 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// Soft-deletes a team without permanently removing it.
+        /// Soft-deletes a team.
         /// </summary>
-        /// <param name="id">The unique identifier of the team.</param>
+        /// <param name="id">The team identifier.</param>
         /// <response code="204">Team soft-deleted successfully.</response>
         /// <response code="404">Team not found.</response>
         [HttpPatch("{id}/soft-delete")]
@@ -105,7 +100,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Restores a previously soft-deleted team.
         /// </summary>
-        /// <param name="id">The unique identifier of the team.</param>
+        /// <param name="id">The team identifier.</param>
         /// <response code="204">Team restored successfully.</response>
         /// <response code="404">Team not found.</response>
         [HttpPatch("{id}/restore")]
@@ -120,7 +115,6 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// [Admin] Retrieves all soft-deleted teams.
         /// </summary>
-        /// <returns>A list of soft-deleted teams.</returns>
         /// <response code="200">Soft-deleted teams retrieved successfully.</response>
         [HttpGet("soft-deleted")]
         [Authorize(Roles = "Admin")]
@@ -128,10 +122,9 @@ namespace TeamsManagmentProject.API.Controllers
             => Ok(await _service.GetAllDeletedTeamsAsync());
 
         /// <summary>
-        /// Retrieves all teams belonging to a specific organization.
+        /// Retrieves teams belonging to a specific organization.
         /// </summary>
-        /// <param name="organizationId">The unique identifier of the organization.</param>
-        /// <returns>A list of teams for the organization.</returns>
+        /// <param name="organizationId">The organization identifier.</param>
         /// <response code="200">Teams retrieved successfully.</response>
         [HttpGet("by-organization/{organizationId}")]
         [Authorize(Roles = "Admin,Manager")]
@@ -142,10 +135,9 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// Retrieves all teams associated with a specific user.
+        /// Retrieves teams associated with a specific user.
         /// </summary>
-        /// <param name="userId">The unique identifier of the user.</param>
-        /// <returns>A list of teams for the user.</returns>
+        /// <param name="userId">The user identifier.</param>
         /// <response code="200">Teams retrieved successfully.</response>
         [HttpGet("by-user/{userId}")]
         [Authorize(Roles = "Admin,Manager,TeamLeader,Member")]
@@ -155,6 +147,5 @@ namespace TeamsManagmentProject.API.Controllers
             return Ok(await _service.GetTeamsByUserAsync(userId,ctx));
         }
     }
-
 }
 

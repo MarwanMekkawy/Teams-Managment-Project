@@ -29,7 +29,7 @@ namespace Services
         public async Task<TeamDto> GetByIdAsync(int id)
         {
             var team = await unitOfWork.teams.GetAsync(id);
-            if (team == null) throw new NotFoundException($"Team with ID {id} not found");
+            if (team == null) throw new NotFoundException($"Team with ID {id} not found or soft-deleted");
             return mapper.Map<TeamDto>(team);
         }
 
@@ -104,7 +104,8 @@ namespace Services
         // get methods related to another entity //
         public async Task<List<TeamDto>> GetTeamsByOrganizationAsync(int organizationId, UserClaims userCredentials)
         {
-            if(userCredentials.Role == UserRole.Manager) organizationId = userCredentials.OrgId;
+            if (userCredentials.Role == UserRole.Manager && organizationId != userCredentials.OrgId)
+                throw new ForbiddenException("Managers can only access their organization");
 
             var teams= await unitOfWork.teams.GetByOrganizationAsync(organizationId);
             return mapper.Map<List<TeamDto>>(teams);

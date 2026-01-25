@@ -20,7 +20,7 @@ namespace Services
         // Get status //
         public async Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)> GetStatsAsync(int orgId)
         {
-            return await unitOfWork.organizations.GetOrganizationStatsAsync(orgId) ?? (0, 0, 0, 0, 0, 0, 0);              //empty tuple
+            return await unitOfWork.organizations.GetOrganizationStatsAsync(orgId) ?? throw new NotFoundException($"No status found for oraganiztion with ID {orgId}");              //empty tuple
         }
 
         // Crud methods //
