@@ -1,7 +1,7 @@
 ﻿using Domain.Enums;
 using System.Security.Claims;
 
-namespace TeamsManagmentProject.API.UserClaims
+namespace TeamsManagmentProject.API.Claims
 {
     public record UserClaims(int UserId, int OrgId, UserRole Role)
     {

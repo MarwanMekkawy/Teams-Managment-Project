@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using Shared.OrganizationDTOs;
 using System.Text.Json;
+using TeamsManagmentProject.API.Claims;
 
 namespace TeamsManagmentProject.API.Controllers
 {
@@ -15,7 +16,36 @@ namespace TeamsManagmentProject.API.Controllers
     public class OrganizationsController(IOrganizationService _service) : ControllerBase
     {
         /// <summary>
-        /// Retrieves aggregated statistics for a specific organization.
+        /// Retrieves aggregated statistics for a specific organization for the Authorized user.
+        /// </summary>
+        /// <returns>
+        /// An object containing users, teams, projects, and task statistics.
+        /// </returns>
+        /// <response code="200">Statistics retrieved successfully.</response>
+        /// <response code="404">Organization not found.</response>
+        [HttpGet("/stats")]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> GetStats()
+        {
+            // extracting claims from requesting user
+            var ctx = UserClaims.From(User);
+
+            var orgStats = await _service.GetStatsAsync(ctx.OrgId);
+            var statsObject = new
+            {
+                totalUsers = orgStats.totalUsers,
+                totalTeams = orgStats.totalTeams,
+                activeProjects = orgStats.activeProjects,
+                archivedProjects = orgStats.archivedProjects,
+                totalTasks = orgStats.totalTasks,
+                completedTasks = orgStats.completedTasks,
+                overdueTasks = orgStats.overdueTasks
+            };
+            return Ok(statsObject);
+        }
+
+        /// <summary>
+        /// [Admin] Retrieves aggregated statistics for a specific organization.
         /// </summary>
         /// <param name="id">The unique identifier of the organization.</param>
         /// <returns>
@@ -24,7 +54,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Statistics retrieved successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpGet("{id}/stats")]
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetStats(int id)
         {
             var orgStats = await _service.GetStatsAsync(id);
@@ -42,29 +72,29 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// Retrieves organizations with pagination.
+        /// [Admin] Retrieves organizations with pagination.
         /// </summary>
         /// <returns>A paginated list of organizations.</returns>
         /// <response code="200">Organizations retrieved successfully.</response>
         [HttpGet]
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<string>>> GetAll(int pageNumber = 1, int pageSize = 5)
             => Ok(await _service.GetAllAsync(pageNumber, pageSize));
 
         /// <summary>
-        /// Retrieves a specific organization by its identifier.
+        /// [Admin] Retrieves a specific organization by its identifier.
         /// </summary>
         /// <param name="id">The unique identifier of the organization.</param>
         /// <returns>The requested organization.</returns>
         /// <response code="200">Organization retrieved successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<string>> GetById(int id)
             => Ok(await _service.GetByIdAsync(id));
 
         /// <summary>
-        /// Creates a new organization.
+        /// [Admin] Creates a new organization.
         /// </summary>
         /// <param name="dto">The data required to create the organization.</param>
         /// <returns>The newly created organization.</returns>
@@ -79,7 +109,7 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// Updates an existing organization.
+        /// [Admin] Updates an existing organization.
         /// </summary>
         /// <param name="id">The unique identifier of the organization.</param>
         /// <param name="dto">The updated organization data.</param>
@@ -92,7 +122,7 @@ namespace TeamsManagmentProject.API.Controllers
             => Ok(await _service.UpdateAsync(id, dto));
 
         /// <summary>
-        /// Permanently deletes an organization.
+        /// [Admin] Permanently deletes an organization.
         /// </summary>
         /// <param name="id">The unique identifier of the organization.</param>
         /// <response code="204">Organization deleted successfully.</response>
@@ -106,7 +136,7 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// Soft-deletes an organization without permanently removing it.
+        /// [Admin] Soft-deletes an organization without permanently removing it.
         /// </summary>
         /// <param name="id">The unique identifier of the organization.</param>
         /// <response code="204">Organization soft-deleted successfully.</response>
@@ -120,7 +150,7 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// Restores a previously soft-deleted organization.
+        /// [Admin] Restores a previously soft-deleted organization.
         /// </summary>
         /// <param name="id">The unique identifier of the organization.</param>
         /// <response code="204">Organization restored successfully.</response>
@@ -134,7 +164,7 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// Retrieves all soft-deleted organizations.
+        /// [Admin] Retrieves all soft-deleted organizations.
         /// </summary>
         /// <returns>A list of soft-deleted organizations.</returns>
         /// <response code="200">Soft-deleted organizations retrieved successfully.</response>
