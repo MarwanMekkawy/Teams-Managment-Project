@@ -49,6 +49,7 @@ namespace Services
             existingUser.Name = dto.Name ?? existingUser.Name;
             existingUser.Email = dto.Email ?? existingUser.Email;
             existingUser.Role = dto.Role ?? existingUser.Role;
+            existingUser.OrganizationId = dto.OrganizationId ?? existingUser.OrganizationId;
             unitOfWork.users.Update(existingUser);
             await unitOfWork.SaveChangesAsync();
             return mapper.Map<UserDto>(existingUser);

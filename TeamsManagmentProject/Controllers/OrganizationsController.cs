@@ -24,7 +24,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Statistics retrieved successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpGet("{id}/stats")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> GetStats(int id)
         {
             var orgStats = await _service.GetStatsAsync(id);

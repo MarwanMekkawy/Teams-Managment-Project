@@ -12,5 +12,6 @@ namespace Shared.UserDTOs
         public string? Name { get; set; }
         public string? Email { get; set; }
         public UserRole? Role { get; set; }
+        public int? OrganizationId { get; set; }
     }
 }

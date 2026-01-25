@@ -241,7 +241,7 @@ namespace Persistance.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("OrganizationId")
+                    b.Property<int?>("OrganizationId")
                         .HasColumnType("int");
 
                     b.Property<string>("PasswordHash")
@@ -334,8 +334,7 @@ namespace Persistance.Data.Migrations
                     b.HasOne("Domain.Entities.Organization", "Organization")
                         .WithMany("Users")
                         .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Organization");
                 });

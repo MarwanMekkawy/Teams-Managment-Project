@@ -32,7 +32,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="201">Team created successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<TeamDto>> Create(CreateTeamDto dto)
         {
             var createdTeam = await _service.CreateAsync(dto);
@@ -48,7 +48,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Team updated successfully.</response>
         /// <response code="404">Team not found.</response>
         [HttpPut("{id}")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<TeamDto>> Update(int id, UpdateTeamDto dto)
             => Ok(await _service.UpdateAsync(id, dto));
 
@@ -73,7 +73,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Team soft-deleted successfully.</response>
         /// <response code="404">Team not found.</response>
         [HttpPatch("{id}/soft-delete")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> SoftDelete(int id)
         {
             await _service.SoftDeleteAsync(id);
@@ -87,7 +87,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Team restored successfully.</response>
         /// <response code="404">Team not found.</response>
         [HttpPatch("{id}/restore")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Restore(int id)
         {
             await _service.RestoreAsync(id);
