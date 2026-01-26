@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Shared.Claims;
 using Shared.OrganizationDTOs;
 using Shared.UserDTOs;
 using System;
@@ -11,16 +12,16 @@ namespace Services.Abstractions
 {
     public interface IUserService
     {
-        Task<UserDto> GetByIdAsync(int id);
+        Task<UserDto> GetByIdAsync(int id, UserClaims userCredentials);
         Task<UserDto> CreateAsync(CreateUserDto dto);
         Task<UserDto> UpdateAsync(int id, UpdateUserDto dto);
         Task DeleteAsync(int id);
-        Task SoftDeleteAsync(int id);
-        Task RestoreAsync(int id);
-        Task<List<UserDto>> GetAllDeletedUsersAsync();
+        Task SoftDeleteAsync(int id, UserClaims userCredentials);
+        Task RestoreAsync(int id, UserClaims userCredentials);
+        Task<List<UserDto>> GetAllDeletedUsersAsync(UserClaims userCredentials);
 
 
-        Task<UserDto> GetByEmailAsync(string email);
+        Task<UserDto> GetByEmailAsync(string email, UserClaims userCredentials);
         Task<List<UserDto>> GetUsersByOrganizationAsync(int organizationId, UserRole? role = null);
         Task<List<UserDto>> GetUsersByTeamAsync(int teamId);
     }

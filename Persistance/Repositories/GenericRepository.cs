@@ -58,6 +58,6 @@ namespace Persistance.Repositories
             var query = _context.Set<TEntity>().IgnoreQueryFilters().Where(e => e.IsDeleted);
             if (!tracked) query = query.AsNoTracking();
             return await query.ToListAsync();
-        }
+        }        
     }
 }

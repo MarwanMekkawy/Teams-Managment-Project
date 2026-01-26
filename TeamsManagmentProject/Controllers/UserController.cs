@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using Shared.UserDTOs;
+using TeamsManagmentProject.API.ApiClaimsFactory;
 
 namespace TeamsManagmentProject.API.Controllers
 {
@@ -13,16 +14,19 @@ namespace TeamsManagmentProject.API.Controllers
     public class UserController(IUserService _service) : ControllerBase
     {
         /// <summary>
-        /// Retrieves a specific user by its identifier.
+        /// Retrieves a specific user by its identifier for Manager,TeamLeader if the user belongs to their org
         /// </summary>
         /// <param name="id">The unique identifier of the user.</param>
         /// <returns>The requested user.</returns>
         /// <response code="200">User retrieved successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,Manager,Member")]
+        [Authorize(Roles = "Admin,Manager,TeamLeader")]
         public async Task<ActionResult<UserDto>> GetById(int id)
-            => Ok(await _service.GetByIdAsync(id));
+        {
+            var ctx = UserClaimsFactory.From(User);
+            return Ok(await _service.GetByIdAsync(id, ctx));
+        }
 
         /// <summary>
         /// Retrieves a specific user by email address.
@@ -32,9 +36,12 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">User retrieved successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpGet("by-email")]
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin,Manager,TeamLeader")]
         public async Task<ActionResult<UserDto>> GetByEmail([FromQuery] string email)
-            => Ok(await _service.GetByEmailAsync(email));
+        {
+            var ctx = UserClaimsFactory.From(User);
+            return Ok(await _service.GetByEmailAsync(email, ctx));
+        }
 
         /// <summary>
         /// Creates a new user.
@@ -60,7 +67,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">User updated successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<UserDto>> Update(int id, UpdateUserDto dto)
             => Ok(await _service.UpdateAsync(id, dto));
 
@@ -88,7 +95,8 @@ namespace TeamsManagmentProject.API.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> SoftDelete(int id)
         {
-            await _service.SoftDeleteAsync(id);
+            var ctx = UserClaimsFactory.From(User);
+            await _service.SoftDeleteAsync(id, ctx);
             return NoContent();
         }
 
@@ -102,7 +110,8 @@ namespace TeamsManagmentProject.API.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Restore(int id)
         {
-            await _service.RestoreAsync(id);
+            var ctx = UserClaimsFactory.From(User);
+            await _service.RestoreAsync(id, ctx);
             return NoContent();
         }
 
@@ -112,10 +121,12 @@ namespace TeamsManagmentProject.API.Controllers
         /// <returns>A list of soft-deleted users.</returns>
         /// <response code="200">Soft-deleted users retrieved successfully.</response>
         [HttpGet("soft-deleted")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<List<UserDto>>> GetDeleted()
-            => Ok(await _service.GetAllDeletedUsersAsync());
+        {
+            var ctx = UserClaimsFactory.From(User);
+            return Ok(await _service.GetAllDeletedUsersAsync(ctx));
+        }
     }
-
 }
 

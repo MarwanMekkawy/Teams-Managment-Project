@@ -5,6 +5,7 @@ using Domain.Entities;
 using Domain.Enums;
 using Domain.Exceptions;
 using Services.Abstractions;
+using Shared.Claims;
 using Shared.UserDTOs;
 using System;
 using System.Collections.Generic;
@@ -26,10 +27,14 @@ namespace Services
             this.Hasher = hasher;
         }
         // Crud methods //
-        public async Task<UserDto> GetByIdAsync(int id)
+        public async Task<UserDto> GetByIdAsync(int id, UserClaims userCredentials)
         {
             var user = await unitOfWork.users.GetUserWithTeamsEntityAsync(id);
             if (user == null) throw new NotFoundException($"User with ID {id} not found");
+
+            if ((userCredentials.Role == UserRole.Manager || userCredentials.Role == UserRole.TeamLeader) &&user.OrganizationId != userCredentials.OrgId) 
+                throw new ForbiddenException("can only access users in your organization");
+
             return mapper.Map<UserDto>(user);
         }
 
@@ -64,36 +69,52 @@ namespace Services
         }
 
         // Soft Delete methods //
-        public async Task SoftDeleteAsync(int id)
+        public async Task SoftDeleteAsync(int id, UserClaims userCredentials)
         {
             var user = await unitOfWork.users.GetAsync(id);
             if (user == null) throw new NotFoundException($"User with ID {id} not found");
+
+            if (userCredentials.Role == UserRole.Manager && user.OrganizationId != userCredentials.OrgId)
+                throw new ForbiddenException("Manger can only soft-delete users in his organization");
+
             user.IsDeleted = true;
             unitOfWork.users.Update(user);
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task RestoreAsync(int id)
+        public async Task RestoreAsync(int id, UserClaims userCredentials)
         {
             var user = await unitOfWork.users.GetIncludingDeletedAsync(id);
             if (user == null) throw new NotFoundException($"user with ID {id} not found");
             if (!user.IsDeleted) throw new BadRequestException("the entity is Not a deleted Entity");
 
+            if (userCredentials.Role == UserRole.Manager && user.OrganizationId != userCredentials.OrgId)
+                throw new ForbiddenException("Manger can only restore softe-deleted users in his organization");
+
             user.IsDeleted = false;
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<UserDto>> GetAllDeletedUsersAsync()
+        public async Task<List<UserDto>> GetAllDeletedUsersAsync(UserClaims userCredentials)///////////////////////////////
         {
+            if(userCredentials.Role == UserRole.Manager)
+            {
+                var orgDeletedUsers = await unitOfWork.users.GetAllSoftDeletedAsyncByOrgId(userCredentials.OrgId);
+                return mapper.Map<List<UserDto>>(orgDeletedUsers);
+            }
             var deletedUsers = await unitOfWork.users.GetAllSoftDeletedAsync();
             return mapper.Map<List<UserDto>>(deletedUsers);
         }
 
         // get methods related to another entity //
-        public async Task<UserDto> GetByEmailAsync(string email)
+        public async Task<UserDto> GetByEmailAsync(string email, UserClaims userCredentials)
         {
             var user = await unitOfWork.users.GetByEmailAsync(email);
             if (user == null) throw new NotFoundException($"User with Email {email} not found");
+
+            if ((userCredentials.Role == UserRole.Manager || userCredentials.Role == UserRole.TeamLeader) && user.OrganizationId != userCredentials.OrgId)
+                throw new ForbiddenException("can only access users in your organization");
+
             return mapper.Map<UserDto>(user);
 
         }
