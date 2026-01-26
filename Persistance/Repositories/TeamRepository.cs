@@ -31,5 +31,9 @@ namespace Persistance.Repositories
             if (!tracked) query = query.AsNoTracking();
             return await query.ToListAsync();
         }
+        public async Task<bool> IsInOrganization (int teamId, int organizationId)
+        {
+           return  await _context.Teams.AnyAsync(t=>t.Id==teamId && t.OrganizationId==organizationId);
+        }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using Shared.ProjectDTOs;
+using TeamsManagmentProject.API.ApiClaimsFactory;
 
 namespace TeamsManagmentProject.API.Controllers
 {
@@ -21,9 +22,12 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Project retrieved successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,Manager,Member")]
+        [Authorize(Roles = "Admin,Manager,TeamLeader,Member")]
         public async Task<ActionResult<ProjectDto>> GetById(int id)
-            => Ok(await _service.GetByIdAsync(id));
+        {
+            var ctx = UserClaimsFactory.From(User);
+            return Ok(await _service.GetByIdAsync(id, ctx));
+        }
 
         /// <summary>
         /// Creates a new project.
@@ -33,10 +37,11 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="201">Project created successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin,Manager,TeamLeader")]
         public async Task<ActionResult<ProjectDto>> Create(CreateProjectDto dto)
         {
-            var createdProject = await _service.CreateAsync(dto);
+            var ctx = UserClaimsFactory.From(User);
+            var createdProject = await _service.CreateAsync(dto, ctx);
             return CreatedAtAction(nameof(GetById), new { id = createdProject.Id }, createdProject);
         }
 
@@ -49,9 +54,12 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Project updated successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin,Manager,TeamLeader")]
         public async Task<ActionResult<ProjectDto>> Update(int id, UpdateProjectDto dto)
-            => Ok(await _service.UpdateAsync(id, dto));
+        {
+            var ctx = UserClaimsFactory.From(User);
+            return Ok(await _service.UpdateAsync(id, dto, ctx)); 
+        }
 
         /// <summary>
         /// Changes the status of a project.
@@ -61,10 +69,11 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Project status updated successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpPatch("{id}/status")]
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin,Manager,TeamLeader")]
         public async Task<IActionResult> ChangeStatus(int id, ProjectStatus status)
         {
-            await _service.ChangeStatusAsync(id, status);
+            var ctx = UserClaimsFactory.From(User);
+            await _service.ChangeStatusAsync(id, status, ctx);
             return NoContent();
         }
 
@@ -75,10 +84,11 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Project deleted successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _service.DeleteAsync(id);
+            var ctx = UserClaimsFactory.From(User);
+            await _service.DeleteAsync(id, ctx);
             return NoContent();
         }
 
@@ -92,7 +102,8 @@ namespace TeamsManagmentProject.API.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> SoftDelete(int id)
         {
-            await _service.SoftDeleteAsync(id);
+            var ctx = UserClaimsFactory.From(User);
+            await _service.SoftDeleteAsync(id, ctx);
             return NoContent();
         }
 
@@ -106,7 +117,8 @@ namespace TeamsManagmentProject.API.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Restore(int id)
         {
-            await _service.RestoreAsync(id);
+            var ctx = UserClaimsFactory.From(User);
+            await _service.RestoreAsync(id, ctx);
             return NoContent();
         }
 
@@ -118,7 +130,10 @@ namespace TeamsManagmentProject.API.Controllers
         [HttpGet("soft-deleted")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<ProjectDto>>> GetDeleted()
-            => Ok(await _service.GetAllDeletedProjectsAsync());
+        {
+
+            return Ok(await _service.GetAllDeletedProjectsAsync());
+        }
 
         /// <summary>
         /// Retrieves all projects associated with a specific team.
@@ -127,9 +142,12 @@ namespace TeamsManagmentProject.API.Controllers
         /// <returns>A list of projects for the team.</returns>
         /// <response code="200">Projects retrieved successfully.</response>
         [HttpGet("by-team/{teamId}")]
-        [Authorize(Roles = "Admin,Manager,Member")]
+        [Authorize(Roles = "Admin,Manager,TeamLeader")]
         public async Task<ActionResult<List<ProjectDto>>> GetByTeam(int teamId)
-            => Ok(await _service.GetByTeamAsync(teamId));
+        {
+            var ctx = UserClaimsFactory.From(User);
+            return Ok(await _service.GetByTeamAsync(teamId, ctx));
+        }
 
         /// <summary>
         /// Retrieves all projects associated with a specific organization.
@@ -138,9 +156,11 @@ namespace TeamsManagmentProject.API.Controllers
         /// <returns>A list of projects for the organization.</returns>
         /// <response code="200">Projects retrieved successfully.</response>
         [HttpGet("by-organization/{organizationId}")]
-        [Authorize(Roles = "Admin,Manager,Member")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<List<ProjectDto>>> GetByOrganization(int organizationId)
-            => Ok(await _service.GetByOrganizationAsync(organizationId));
+        {
+            var ctx = UserClaimsFactory.From(User);
+            return Ok(await _service.GetByOrganizationAsync(organizationId, ctx));
+        }
     }
-
 }
