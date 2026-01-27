@@ -20,6 +20,6 @@ namespace Domain.Contracts
         // gets list of teams ids with certain users with user id
         Task<IEnumerable<int>> GetTeamIdsByUserAsync(int userId);
         // checks if user with user id belongs to team with team id
-        Task<bool> ExistsAsync(int teamId, int userId);
+        Task<bool> ExistsInTeamAsync(int teamId, int userId);
     }
 }

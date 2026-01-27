@@ -118,8 +118,8 @@ namespace Services
 
             if (userCredentials.Role == UserRole.Manager)
             {
-                var orgTeamsForId = await unitOfWork.teams.GetByUserAndOrganizationAsync(userCredentials.UserId, userCredentials.OrgId);
-                if(!orgTeamsForId.Any()) throw new ForbiddenException("User does not belong to your organization");
+                var orgTeamsForId = await unitOfWork.teams.GetByUserAndOrganizationAsync(userId, userCredentials.OrgId);
+                if(!orgTeamsForId.Any()) throw new ForbiddenException("The user does not belong to your organization or has no teams in it");
                 return mapper.Map<List<TeamDto>>(orgTeamsForId);
             }
             
@@ -133,6 +133,5 @@ namespace Services
             if (userCredentials.Role == UserRole.Manager) return await GetTeamsByOrganizationAsync(userCredentials.OrgId, userCredentials);
             return await GetTeamsByUserAsync(userCredentials.UserId, userCredentials);
         }
-
     }
 }

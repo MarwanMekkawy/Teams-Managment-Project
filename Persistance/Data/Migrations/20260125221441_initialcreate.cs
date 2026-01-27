@@ -6,7 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Persistance.Data.Migrations
 {
     /// <inheritdoc />
+<<<<<<< HEAD:Persistance/Data/Migrations/20260125103213_NewCreate.cs
     public partial class NewCreate : Migration
+=======
+    public partial class initialcreate : Migration
+>>>>>>> 5fdd5c1 (teammember controller tunining #9.8):Persistance/Data/Migrations/20260125221441_initialcreate.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

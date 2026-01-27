@@ -42,7 +42,7 @@ namespace Persistance.Repositories
             return await _context.TeamMembers.Where(tm=>tm.UserId == userId).Select(tm => tm.TeamId).ToListAsync();
         }
 
-        public async Task<bool> ExistsAsync(int teamId, int userId)
+        public async Task<bool> ExistsInTeamAsync(int teamId, int userId)
         {
             return await _context.TeamMembers.AnyAsync(tm=>tm.TeamId == teamId && tm.UserId == userId );
         }

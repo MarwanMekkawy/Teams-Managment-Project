@@ -12,8 +12,13 @@ using Persistance;
 namespace Persistance.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
+<<<<<<< HEAD:Persistance/Data/Migrations/20260125103213_NewCreate.Designer.cs
     [Migration("20260125103213_NewCreate")]
     partial class NewCreate
+=======
+    [Migration("20260125221441_initialcreate")]
+    partial class initialcreate
+>>>>>>> 5fdd5c1 (teammember controller tunining #9.8):Persistance/Data/Migrations/20260125221441_initialcreate.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

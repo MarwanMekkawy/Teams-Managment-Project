@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using Shared.TeamMemberDTOs;
+using TeamsManagmentProject.API.ApiClaimsFactory;
 
 namespace TeamsManagmentProject.API.Controllers
 {
@@ -19,10 +20,11 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="201">Team member added successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin,Manager,TeamLeader")]
         public async Task<IActionResult> Add(CreateTeamMemberDto dto)
         {
-            await _service.AddMemberAsync(dto);
+            var ctx = UserClaimsFactory.From(User);
+            await _service.AddMemberAsync(dto,ctx);
             return Created();
         }
 
@@ -34,10 +36,11 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="204">Team member removed successfully.</response>
         /// <response code="404">Team or user not found.</response>
         [HttpDelete("{userId}")]
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin,Manager,TeamLeader")]
         public async Task<IActionResult> Remove(int teamId, int userId)
         {
-            await _service.RemoveMemberAsync(teamId, userId);
+            var ctx = UserClaimsFactory.From(User);
+            await _service.RemoveMemberAsync(teamId, userId,ctx);
             return NoContent();
         }
 
@@ -49,9 +52,12 @@ namespace TeamsManagmentProject.API.Controllers
         /// <returns><c>true</c> if the user is a member; otherwise, <c>false</c>.</returns>
         /// <response code="200">Membership status retrieved successfully.</response>
         [HttpGet("{userId}/exists")]
-        [Authorize(Roles = "Admin,Manager,Member")]
+        [Authorize(Roles = "Admin,Manager,TeamLeader")]
         public async Task<ActionResult<bool>> CheckMembership(int teamId, int userId)
-            => Ok(await _service.IsMemberAsync(teamId, userId));
+        {
+            var ctx = UserClaimsFactory.From(User);
+            return Ok(await _service.IsMemberAsync(teamId, userId,ctx));
+        }
     }
 
 }

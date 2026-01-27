@@ -1,4 +1,5 @@
-﻿using Shared.TeamMemberDTOs;
+﻿using Shared.Claims;
+using Shared.TeamMemberDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace Services.Abstractions
 {
     public interface ITeamMemberService
     {
-        Task AddMemberAsync(CreateTeamMemberDto dto);
-        Task RemoveMemberAsync(int teamId, int userId);
-        Task<bool> IsMemberAsync(int teamId, int userId);
+        Task AddMemberAsync(CreateTeamMemberDto dto, UserClaims userCredentials);
+        Task RemoveMemberAsync(int teamId, int userId, UserClaims userCredentials);
+        Task<bool> IsMemberAsync(int teamId, int userId, UserClaims userCredentials);
     }
 }
 
