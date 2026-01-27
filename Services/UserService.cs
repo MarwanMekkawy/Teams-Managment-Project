@@ -7,11 +7,6 @@ using Domain.Exceptions;
 using Services.Abstractions;
 using Shared.Claims;
 using Shared.UserDTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services
 {
@@ -95,14 +90,14 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<UserDto>> GetAllDeletedUsersAsync(UserClaims userCredentials)///////////////////////////////
+        public async Task<List<UserDto>> GetAllDeletedUsersAsync(int pageNumber , int pageSize, UserClaims userCredentials)
         {
             if(userCredentials.Role == UserRole.Manager)
             {
-                var orgDeletedUsers = await unitOfWork.users.GetAllSoftDeletedAsyncByOrgId(userCredentials.OrgId);
+                var orgDeletedUsers = await unitOfWork.users.GetAllSoftDeletedAsyncByOrgId(userCredentials.OrgId, pageNumber, pageSize);
                 return mapper.Map<List<UserDto>>(orgDeletedUsers);
             }
-            var deletedUsers = await unitOfWork.users.GetAllSoftDeletedAsync();
+            var deletedUsers = await unitOfWork.users.GetAllSoftDeletedAsync(pageNumber, pageSize);
             return mapper.Map<List<UserDto>>(deletedUsers);
         }
 

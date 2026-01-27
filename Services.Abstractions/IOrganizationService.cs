@@ -17,7 +17,7 @@ namespace Services.Abstractions
         Task DeleteAsync(int id);
         Task SoftDeleteAsync(int id);
         Task RestoreAsync(int id);
-        Task<List<OrganizationDto>> GetAllDeletedOrganizationsAsync();
+        Task<List<OrganizationDto>> GetAllDeletedOrganizationsAsync(int pageNumber, int pageSize);
     }
 }
 

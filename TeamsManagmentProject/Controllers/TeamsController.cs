@@ -16,7 +16,7 @@ namespace TeamsManagmentProject.API.Controllers
     public class TeamsController(ITeamService _service) : ControllerBase
     {
         /// <summary>
-        /// Retrieves teams accessible to the authenticated user based on role.
+        /// Retrieves all teams accessible to the authenticated user based on role.
         /// </summary>
         /// <response code="200">Teams retrieved successfully.</response>
         [HttpGet]
@@ -63,15 +63,18 @@ namespace TeamsManagmentProject.API.Controllers
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<TeamDto>> Update(int id, UpdateTeamDto dto)
-            => Ok(await _service.UpdateAsync(id, dto));
+        {
+            var ctx = UserClaimsFactory.From(User);
+            return Ok(await _service.UpdateAsync(id, dto, ctx));
+        }
 
-        /// <summary>
-        /// [Admin] Permanently deletes a team.
-        /// </summary>
-        /// <param name="id">The team identifier.</param>
-        /// <response code="204">Team deleted successfully.</response>
-        /// <response code="404">Team not found.</response>
-        [HttpDelete("{id}")]
+            /// <summary>
+            /// [Admin] Permanently deletes a team.
+            /// </summary>
+            /// <param name="id">The team identifier.</param>
+            /// <response code="204">Team deleted successfully.</response>
+            /// <response code="404">Team not found.</response>
+            [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -110,13 +113,13 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// [Admin] Retrieves all soft-deleted teams.
+        /// [Admin] Retrieves all soft-deleted teams.[paginated]
         /// </summary>
         /// <response code="200">Soft-deleted teams retrieved successfully.</response>
         [HttpGet("soft-deleted")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<List<TeamDto>>> GetDeleted()
-            => Ok(await _service.GetAllDeletedTeamsAsync());
+        public async Task<ActionResult<List<TeamDto>>> GetDeleted(int pageNumber, int pageSize)
+            => Ok(await _service.GetAllDeletedTeamsAsync(pageNumber, pageSize));
 
         /// <summary>
         /// Retrieves teams belonging to a specific organization.

@@ -17,8 +17,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Retrieves a specific project by its identifier.
         /// </summary>
-        /// <param name="id">The unique identifier of the project.</param>
-        /// <returns>The requested project.</returns>
+        /// <param name="id">The project identifier.</param>
         /// <response code="200">Project retrieved successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpGet("{id}")]
@@ -32,8 +31,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Creates a new project.
         /// </summary>
-        /// <param name="dto">The data required to create the project.</param>
-        /// <returns>The newly created project.</returns>
+        /// <param name="dto">Project creation data.</param>
         /// <response code="201">Project created successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
@@ -48,9 +46,8 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Updates an existing project.
         /// </summary>
-        /// <param name="id">The unique identifier of the project.</param>
-        /// <param name="dto">The updated project data.</param>
-        /// <returns>The updated project.</returns>
+        /// <param name="id">The project identifier.</param>
+        /// <param name="dto">Updated project data.</param>
         /// <response code="200">Project updated successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpPut("{id}")]
@@ -58,13 +55,13 @@ namespace TeamsManagmentProject.API.Controllers
         public async Task<ActionResult<ProjectDto>> Update(int id, UpdateProjectDto dto)
         {
             var ctx = UserClaimsFactory.From(User);
-            return Ok(await _service.UpdateAsync(id, dto, ctx)); 
+            return Ok(await _service.UpdateAsync(id, dto, ctx));
         }
 
         /// <summary>
         /// Changes the status of a project.
         /// </summary>
-        /// <param name="id">The unique identifier of the project.</param>
+        /// <param name="id">The project identifier.</param>
         /// <param name="status">The new status to apply.</param>
         /// <response code="204">Project status updated successfully.</response>
         /// <response code="404">Project not found.</response>
@@ -80,7 +77,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Permanently deletes a project.
         /// </summary>
-        /// <param name="id">The unique identifier of the project.</param>
+        /// <param name="id">The project identifier.</param>
         /// <response code="204">Project deleted successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpDelete("{id}")]
@@ -95,7 +92,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Soft-deletes a project without permanently removing it.
         /// </summary>
-        /// <param name="id">The unique identifier of the project.</param>
+        /// <param name="id">The project identifier.</param>
         /// <response code="204">Project soft-deleted successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpPatch("{id}/soft-delete")]
@@ -110,7 +107,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Restores a previously soft-deleted project.
         /// </summary>
-        /// <param name="id">The unique identifier of the project.</param>
+        /// <param name="id">The project identifier.</param>
         /// <response code="204">Project restored successfully.</response>
         /// <response code="404">Project not found.</response>
         [HttpPatch("{id}/restore")]
@@ -123,23 +120,20 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// Retrieves all soft-deleted projects.
+        /// Retrieves all soft-deleted projects.[paginated]
         /// </summary>
-        /// <returns>A list of soft-deleted projects.</returns>
         /// <response code="200">Soft-deleted projects retrieved successfully.</response>
         [HttpGet("soft-deleted")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<List<ProjectDto>>> GetDeleted()
+        public async Task<ActionResult<List<ProjectDto>>> GetDeleted(int pageNumber, int pageSize)
         {
-
-            return Ok(await _service.GetAllDeletedProjectsAsync());
+            return Ok(await _service.GetAllDeletedProjectsAsync(pageNumber, pageSize));
         }
 
         /// <summary>
         /// Retrieves all projects associated with a specific team.
         /// </summary>
-        /// <param name="teamId">The unique identifier of the team.</param>
-        /// <returns>A list of projects for the team.</returns>
+        /// <param name="teamId">The team identifier.</param>
         /// <response code="200">Projects retrieved successfully.</response>
         [HttpGet("by-team/{teamId}")]
         [Authorize(Roles = "Admin,Manager,TeamLeader")]
@@ -152,8 +146,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Retrieves all projects associated with a specific organization.
         /// </summary>
-        /// <param name="organizationId">The unique identifier of the organization.</param>
-        /// <returns>A list of projects for the organization.</returns>
+        /// <param name="organizationId">The organization identifier.</param>
         /// <response code="200">Projects retrieved successfully.</response>
         [HttpGet("by-organization/{organizationId}")]
         [Authorize(Roles = "Admin,Manager")]

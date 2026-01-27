@@ -13,7 +13,7 @@ namespace Domain.Contracts
         Task<IEnumerable<User>> GetByTeamAsync(int teamId, bool tracked = false);
         // get users by id with teams info
         Task<User?> GetUserWithTeamsEntityAsync(int userId);
-        // gets all soft deleted entities by org id
-        Task<List<User>> GetAllSoftDeletedAsyncByOrgId(int orgId, bool tracked = false);
+        // gets all soft deleted entities by org id [paginated]
+        Task<List<User>> GetAllSoftDeletedAsyncByOrgId(int orgId, int pageNumber = 1, int pageSize = 10, bool tracked = false);
     }
 }

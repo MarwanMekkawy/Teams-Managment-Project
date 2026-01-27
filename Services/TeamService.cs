@@ -6,12 +6,7 @@ using Domain.Exceptions;
 using Services.Abstractions;
 using Shared.Claims;
 using Shared.TeamDTOs;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Services
 {
@@ -35,7 +30,14 @@ namespace Services
 
         public async Task<TeamDto> CreateAsync(CreateTeamDto dto, UserClaims userCredentials)
         {
-            if (userCredentials.Role == UserRole.Manager) dto.OrganizationId = userCredentials.OrgId;
+            if (userCredentials.Role == UserRole.Manager) dto.OrganizationId = userCredentials.OrgId;        
+            
+            else if (userCredentials.Role == UserRole.Admin)
+            {
+                if (dto.OrganizationId <= 0)throw new BadRequestException("OrganizationId is required for Admin");
+                var orgExists = await unitOfWork.organizations.ExistsAsync(dto.OrganizationId);
+                if (!orgExists) throw new NotFoundException($"Organization with ID {dto.OrganizationId} not found");
+            }
 
             var newTeam = mapper.Map<Team>(dto);
             unitOfWork.teams.Add(newTeam);
@@ -95,9 +97,9 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<TeamDto>> GetAllDeletedTeamsAsync()
+        public async Task<List<TeamDto>> GetAllDeletedTeamsAsync(int pageNumber, int pageSize)
         {
-            var deletedTeams = await unitOfWork.teams.GetAllSoftDeletedAsync();
+            var deletedTeams = await unitOfWork.teams.GetAllSoftDeletedAsync(pageNumber, pageSize);
             return mapper.Map<List<TeamDto>>(deletedTeams);
         }
 
@@ -119,7 +121,7 @@ namespace Services
             if (userCredentials.Role == UserRole.Manager)
             {
                 var orgTeamsForId = await unitOfWork.teams.GetByUserAndOrganizationAsync(userId, userCredentials.OrgId);
-                if(!orgTeamsForId.Any()) throw new ForbiddenException("The user does not belong to your organization or has no teams in it");
+                if(!orgTeamsForId.Any()) throw new NotFoundException("The user does not belong to your organization or has no teams in it");
                 return mapper.Map<List<TeamDto>>(orgTeamsForId);
             }
             

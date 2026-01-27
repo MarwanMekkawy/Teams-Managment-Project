@@ -47,5 +47,17 @@ namespace Persistance.Repositories
             return await _context.Tasks.AsNoTracking().Include(t => t.Project).ThenInclude(p => p.Team)
                                        .ThenInclude(t => t.Members).FirstOrDefaultAsync(t => t.Id == taskId);
         }
+
+        public async Task<List<TaskEntity>> GetAllSoftDeletedByOrganizationIncludingProjectsAndTeamsAsync(int organizationId, int pageNumber = 1, int pageSize = 10, bool tracked = false)
+        {
+            if (pageNumber <= 0) pageNumber = 1;
+            if (pageSize <= 0) pageSize = 10;
+
+            var query = _context.Tasks.IgnoreQueryFilters().Where(t => t.IsDeleted && t.Project.Team.OrganizationId == organizationId)
+                                      .Include(t => t.Project).ThenInclude(p => p.Team).AsQueryable();
+
+            if (!tracked) query = query.AsNoTracking();
+            return await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
     }
 }

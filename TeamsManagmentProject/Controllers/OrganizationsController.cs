@@ -39,7 +39,7 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// [Admin] Retrieves organizations with pagination.
+        /// [Admin] Retrieves organizations names with pagination.
         /// </summary>
         /// <param name="pageNumber">Page number.</param>
         /// <param name="pageSize">Number of items per page.</param>
@@ -129,12 +129,12 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// [Admin] Retrieves all soft-deleted organizations.
+        /// [Admin] Retrieves all soft-deleted organizations.[paginated]
         /// </summary>
         /// <response code="200">Soft-deleted organizations retrieved successfully.</response>
         [HttpGet("soft-deleted")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<List<OrganizationDto>>> GetDeleted()
-            => Ok(await _service.GetAllDeletedOrganizationsAsync());
+        public async Task<ActionResult<List<OrganizationDto>>> GetDeleted(int pageNumber, int pageSize)
+            => Ok(await _service.GetAllDeletedOrganizationsAsync(pageNumber, pageSize));
     }
 }

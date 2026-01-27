@@ -25,6 +25,8 @@ namespace Domain.Contracts
         Task<IEnumerable<TaskEntity>> GetOverdueAsync(int organizationId);
         // get task including project and team
         Task<TaskEntity?> GetByIdWithProjectAndTeamAndMembersAsync(int taskid);
+        // gets all soft deleted by org id with proj and teams
+        Task<List<TaskEntity>> GetAllSoftDeletedByOrganizationIncludingProjectsAndTeamsAsync(int organizationId, int pageNumber, int pageSize, bool tracked = false);
     }
 }
 

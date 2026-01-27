@@ -17,8 +17,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Retrieves a specific task by its identifier.
         /// </summary>
-        /// <param name="id">The unique identifier of the task.</param>
-        /// <returns>The requested task.</returns>
+        /// <param name="id">The task identifier.</param>
         /// <response code="200">Task retrieved successfully.</response>
         /// <response code="404">Task not found.</response>
         [HttpGet]
@@ -32,8 +31,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Creates a new task.
         /// </summary>
-        /// <param name="dto">The data required to create the task.</param>
-        /// <returns>The newly created task.</returns>
+        /// <param name="dto">Task creation data.</param>
         /// <response code="201">Task created successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
@@ -48,9 +46,8 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Updates an existing task.
         /// </summary>
-        /// <param name="id">The unique identifier of the task.</param>
-        /// <param name="dto">The updated task data.</param>
-        /// <returns>The updated task.</returns>
+        /// <param name="id">The task identifier.</param>
+        /// <param name="dto">Updated task data.</param>
         /// <response code="200">Task updated successfully.</response>
         /// <response code="404">Task not found.</response>
         [HttpPut("{id}")]
@@ -64,7 +61,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Permanently deletes a task.
         /// </summary>
-        /// <param name="id">The unique identifier of the task.</param>
+        /// <param name="id">The task identifier.</param>
         /// <response code="204">Task deleted successfully.</response>
         /// <response code="404">Task not found.</response>
         [HttpDelete("{id}")]
@@ -79,7 +76,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Soft-deletes a task without permanently removing it.
         /// </summary>
-        /// <param name="id">The unique identifier of the task.</param>
+        /// <param name="id">The task identifier.</param>
         /// <response code="204">Task soft-deleted successfully.</response>
         /// <response code="404">Task not found.</response>
         [HttpPatch("{id}/soft-delete")]
@@ -94,7 +91,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Restores a previously soft-deleted task.
         /// </summary>
-        /// <param name="id">The unique identifier of the task.</param>
+        /// <param name="id">The task identifier.</param>
         /// <response code="204">Task restored successfully.</response>
         /// <response code="404">Task not found.</response>
         [HttpPatch("{id}/restore")]
@@ -107,22 +104,21 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// Retrieves all soft-deleted tasks.
+        /// Retrieves all soft-deleted tasks.[paginated]
         /// </summary>
-        /// <returns>A list of soft-deleted tasks.</returns>
         /// <response code="200">Soft-deleted tasks retrieved successfully.</response>
         [HttpGet("soft-deleted")]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult<List<TaskDto>>> GetDeleted()
+        public async Task<ActionResult<List<TaskDto>>> GetDeleted(int pageNumber, int pageSize)
         {
             var ctx = UserClaimsFactory.From(User);
-            return Ok(await _service.GetAllDeletedTasksAsync(ctx));
+            return Ok(await _service.GetAllDeletedTasksAsync(pageNumber, pageSize, ctx));
         }
 
         /// <summary>
         /// Changes the status of a task.
         /// </summary>
-        /// <param name="id">The unique identifier of the task.</param>
+        /// <param name="id">The task identifier.</param>
         /// <param name="status">The new status to apply.</param>
         /// <response code="204">Task status updated successfully.</response>
         /// <response code="404">Task not found.</response>
@@ -138,8 +134,8 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Assigns a task to a specific user.
         /// </summary>
-        /// <param name="id">The unique identifier of the task.</param>
-        /// <param name="userId">The unique identifier of the user.</param>
+        /// <param name="id">The task identifier.</param>
+        /// <param name="userId">The user identifier.</param>
         /// <response code="204">Task assigned successfully.</response>
         /// <response code="404">Task or user not found.</response>
         [HttpPatch("{id}/assign/{userId}")]
@@ -151,5 +147,4 @@ namespace TeamsManagmentProject.API.Controllers
             return NoContent();
         }
     }
-
 }

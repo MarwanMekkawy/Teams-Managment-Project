@@ -83,9 +83,9 @@ namespace Services
             organization.IsDeleted = false;
             await unitOfWork.SaveChangesAsync();
         }
-        public async Task<List<OrganizationDto>> GetAllDeletedOrganizationsAsync()
+        public async Task<List<OrganizationDto>> GetAllDeletedOrganizationsAsync(int pageNumber, int pageSize)
         {
-            var deletedOrgs = await unitOfWork.organizations.GetAllSoftDeletedAsync();
+            var deletedOrgs = await unitOfWork.organizations.GetAllSoftDeletedAsync(pageNumber, pageSize);
             return mapper.Map<List<OrganizationDto>>(deletedOrgs);
         }
     }

@@ -188,9 +188,9 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<ProjectDto>> GetAllDeletedProjectsAsync()
+        public async Task<List<ProjectDto>> GetAllDeletedProjectsAsync(int pageNumber, int pageSize)
         {
-            var deletedProjects = await unitOfWork.projects.GetAllSoftDeletedAsync();
+            var deletedProjects = await unitOfWork.projects.GetAllSoftDeletedAsync(pageNumber, pageSize);
             return mapper.Map<List<ProjectDto>>(deletedProjects);
         }
 

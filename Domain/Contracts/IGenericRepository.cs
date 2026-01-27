@@ -17,6 +17,6 @@ namespace Domain.Contracts
         void Delete(TEntity entity); 
         Task<bool> ExistsAsync(TKey id);
         Task<TEntity?> GetIncludingDeletedAsync(TKey id);
-        Task<List<TEntity>> GetAllSoftDeletedAsync(bool tracked = false);
+        Task<List<TEntity>> GetAllSoftDeletedAsync(int pageNumber = 1, int pageSize = 10, bool tracked = false);
     }
 }

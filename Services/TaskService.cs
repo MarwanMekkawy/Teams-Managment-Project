@@ -6,11 +6,7 @@ using Domain.Exceptions;
 using Services.Abstractions;
 using Shared.Claims;
 using Shared.TaskDTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Services
 {
@@ -119,7 +115,26 @@ namespace Services
             task.Description = dto.Description ?? task.Description;
             task.DueDate = dto.DueDate ?? task.DueDate;
             task.Status = dto.Status ?? task.Status;
-            task.AssigneeId = dto.AssigneeId ?? task.AssigneeId;
+            if (dto.AssigneeId.HasValue && dto.AssigneeId != task.AssigneeId)
+            {
+                var newUser = await unitOfWork.users.GetAsync(dto.AssigneeId.Value);
+                if (newUser == null) throw new NotFoundException("Assignee not found");
+
+                switch (userCredentials.Role)
+                {
+                    case UserRole.Admin:
+                        break;
+
+                    case UserRole.Manager:
+                        if (newUser.OrganizationId != userCredentials.OrgId) throw new ForbiddenException("Cannot assign outside your organization");
+                        break;
+
+                    case UserRole.TeamLeader:
+                        var isInTeam = await unitOfWork.teamMembers.ExistsInTeamAsync(task.Project.TeamId, dto.AssigneeId.Value);
+                        if (!isInTeam) throw new ForbiddenException("Cannot assign outside your team");
+                        break;
+                }
+            }
 
             unitOfWork.tasks.Update(task);
             await unitOfWork.SaveChangesAsync();
@@ -200,19 +215,18 @@ namespace Services
         }
         
 
-        public async Task<List<TaskDto>> GetAllDeletedTasksAsync(UserClaims userCredentials)
+        public async Task<List<TaskDto>> GetAllDeletedTasksAsync(int pageNumber, int pageSize, UserClaims userCredentials)
         {
             IEnumerable<TaskEntity> deletedTasks;
 
             switch (userCredentials.Role)
             {
                 case UserRole.Admin:
-                    deletedTasks = await unitOfWork.tasks.GetAllSoftDeletedAsync();
+                    deletedTasks = await unitOfWork.tasks.GetAllSoftDeletedAsync(pageNumber, pageSize);
                     break;
 
                 case UserRole.Manager:                   
-                    deletedTasks = (await unitOfWork.tasks.GetAllSoftDeletedAsync())
-                                   .Where(t => t.Project.Team.OrganizationId == userCredentials.OrgId).ToList();
+                    deletedTasks = await unitOfWork.tasks.GetAllSoftDeletedByOrganizationIncludingProjectsAndTeamsAsync(userCredentials.OrgId, pageNumber, pageSize);                                  
                     break;
 
                 default:
@@ -245,7 +259,7 @@ namespace Services
         }
 
         // Specific update methods //
-        public async Task AssignToUserAsync(int taskId, int userId, UserClaims userCredentials)////////////////
+        public async Task AssignToUserAsync(int taskId, int userId, UserClaims userCredentials)
         {
             var task = await unitOfWork.tasks.GetByIdWithProjectAndTeamAndMembersAsync(taskId);
             if (task == null) throw new NotFoundException($"Task with ID {taskId} not found");
@@ -278,7 +292,7 @@ namespace Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task ChangeStatusAsync(int id, TaskEntityStatus? status, UserClaims userCredentials)///////////////////
+        public async Task ChangeStatusAsync(int id, TaskEntityStatus? status, UserClaims userCredentials)
         {
             var task = await unitOfWork.tasks.GetByIdWithProjectAndTeamAndMembersAsync(id);
             if (task == null) throw new NotFoundException($"Task with ID {id} not found");
@@ -307,7 +321,8 @@ namespace Services
                     throw new ForbiddenException("Unauthorized role");
             }
 
-            task.Status = status ?? task.Status;
+            if (!status.HasValue) throw new BadRequestException("Status is required");
+            task.Status = status.Value;
             unitOfWork.tasks.Update(task);
             await unitOfWork.SaveChangesAsync();
         }      

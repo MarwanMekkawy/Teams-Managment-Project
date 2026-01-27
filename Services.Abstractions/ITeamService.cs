@@ -18,7 +18,7 @@ namespace Services.Abstractions
         Task DeleteAsync(int id);
         Task SoftDeleteAsync(int id, UserClaims userCredentials);
         Task RestoreAsync(int id, UserClaims userCredentials);
-        Task<List<TeamDto>> GetAllDeletedTeamsAsync();
+        Task<List<TeamDto>> GetAllDeletedTeamsAsync(int pageNumber, int pageSize);
 
         Task<List<TeamDto>> GetTeamsByOrganizationAsync(int organizationId, UserClaims userCredentials);      
         Task<List<TeamDto>> GetTeamsByUserAsync(int userId, UserClaims userCredentials);

@@ -52,12 +52,16 @@ namespace Persistance.Repositories
         {
             return await _context.Set<TEntity>().IgnoreQueryFilters().FirstOrDefaultAsync(e => e.Id.Equals(id));
         }
-        // gets all soft deleted entities
-        public async Task<List<TEntity>> GetAllSoftDeletedAsync(bool tracked = false)
+        // gets all soft deleted entities[paginated]
+        public async Task<List<TEntity>> GetAllSoftDeletedAsync(int pageNumber = 1, int pageSize = 10,bool tracked = false)
         {
+            if (pageNumber <= 0) pageNumber = 1;
+            if (pageSize <= 0) pageSize = 10;
+
             var query = _context.Set<TEntity>().IgnoreQueryFilters().Where(e => e.IsDeleted);
             if (!tracked) query = query.AsNoTracking();
-            return await query.ToListAsync();
+            return await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         }        
     }
 }
+ 

@@ -39,11 +39,14 @@ namespace Persistance.Repositories
             .Include(u => u.TeamMemberships).ThenInclude(tm => tm.Team).Where(u => u.Id == userId).AsNoTracking().FirstOrDefaultAsync();
         }
       
-        public async Task<List<User>> GetAllSoftDeletedAsyncByOrgId(int orgId, bool tracked = false)
+        public async Task<List<User>> GetAllSoftDeletedAsyncByOrgId(int orgId, int pageNumber = 1, int pageSize = 10, bool tracked = false)
         {
+            if (pageNumber <= 0) pageNumber = 1;
+            if (pageSize <= 0) pageSize = 10;
+
             var query = _context.Users.IgnoreQueryFilters().Where(e => e.IsDeleted && e.OrganizationId == orgId);
             if (!tracked) query = query.AsNoTracking();
-            return await query.ToListAsync();
+            return await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         }
     }
 }

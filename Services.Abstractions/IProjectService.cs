@@ -19,7 +19,7 @@ namespace Services.Abstractions
         Task DeleteAsync(int id, UserClaims userCredentials);
         Task SoftDeleteAsync(int id, UserClaims userCredentials);
         Task RestoreAsync(int id, UserClaims userCredentials);
-        Task<List<ProjectDto>> GetAllDeletedProjectsAsync();
+        Task<List<ProjectDto>> GetAllDeletedProjectsAsync(int pageNumber, int pageSize);
 
         Task<List<ProjectDto>> GetByTeamAsync(int teamId, UserClaims userCredentials);
         Task<List<ProjectDto>> GetByOrganizationAsync( int organizationId, UserClaims userCredentials);

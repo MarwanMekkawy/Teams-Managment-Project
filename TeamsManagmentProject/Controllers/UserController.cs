@@ -14,10 +14,10 @@ namespace TeamsManagmentProject.API.Controllers
     public class UserController(IUserService _service) : ControllerBase
     {
         /// <summary>
-        /// Retrieves a specific user by its identifier for Manager,TeamLeader if the user belongs to their org
+        /// Retrieves a specific user by its identifier.
+        /// Managers and TeamLeaders can only access users in their organization.
         /// </summary>
-        /// <param name="id">The unique identifier of the user.</param>
-        /// <returns>The requested user.</returns>
+        /// <param name="id">The user identifier.</param>
         /// <response code="200">User retrieved successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpGet("{id}")]
@@ -30,9 +30,9 @@ namespace TeamsManagmentProject.API.Controllers
 
         /// <summary>
         /// Retrieves a specific user by email address.
+        /// Managers and TeamLeaders can only access users in their organization.
         /// </summary>
         /// <param name="email">The email address of the user.</param>
-        /// <returns>The requested user.</returns>
         /// <response code="200">User retrieved successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpGet("by-email")]
@@ -46,8 +46,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Creates a new user.
         /// </summary>
-        /// <param name="dto">The data required to create the user.</param>
-        /// <returns>The newly created user.</returns>
+        /// <param name="dto">User creation data.</param>
         /// <response code="201">User created successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
@@ -61,9 +60,8 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Updates an existing user.
         /// </summary>
-        /// <param name="id">The unique identifier of the user.</param>
-        /// <param name="dto">The updated user data.</param>
-        /// <returns>The updated user.</returns>
+        /// <param name="id">The user identifier.</param>
+        /// <param name="dto">Updated user data.</param>
         /// <response code="200">User updated successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpPut("{id}")]
@@ -74,7 +72,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Permanently deletes a user.
         /// </summary>
-        /// <param name="id">The unique identifier of the user.</param>
+        /// <param name="id">The user identifier.</param>
         /// <response code="204">User deleted successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpDelete("{id}")]
@@ -88,7 +86,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Soft-deletes a user without permanently removing it.
         /// </summary>
-        /// <param name="id">The unique identifier of the user.</param>
+        /// <param name="id">The user identifier.</param>
         /// <response code="204">User soft-deleted successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpPatch("{id}/soft-delete")]
@@ -103,7 +101,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Restores a previously soft-deleted user.
         /// </summary>
-        /// <param name="id">The unique identifier of the user.</param>
+        /// <param name="id">The user identifier.</param>
         /// <response code="204">User restored successfully.</response>
         /// <response code="404">User not found.</response>
         [HttpPatch("{id}/restore")]
@@ -116,16 +114,15 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// Retrieves all soft-deleted users.
+        /// Retrieves all soft-deleted users.[paginated]
         /// </summary>
-        /// <returns>A list of soft-deleted users.</returns>
         /// <response code="200">Soft-deleted users retrieved successfully.</response>
         [HttpGet("soft-deleted")]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult<List<UserDto>>> GetDeleted()
+        public async Task<ActionResult<List<UserDto>>> GetDeleted(int pageNumber, int pageSize)
         {
             var ctx = UserClaimsFactory.From(User);
-            return Ok(await _service.GetAllDeletedUsersAsync(ctx));
+            return Ok(await _service.GetAllDeletedUsersAsync(pageNumber, pageSize, ctx));
         }
     }
 }
