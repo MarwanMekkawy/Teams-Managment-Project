@@ -36,5 +36,12 @@ namespace Persistance.Repositories
             if (!tracked) query = query.AsNoTracking();
             return await query.ToListAsync() ;  
         }
+
+        public async Task<Project?> GetByIdWithTeamAndMembersAsync(int projectId, bool tracked = false)
+        {
+            var query = _context.Projects.Include(p => p.Team).ThenInclude(t => t.Members).Where(p => p.Id == projectId).AsQueryable();
+            if (!tracked) query = query.AsNoTracking();
+            return await query.FirstOrDefaultAsync();
+        }
     }
 }

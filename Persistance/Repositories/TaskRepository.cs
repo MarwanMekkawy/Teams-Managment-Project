@@ -41,5 +41,11 @@ namespace Persistance.Repositories
                 .Where(t => t.Assignee.OrganizationId == organizationId && (t.Status == TaskEntityStatus.Todo || t.Status == TaskEntityStatus.InProgress)
                          && t.DueDate.HasValue && t.DueDate.Value < DateTime.Now).ToListAsync();
         }
+
+        public async Task<TaskEntity?> GetByIdWithProjectAndTeamAndMembersAsync(int taskId)
+        {
+            return await _context.Tasks.AsNoTracking().Include(t => t.Project).ThenInclude(p => p.Team)
+                                       .ThenInclude(t => t.Members).FirstOrDefaultAsync(t => t.Id == taskId);
+        }
     }
 }

@@ -13,5 +13,7 @@ namespace Domain.Contracts
 
         // Get projects of an entire organization filtered by status (or all if null)
         Task<IEnumerable<Project>> GetByOrganizationAndStatusAsync(int organizationId, ProjectStatus? status = null, bool tracked = false);
+        // Get projects by its id including team and memebers
+        Task<Project?> GetByIdWithTeamAndMembersAsync(int projectId, bool tracked = false);
     }
 }

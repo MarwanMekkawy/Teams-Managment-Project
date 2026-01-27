@@ -23,6 +23,8 @@ namespace Domain.Contracts
         // Global //
         // get overdue tasks by org id
         Task<IEnumerable<TaskEntity>> GetOverdueAsync(int organizationId);
+        // get task including project and team
+        Task<TaskEntity?> GetByIdWithProjectAndTeamAndMembersAsync(int taskid);
     }
 }
 

@@ -4,6 +4,7 @@ using Domain.Entities;
 using Domain.Enums;
 using Domain.Exceptions;
 using Services.Abstractions;
+using Shared.Claims;
 using Shared.TaskDTOs;
 using System;
 using System.Collections.Generic;
@@ -22,67 +23,202 @@ namespace Services
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
+
         // Crud methods //
-        public async Task<TaskDto> GetByIdAsync(int id)
+        public async Task<TaskDto> GetByIdAsync(int id, UserClaims userCredentials)
         {
-            var task = await unitOfWork.tasks.GetAsync(id);
-            if (task == null) throw new NotFoundException($"Task with ID {id} not found");
+            var task = await unitOfWork.tasks.GetByIdWithProjectAndTeamAndMembersAsync(id);
+            if (task == null)
+                throw new NotFoundException($"Task with ID {id} not found");
+
+            switch (userCredentials.Role)
+            {
+                case UserRole.Admin:
+                    break;
+
+                case UserRole.Manager:
+                    if (task.Project.Team.OrganizationId != userCredentials.OrgId)
+                        throw new ForbiddenException("Managers can only access tasks in their organization");
+                    break;
+
+                case UserRole.TeamLeader:
+                    var leaderInTeam = task.Project.Team.Members.Any(m => m.UserId == userCredentials.UserId);
+                    if (!leaderInTeam) throw new ForbiddenException("Team leaders can only access tasks in their teams");
+                    break;
+
+                case UserRole.Member:
+                    var isAssigned = task.AssigneeId == userCredentials.UserId;
+                    var memberInTeam = task.Project.Team.Members.Any(m => m.UserId == userCredentials.UserId);
+                    if (!isAssigned && !memberInTeam)throw new ForbiddenException("Members can only access assigned tasks or tasks in their teams");
+                    break;
+
+                default:
+                    throw new ForbiddenException("Unauthorized role");
+            }
+
             return mapper.Map<TaskDto>(task);
         }
 
-        public async Task<TaskDto> CreateAsync(CreateTaskDto dto)
+        public async Task<TaskDto> CreateAsync(CreateTaskDto dto, UserClaims userCredentials)
         {
+            var project = await unitOfWork.projects.GetByIdWithTeamAndMembersAsync(dto.ProjectId);
+            if (project == null) throw new NotFoundException($"Project with ID {dto.ProjectId} not found");
+
+
+            switch (userCredentials.Role)
+            {
+                case UserRole.Admin:
+                    break;
+
+                case UserRole.Manager:
+                    if (project.Team.OrganizationId != userCredentials.OrgId)
+                        throw new ForbiddenException("Managers can only create tasks in teams within their organization");
+                    break;
+
+                case UserRole.TeamLeader:
+                    var leaderInTeam = project.Team.Members.Any(m => m.UserId == userCredentials.UserId);
+                    if (!leaderInTeam) throw new ForbiddenException("Team leaders can only create tasks in their teams");
+                    break;
+
+                default:
+                    throw new ForbiddenException("You are not allowed to create tasks");
+            }
+
             var task = mapper.Map<TaskEntity>(dto);
             unitOfWork.tasks.Add(task);
             await unitOfWork.SaveChangesAsync();
             return mapper.Map<TaskDto>(task);
         }
 
-        public async Task<TaskDto> UpdateAsync(int id, UpdateTaskDto dto)
+        public async Task<TaskDto> UpdateAsync(int id, UpdateTaskDto dto, UserClaims userCredentials)
         {
-            var task = await unitOfWork.tasks.GetAsync(id);
+            var task = await unitOfWork.tasks.GetByIdWithProjectAndTeamAndMembersAsync(id);
             if (task == null) throw new NotFoundException($"Task with ID {id} not found");
+
+
+            switch (userCredentials.Role)
+            {
+                case UserRole.Admin:
+                    break;
+
+                case UserRole.Manager:
+                    if (task.Project.Team.OrganizationId != userCredentials.OrgId)
+                        throw new ForbiddenException("Managers can only update tasks in teams within their organization");
+                    break;
+
+                case UserRole.TeamLeader:
+                    var leaderInTeam = task.Project.Team.Members.Any(m => m.UserId == userCredentials.UserId);
+                    if (!leaderInTeam) throw new ForbiddenException("Team leaders can only update tasks in their teams");
+                    break;
+
+                default:
+                    throw new ForbiddenException("You are not allowed to update this task");
+            }
+
             task.Title = dto.Title ?? task.Title;
             task.Description = dto.Description ?? task.Description;
             task.DueDate = dto.DueDate ?? task.DueDate;
             task.Status = dto.Status ?? task.Status;
             task.AssigneeId = dto.AssigneeId ?? task.AssigneeId;
+
             unitOfWork.tasks.Update(task);
             await unitOfWork.SaveChangesAsync();
+
             return mapper.Map<TaskDto>(task);
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, UserClaims userCredentials)
         {
-            var task = await unitOfWork.tasks.GetAsync(id);
+            var task = await unitOfWork.tasks.GetByIdWithProjectAndTeamAndMembersAsync(id);
             if (task == null) throw new NotFoundException($"Task with ID {id} not found");
+
+            switch (userCredentials.Role)
+            {
+                case UserRole.Admin:
+                    break; 
+
+                case UserRole.Manager:
+                    if (task.Project.Team.OrganizationId != userCredentials.OrgId)
+                        throw new ForbiddenException("Managers can only delete tasks in their organization");
+                    break;
+
+                default:
+                    throw new ForbiddenException("You are not allowed to delete this task");
+            }
+
             unitOfWork.tasks.Delete(task);
             await unitOfWork.SaveChangesAsync();
         }
 
         // Soft Delete methods //
-        public async Task SoftDeleteAsync(int id)
+        public async Task SoftDeleteAsync(int id, UserClaims userCredentials)
         {
-            var task = await unitOfWork.tasks.GetAsync(id);
+            var task = await unitOfWork.tasks.GetByIdWithProjectAndTeamAndMembersAsync(id);
             if (task == null) throw new NotFoundException($"Task with ID {id} not found");
+
+            switch (userCredentials.Role)
+            {
+                case UserRole.Admin:
+                    break; 
+
+                case UserRole.Manager:
+                    if (task.Project.Team.OrganizationId != userCredentials.OrgId)
+                        throw new ForbiddenException("Managers can only soft-delete tasks in their organization");
+                    break;
+
+                default:
+                    throw new ForbiddenException("You are not allowed to soft-delete this task");
+            }
+
             task.IsDeleted = true;
             unitOfWork.tasks.Update(task);
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task RestoreAsync(int id)
+        public async Task RestoreAsync(int id, UserClaims userCredentials)
         {
-            var task = await unitOfWork.tasks.GetIncludingDeletedAsync(id);
+            var task = await unitOfWork.tasks.GetByIdWithProjectAndTeamAndMembersAsync(id);
             if (task == null) throw new NotFoundException($"Task with ID {id} not found");
-            if (!task.IsDeleted) throw new BadRequestException("the entity is Not a deleted Entity");
+            if (!task.IsDeleted)throw new BadRequestException("The task is not a deleted entity");
+
+            switch (userCredentials.Role)
+            {
+                case UserRole.Admin:
+                    break; 
+
+                case UserRole.Manager:
+                    if (task.Project.Team.OrganizationId != userCredentials.OrgId) throw new ForbiddenException("Managers can only restore tasks in their organization");
+                    break;
+
+                default:
+                    throw new ForbiddenException("You are not allowed to restore this task");
+            }
 
             task.IsDeleted = false;
+            unitOfWork.tasks.Update(task);
             await unitOfWork.SaveChangesAsync();
         }
+        
 
-        public async Task<List<TaskDto>> GetAllDeletedTasksAsync()
+        public async Task<List<TaskDto>> GetAllDeletedTasksAsync(UserClaims userCredentials)
         {
-            var deletedTasks = await unitOfWork.tasks.GetAllSoftDeletedAsync();
+            IEnumerable<TaskEntity> deletedTasks;
+
+            switch (userCredentials.Role)
+            {
+                case UserRole.Admin:
+                    deletedTasks = await unitOfWork.tasks.GetAllSoftDeletedAsync();
+                    break;
+
+                case UserRole.Manager:                   
+                    deletedTasks = (await unitOfWork.tasks.GetAllSoftDeletedAsync())
+                                   .Where(t => t.Project.Team.OrganizationId == userCredentials.OrgId).ToList();
+                    break;
+
+                default:
+                    throw new ForbiddenException("You are not allowed to access deleted tasks");
+            }
+
             return mapper.Map<List<TaskDto>>(deletedTasks);
         }
 
@@ -109,21 +245,68 @@ namespace Services
         }
 
         // Specific update methods //
-        public async Task AssignToUserAsync(int taskId, int userId)
+        public async Task AssignToUserAsync(int taskId, int userId, UserClaims userCredentials)////////////////
         {
-            var task = await unitOfWork.tasks.GetAsync(taskId);
+            var task = await unitOfWork.tasks.GetByIdWithProjectAndTeamAndMembersAsync(taskId);
             if (task == null) throw new NotFoundException($"Task with ID {taskId} not found");
-            var userExists  = await unitOfWork.users.ExistsAsync(userId);
-            if (!userExists) throw new NotFoundException($"User with ID {userId} not found");
+
+            var user = await unitOfWork.users.GetAsync(userId);
+            if (user == null) throw new NotFoundException($"User with ID {userId} not found");
+
+            switch (userCredentials.Role)
+            {
+                case UserRole.Admin:
+                    break;
+
+                case UserRole.Manager:                    
+                    if (task.Project.Team.OrganizationId != userCredentials.OrgId || user.OrganizationId != userCredentials.OrgId)
+                        throw new ForbiddenException("Managers can only assign tasks to users in their organization");
+                    break;
+
+                case UserRole.TeamLeader:
+                    var isLeaderInTeam = task.Project.Team.Members.Any(m => m.UserId == userCredentials.UserId);
+                    var assigneeInTeam = task.Project.Team.Members.Any(m => m.UserId == userId);
+                    if (!isLeaderInTeam || !assigneeInTeam) throw new ForbiddenException("Team leaders can only assign tasks to users in their team");
+                    break;
+
+                default:
+                    throw new ForbiddenException("Unauthorized role");
+            }
+
             task.AssigneeId = userId;
             unitOfWork.tasks.Update(task);
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task ChangeStatusAsync(int id, TaskEntityStatus? status)
+        public async Task ChangeStatusAsync(int id, TaskEntityStatus? status, UserClaims userCredentials)///////////////////
         {
-            var task = await unitOfWork.tasks.GetAsync(id);
+            var task = await unitOfWork.tasks.GetByIdWithProjectAndTeamAndMembersAsync(id);
             if (task == null) throw new NotFoundException($"Task with ID {id} not found");
+
+            switch (userCredentials.Role)
+            {
+                case UserRole.Admin:
+                    break;
+
+                case UserRole.Manager:
+                    if (task.Project.Team.OrganizationId != userCredentials.OrgId)
+                        throw new ForbiddenException("Managers can only modify tasks in their organization");
+                    break;
+
+                case UserRole.TeamLeader:
+                    if (!task.Project.Team.Members.Any(m => m.UserId == userCredentials.UserId))
+                        throw new ForbiddenException("Team leaders can only modify tasks in their teams");
+                    break;
+
+                case UserRole.Member:
+                    if (task.AssigneeId != userCredentials.UserId)
+                        throw new ForbiddenException("Members can only modify tasks assigned to them");
+                    break;
+
+                default:
+                    throw new ForbiddenException("Unauthorized role");
+            }
+
             task.Status = status ?? task.Status;
             unitOfWork.tasks.Update(task);
             await unitOfWork.SaveChangesAsync();
