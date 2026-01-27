@@ -31,7 +31,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Retrieves overdue tasks for a specific organization.
         /// </summary>
-        /// <param name="organizationId">The organization identifier.</param>
+        /// <param name="id">The organization identifier.</param>
         /// <response code="200">Overdue tasks retrieved successfully.</response>
         /// <response code="404">Organization not found.</response>
         [HttpGet("{overdue}")]
