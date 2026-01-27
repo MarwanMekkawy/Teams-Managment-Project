@@ -28,6 +28,12 @@ namespace TeamsManagmentProject.API.Controllers
             return Ok(await _service.GetByIdAsync(id, ctx));
         }
 
+        /// <summary>
+        /// Retrieves overdue tasks for a specific organization.
+        /// </summary>
+        /// <param name="organizationId">The organization identifier.</param>
+        /// <response code="200">Overdue tasks retrieved successfully.</response>
+        /// <response code="404">Organization not found.</response>
         [HttpGet("{overdue}")]
         [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<TaskDto>> GetOverDue(int id)
