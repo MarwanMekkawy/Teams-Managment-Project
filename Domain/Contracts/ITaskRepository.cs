@@ -16,10 +16,6 @@ namespace Domain.Contracts
         // get list of tasks in project by project id with optional task status filter
         Task<IEnumerable<TaskEntity>> GetByProjectAndStatusAsync(int projectId, TaskEntityStatus? status = null, bool tracked = false);
 
-        // User/Assignee related //
-        // get list of tasks in project by assignee id with optional task status filter
-        Task<IEnumerable<TaskEntity>> GetByAssigneeAndStatusAsync(int userId, TaskEntityStatus? status = null, bool tracked = false);
-
         // Global //
         // get overdue tasks by org id
         Task<IEnumerable<TaskEntity>> GetOverdueAsync(int organizationId);

@@ -236,23 +236,11 @@ namespace Services
             return mapper.Map<List<TaskDto>>(deletedTasks);
         }
 
-        // get methods related to another entity //
-        public async Task<List<TaskDto>> GetTasksByProjectAsync(int projectId)
+        public async Task<List<TaskDto>> GetOverdueTasksAsync(int organizationId, UserClaims userCredentials)
         {
-            var tasks = await unitOfWork.tasks.GetByProjectAndStatusAsync(projectId);
-            if (tasks == null) throw new NotFoundException($"Project with ID {projectId} not found");
-            return mapper.Map<List<TaskDto>>(tasks);
-        }
+            if (userCredentials.Role == UserRole.Manager && organizationId != userCredentials.OrgId) 
+                throw new ForbiddenException($"you are not allowed acces OverDue Tasks for Org no: {organizationId}");
 
-        public async Task<List<TaskDto>> GetTasksByUserAsync(int userId)
-        {
-            var tasks = await unitOfWork.tasks.GetByAssigneeAndStatusAsync(userId);
-            if (tasks == null) throw new NotFoundException($"User with ID {userId} not found");
-            return mapper.Map<List<TaskDto>>(tasks);
-        }
-
-        public async Task<List<TaskDto>> GetOverdueTasksAsync(int organizationId)
-        {
             var overDueTasks = await unitOfWork.tasks.GetOverdueAsync(organizationId);
             if (overDueTasks == null) throw new NotFoundException($"Organization with ID {organizationId} not found");
             return mapper.Map<List<TaskDto>>(overDueTasks);

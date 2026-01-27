@@ -22,7 +22,5 @@ namespace Services.Abstractions
 
 
         Task<UserDto> GetByEmailAsync(string email, UserClaims userCredentials);
-        Task<List<UserDto>> GetUsersByOrganizationAsync(int organizationId, UserRole? role = null);
-        Task<List<UserDto>> GetUsersByTeamAsync(int teamId);
     }
 }

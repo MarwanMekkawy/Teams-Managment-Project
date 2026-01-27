@@ -27,14 +27,6 @@ namespace Persistance.Repositories
             return await query.ToListAsync() ;
         }
 
-        public async Task<IEnumerable<TaskEntity>> GetByAssigneeAndStatusAsync(int userId, TaskEntityStatus? status = null, bool tracked = false)
-        {
-            var query = _context.Tasks.Where(t => t.AssigneeId == userId).AsQueryable();
-            if (!tracked) query = query.AsNoTracking();
-            if(status != null) query = query.Where(t=> t.Status == status.Value);
-            return await query.ToListAsync();
-        }
-
         public async Task<IEnumerable<TaskEntity>> GetOverdueAsync(int organizationId)
         {
             return await _context.Tasks

@@ -28,6 +28,14 @@ namespace TeamsManagmentProject.API.Controllers
             return Ok(await _service.GetByIdAsync(id, ctx));
         }
 
+        [HttpGet("{overdue}")]
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<ActionResult<TaskDto>> GetOverDue(int id)
+        {
+            var ctx = UserClaimsFactory.From(User);
+            return Ok(await _service.GetOverdueTasksAsync(id, ctx));
+        }
+
         /// <summary>
         /// Creates a new task.
         /// </summary>
