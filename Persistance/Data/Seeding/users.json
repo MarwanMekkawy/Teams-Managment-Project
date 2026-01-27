@@ -2,28 +2,28 @@
   {
     "Name": "User1 Org1",
     "Email": "user1org1@example.com",
-    "Role": 0,
+    "Role": 3,
     "OrganizationId": 1,
     "PasswordHash": "hash1"
   },
   {
     "Name": "User2 Org1",
     "Email": "user2org1@example.com",
-    "Role": 1,
+    "Role": 3,
     "OrganizationId": 1,
     "PasswordHash": "hash2"
   },
   {
     "Name": "User3 Org1",
     "Email": "user3org1@example.com",
-    "Role": 2,
+    "Role": 3,
     "OrganizationId": 1,
     "PasswordHash": "hash3"
   },
   {
     "Name": "User1 Org2",
     "Email": "user1org2@example.com",
-    "Role": 0,
+    "Role": 3,
     "OrganizationId": 2,
     "PasswordHash": "hash4"
   },
@@ -44,7 +44,7 @@
   {
     "Name": "User1 Org3",
     "Email": "user1org3@example.com",
-    "Role": 0,
+    "Role": 3,
     "OrganizationId": 3,
     "PasswordHash": "hash7"
   },
@@ -65,7 +65,7 @@
   {
     "Name": "User1 Org4",
     "Email": "user1org4@example.com",
-    "Role": 0,
+    "Role": 3,
     "OrganizationId": 4,
     "PasswordHash": "hash10"
   },
@@ -86,7 +86,7 @@
   {
     "Name": "User1 Org5",
     "Email": "user1org5@example.com",
-    "Role": 0,
+    "Role": 3,
     "OrganizationId": 5,
     "PasswordHash": "hash13"
   },
@@ -107,7 +107,7 @@
   {
     "Name": "User1 Org6",
     "Email": "user1org6@example.com",
-    "Role": 0,
+    "Role": 3,
     "OrganizationId": 6,
     "PasswordHash": "hash16"
   },
@@ -128,7 +128,7 @@
   {
     "Name": "User1 Org7",
     "Email": "user1org7@example.com",
-    "Role": 0,
+    "Role": 3,
     "OrganizationId": 7,
     "PasswordHash": "hash19"
   },
@@ -149,7 +149,7 @@
   {
     "Name": "User1 Org8",
     "Email": "user1org8@example.com",
-    "Role": 0,
+    "Role": 3,
     "OrganizationId": 8,
     "PasswordHash": "hash22"
   },
@@ -170,7 +170,7 @@
   {
     "Name": "User1 Org9",
     "Email": "user1org9@example.com",
-    "Role": 0,
+    "Role": 3,
     "OrganizationId": 9,
     "PasswordHash": "hash25"
   },
@@ -191,7 +191,7 @@
   {
     "Name": "User1 Org10",
     "Email": "user1org10@example.com",
-    "Role": 0,
+    "Role": 3,
     "OrganizationId": 10,
     "PasswordHash": "hash28"
   },
@@ -212,7 +212,7 @@
   {
     "Name": "User1 Org11",
     "Email": "user1org11@example.com",
-    "Role": 0,
+    "Role": 3,
     "OrganizationId": 11,
     "PasswordHash": "hash31"
   },
@@ -233,7 +233,7 @@
   {
     "Name": "User1 Org12",
     "Email": "user1org12@example.com",
-    "Role": 0,
+    "Role": 3,
     "OrganizationId": 12,
     "PasswordHash": "hash34"
   },
@@ -254,7 +254,7 @@
   {
     "Name": "User1 Org13",
     "Email": "user1org13@example.com",
-    "Role": 0,
+    "Role": 3,
     "OrganizationId": 13,
     "PasswordHash": "hash37"
   },
