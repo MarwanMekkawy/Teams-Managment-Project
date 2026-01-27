@@ -44,7 +44,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <param name="dto">Team creation data.</param>
         /// <response code="201">Team created successfully.</response>
         /// <response code="400">Invalid input data.</response>
-        [HttpPost]                                       
+        [HttpPost]
         [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<TeamDto>> Create(CreateTeamDto dto)
         {
@@ -62,11 +62,8 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="404">Team not found.</response>
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult<TeamDto>> Update(int id, UpdateTeamDto dto)           
-        {
-            var ctx = UserClaimsFactory.From(User);
-            return Ok(await _service.UpdateAsync(id, dto, ctx));
-        }
+        public async Task<ActionResult<TeamDto>> Update(int id, UpdateTeamDto dto)
+            => Ok(await _service.UpdateAsync(id, dto));
 
         /// <summary>
         /// [Admin] Permanently deletes a team.

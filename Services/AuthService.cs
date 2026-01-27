@@ -110,7 +110,7 @@ namespace Services
             var existingUser = await unitOfWork.users.GetByEmailAsync(normalizedEmail);
 
             // Use dummy hash if user doesn't exist
-            var existingPwHash = existingUser?.PasswordHash ?? "$2a$11$N9qo8uLOickgx2ZMRZoMye.ML3LQeKjFYGGZQDI6RgL3t4SZPp/5a";
+            var existingPwHash = existingUser?.PasswordHash ?? "AQAAAAIAAYagAAAAEAAAAAAAAAAAAAAAAAAAAABIN8F2glsG2w0ThRc6b//V2SgXfV/+/2ZFaUf66RukGA==";
 
             // Verify password against hash
             var isPasswordValid = hasher.Verify(existingPwHash, dto.Password);
@@ -188,4 +188,5 @@ namespace Services
 
         }
     }
+
 }

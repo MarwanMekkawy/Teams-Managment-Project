@@ -1,4 +1,12 @@
+## 🚧 Project Status
+
+> **Work in Progress**  
+> This project is under active development.  
+> Core features are implemented; additional features and refinements are ongoing.
+
+
 # Teams Management API
+![Status](https://img.shields.io/badge/status-work%20in%20progress-orange)
 
 A **production‑ready Team Management REST API** built with **ASP.NET Core (.NET 8)** following **Clean / Onion Architecture** principles. The API manages **organizations, teams, users, projects, and tasks** with full lifecycle support, **soft deletion**, and clear separation of concerns.
 
@@ -12,7 +20,7 @@ This project is designed to be **CV‑ready**: clean architecture, scalable stru
 * Rich domain model (Organizations, Teams, Projects, Tasks, Users)
 * **Soft delete & restore** across all aggregates
 * Repository + Unit of Work patterns
-* DTO-based API contracts (no domain leakage)
+* DTO-based API contracts 
 * EF Core code-first with migrations
 * Designed for extensibility and testability
 
@@ -164,4 +172,10 @@ Update the connection string in `appsettings.json` before running migrations.
 ## 👨‍💻 Author
 
 **Marwan** – Software Engineer (.NET)
+
+
+
+
+
+
 

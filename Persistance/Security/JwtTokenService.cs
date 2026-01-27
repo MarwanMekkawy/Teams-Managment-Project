@@ -21,10 +21,12 @@ namespace Persistance.Security
             {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Name),
-            new Claim(ClaimTypes.Role, user.Role.ToString()),
-            new Claim("OrgId" , user.OrganizationId.ToString()),
+            new Claim(ClaimTypes.Role, user.Role.ToString()),           
             new Claim("creationDate", user.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"))
             };
+            // if org id is not null add it if not add palceholder
+            if (user.OrganizationId.HasValue) claims.Add(new Claim("OrgId", user.OrganizationId.Value.ToString()));
+            else claims.Add(new Claim("OrgId", "-1"));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

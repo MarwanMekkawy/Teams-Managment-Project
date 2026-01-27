@@ -20,35 +20,8 @@ namespace TeamsManagmentProject.API.Controllers
         /// </summary>
         /// <response code="200">Statistics retrieved successfully.</response>
         /// <response code="404">Organization not found.</response>
-        [HttpGet("stats")]
-        [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> GetStats()
-        {
-            // extracting claims from requesting user
-            var ctx = UserClaimsFactory.From(User);
-
-            var orgStats = await _service.GetStatsAsync(ctx.OrgId);
-            var statsObject = new
-            {
-                totalUsers = orgStats.totalUsers,
-                totalTeams = orgStats.totalTeams,
-                activeProjects = orgStats.activeProjects,
-                archivedProjects = orgStats.archivedProjects,
-                totalTasks = orgStats.totalTasks,
-                completedTasks = orgStats.completedTasks,
-                overdueTasks = orgStats.overdueTasks
-            };
-            return Ok(statsObject);
-        }
-
-        /// <summary>
-        /// [Admin] Retrieves aggregated statistics for a specific organization.
-        /// </summary>
-        /// <param name="id">The organization identifier.</param>
-        /// <response code="200">Statistics retrieved successfully.</response>
-        /// <response code="404">Organization not found.</response>
         [HttpGet("{id}/stats")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> GetStats(int id)
         {
             var orgStats = await _service.GetStatsAsync(id);
