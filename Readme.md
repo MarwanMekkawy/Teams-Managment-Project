@@ -2,12 +2,14 @@
 
 > **Feature Complete**  
 > This project has reached a stable and feature-complete state.  
-> All core functionality is implemented, tested, and documented.  
+> All core functionality is implemented.  
 > Minor improvements and optimizations may be introduced in future updates.
 
 
 # Teams Management API
 ![Status](https://img.shields.io/badge/status-feature%20complete-success)
+![.NET](https://img.shields.io/badge/.NET-8.0-blue)
+![Architecture](https://img.shields.io/badge/architecture-Clean%20Onion-informational)
 
 A **production‑ready Team Management REST API** built with **ASP.NET Core (.NET 8)** following **Clean / Onion Architecture** principles. The API manages **organizations, teams, users, projects, and tasks** with full lifecycle support, **soft deletion**, and clear separation of concerns.
 
@@ -55,97 +57,109 @@ All main entities inherit:
 
 ## 🔁 Soft Delete Strategy
 
-* `PATCH /soft-delete` → sets `IsDeleted = true`
-* `PATCH /restore` → restores entity
-* `GET /deleted` → fetch soft‑deleted records
-* 
----
+Soft deletion is implemented consistently across all aggregates.
 
-## 🔌 API Endpoints Overview
+### Behavior
 
-### 🧩 Tasks
+- Soft delete sets `IsDeleted = true`
+- Restore clears `IsDeleted`
+- Deleted records are excluded from normal queries
+- Dedicated endpoints expose deleted data
 
-* `GET /tasks/{id}`
-* `POST /tasks`
-* `PUT /tasks/{id}`
-* `DELETE /tasks/{id}` (hard delete)
-* `PATCH /tasks/{id}/soft-delete`
-* `PATCH /tasks/{id}/restore`
-* `GET /tasks/deleted`
-* `PATCH /tasks/{id}/status`
-* `PATCH /tasks/{id}/assign/{userId}`
+### Endpoints Pattern
+
+- `PATCH /{entity}/{id}/soft-delete`
+- `PATCH /{entity}/{id}/restore`
+- `GET /{entity}/deleted`
 
 ---
+
+## 🔌 API Endpoints
 
 ### 🏢 Organizations
 
-* `GET /organizations`
-* `GET /organizations/{id}`
-* `POST /organizations`
-* `PUT /organizations/{id}`
-* `DELETE /organizations/{id}`
-* `PATCH /organizations/{id}/soft-delete`
-* `PATCH /organizations/{id}/restore`
-* `GET /organizations/deleted`
-* `GET /organizations/statistics`
-
----
-
-### 📁 Projects
-
-* `GET /projects/{id}`
-* `POST /projects`
-* `PUT /projects/{id}`
-* `PATCH /projects/{id}/status`
-* `DELETE /projects/{id}`
-* `PATCH /projects/{id}/soft-delete`
-* `PATCH /projects/{id}/restore`
-* `GET /projects/deleted`
-* `GET /projects/by-team/{teamId}`
-* `GET /projects/by-organization/{orgId}`
+- `GET /organizations`
+- `GET /organizations/{id}`
+- `POST /organizations`
+- `PUT /organizations/{id}`
+- `DELETE /organizations/{id}`
+- `PATCH /organizations/{id}/soft-delete`
+- `PATCH /organizations/{id}/restore`
+- `GET /organizations/deleted`
+- `GET /organizations/statistics`
 
 ---
 
 ### 👥 Teams
 
-* `GET /teams/{id}`
-* `POST /teams`
-* `PUT /teams/{id}`
-* `DELETE /teams/{id}`
-* `PATCH /teams/{id}/soft-delete`
-* `PATCH /teams/{id}/restore`
-* `GET /teams/deleted`
-* `GET /teams/by-organization/{orgId}`
-* `GET /teams/by-user/{userId}`
+- `GET /teams/{id}`
+- `POST /teams`
+- `PUT /teams/{id}`
+- `DELETE /teams/{id}`
+- `PATCH /teams/{id}/soft-delete`
+- `PATCH /teams/{id}/restore`
+- `GET /teams/deleted`
+- `GET /teams/by-organization/{orgId}`
+- `GET /teams/by-user/{userId}`
 
 #### Team Membership
 
-* `POST /teams/{teamId}/users/{userId}`
-* `DELETE /teams/{teamId}/users/{userId}`
-* `GET /teams/{teamId}/users/{userId}/exists`
+- `POST /teams/{teamId}/users/{userId}`
+- `DELETE /teams/{teamId}/users/{userId}`
+- `GET /teams/{teamId}/users/{userId}/exists`
 
 ---
 
 ### 👤 Users
 
-* `GET /users/{id}`
-* `GET /users/by-email`
-* `POST /users`
-* `PUT /users/{id}`
-* `DELETE /users/{id}`
-* `PATCH /users/{id}/soft-delete`
-* `PATCH /users/{id}/restore`
-* `GET /users/deleted`
+- `GET /users/{id}`
+- `GET /users/by-email`
+- `POST /users`
+- `PUT /users/{id}`
+- `DELETE /users/{id}`
+- `PATCH /users/{id}/soft-delete`
+- `PATCH /users/{id}/restore`
+- `GET /users/deleted`
+
+---
+
+### 📁 Projects
+
+- `GET /projects/{id}`
+- `POST /projects`
+- `PUT /projects/{id}`
+- `PATCH /projects/{id}/status`
+- `DELETE /projects/{id}`
+- `PATCH /projects/{id}/soft-delete`
+- `PATCH /projects/{id}/restore`
+- `GET /projects/deleted`
+- `GET /projects/by-team/{teamId}`
+- `GET /projects/by-organization/{orgId}`
+
+---
+
+### 🧩 Tasks
+
+- `GET /tasks/{id}`
+- `POST /tasks`
+- `PUT /tasks/{id}`
+- `DELETE /tasks/{id}` (Hard Delete)
+- `PATCH /tasks/{id}/soft-delete`
+- `PATCH /tasks/{id}/restore`
+- `GET /tasks/deleted`
+- `PATCH /tasks/{id}/status`
+- `PATCH /tasks/{id}/assign/{userId}`
 
 ---
 
 ## 🛠️ Tech Stack
 
-* **.NET 8 / ASP.NET Core Web API**
-* **Entity Framework Core**
-* **AutoMapper**
-* **Repository & Unit of Work patterns**
-* **SQL Server (configurable)**
+- **ASP.NET Core Web API (.NET 8)**
+- **Entity Framework Core**
+- **SQL Server**
+- **AutoMapper**
+- **Repository + Unit of Work**
+- **DTO-based API contracts**
 
 ---
 
@@ -155,29 +169,8 @@ All main entities inherit:
 dotnet restore
 dotnet ef database update
 dotnet run
-```
-
-Update the connection string in `appsettings.json` before running migrations.
-
----
-
-## 🔮 Future Improvements
-
-* Authentication & authorization (JWT, roles)
-* Pagination, filtering, and sorting
-* Global exception handling middleware
-* Unit & integration testing
-
 ---
 
 ## 👨‍💻 Author
 
 **Marwan** – Software Engineer (.NET)
-
-
-
-
-
-
-
-
