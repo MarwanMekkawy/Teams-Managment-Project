@@ -46,7 +46,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Organizations retrieved successfully.</response>
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<string>>> GetAll(int pageNumber = 1, int pageSize = 5)
+        public async Task<ActionResult<IEnumerable<string>>> GetAll(int pageNumber = 1, int pageSize = 10)
             => Ok(await _service.GetAllAsync(pageNumber, pageSize));
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Soft-deleted organizations retrieved successfully.</response>
         [HttpGet("soft-deleted")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<List<OrganizationDto>>> GetDeleted(int pageNumber, int pageSize)
+        public async Task<ActionResult<List<OrganizationDto>>> GetDeleted(int pageNumber =1, int pageSize = 10)
             => Ok(await _service.GetAllDeletedOrganizationsAsync(pageNumber, pageSize));
     }
 }

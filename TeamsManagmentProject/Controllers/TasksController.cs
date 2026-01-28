@@ -20,7 +20,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <param name="id">The task identifier.</param>
         /// <response code="200">Task retrieved successfully.</response>
         /// <response code="404">Task not found.</response>
-        [HttpGet]
+        [HttpGet("{id}")]
         [Authorize(Roles = "Admin,Manager,TeamLeader,Member")]
         public async Task<ActionResult<TaskDto>> GetById(int id)
         {
@@ -34,7 +34,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <param name="id">The organization identifier.</param>
         /// <response code="200">Overdue tasks retrieved successfully.</response>
         /// <response code="404">Organization not found.</response>
-        [HttpGet("{overdue}")]
+        [HttpGet("overdue/{id}")]
         [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<TaskDto>> GetOverDue(int id)
         {
@@ -123,7 +123,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Soft-deleted tasks retrieved successfully.</response>
         [HttpGet("soft-deleted")]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult<List<TaskDto>>> GetDeleted(int pageNumber, int pageSize)
+        public async Task<ActionResult<List<TaskDto>>> GetDeleted(int pageNumber = 1, int pageSize = 10)
         {
             var ctx = UserClaimsFactory.From(User);
             return Ok(await _service.GetAllDeletedTasksAsync(pageNumber, pageSize, ctx));

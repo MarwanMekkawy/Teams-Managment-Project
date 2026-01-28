@@ -16,8 +16,10 @@ namespace Persistance.Repositories
         }
 
         // getting list entities <TEntity> tracked/not tracked [paginated]
-        public async Task<IEnumerable<TEntity>> GetAllAsync(int pageNumber, int pageSize, bool Tracked = false)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(int pageNumber = 1, int pageSize = 10, bool Tracked = false)
         {
+            if (pageNumber <= 0) pageNumber = 1;
+            if (pageSize <= 0) pageSize = 10;
             var query = _context.Set<TEntity>().AsQueryable();
             if(!Tracked) query = query.AsNoTracking();         
             return await query.OrderBy(e => e.Id).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();

@@ -119,7 +119,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Soft-deleted users retrieved successfully.</response>
         [HttpGet("soft-deleted")]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult<List<UserDto>>> GetDeleted(int pageNumber, int pageSize)
+        public async Task<ActionResult<List<UserDto>>> GetDeleted(int pageNumber = 1, int pageSize = 10)
         {
             var ctx = UserClaimsFactory.From(User);
             return Ok(await _service.GetAllDeletedUsersAsync(pageNumber, pageSize, ctx));

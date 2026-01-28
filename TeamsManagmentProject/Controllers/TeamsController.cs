@@ -118,7 +118,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="200">Soft-deleted teams retrieved successfully.</response>
         [HttpGet("soft-deleted")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<List<TeamDto>>> GetDeleted(int pageNumber, int pageSize)
+        public async Task<ActionResult<List<TeamDto>>> GetDeleted(int pageNumber = 1, int pageSize = 10)
             => Ok(await _service.GetAllDeletedTeamsAsync(pageNumber, pageSize));
 
         /// <summary>
