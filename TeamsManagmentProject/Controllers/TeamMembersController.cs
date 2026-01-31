@@ -16,7 +16,8 @@ namespace TeamsManagmentProject.API.Controllers
         /// <summary>
         /// Adds a user to a team.
         /// </summary>
-        /// <param name="dto">Team member creation data.</param>
+        /// <param name="dto">Team member id.</param>
+        /// <param name="teamId">Team id.</param>
         /// <response code="201">Team member added successfully.</response>
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
@@ -50,12 +51,13 @@ namespace TeamsManagmentProject.API.Controllers
         /// <param name="teamId">The team identifier.</param>
         /// <param name="userId">The user identifier.</param>
         /// <response code="200">Membership status retrieved successfully.</response>
-        [HttpGet("{userId}/exists")]
+        [HttpHead("{userId}")]
         [Authorize(Roles = "Admin,Manager,TeamLeader")]
         public async Task<ActionResult<bool>> CheckMembership(int teamId, int userId)
         {
             var ctx = UserClaimsFactory.From(User);
-            return Ok(await _service.IsMemberAsync(teamId, userId, ctx));
+            bool exists = await _service.IsMemberAsync(teamId, userId, ctx);
+            return exists ? Ok() : NotFound();
         }
     }
 }

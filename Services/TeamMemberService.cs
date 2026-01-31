@@ -24,6 +24,12 @@ namespace Services
             var team = await unitOfWork.teams.GetAsync(teamId);
             if (team == null) throw new NotFoundException($"Team with ID {teamId} not found");
 
+            var existingUser = await unitOfWork.users.GetAsync(dto.UserId);
+            if (existingUser == null) throw new NotFoundException($"User with ID {dto.UserId} not found");
+
+            if (team.OrganizationId != existingUser.OrganizationId) throw new 
+                    ConflictException($"the user no.{dto.UserId} and the team no.{teamId} do Not Belong to the same Organization");
+
             switch (userCredentials.Role)
             {
                 case UserRole.Admin:
@@ -48,6 +54,7 @@ namespace Services
             if (userExistsInTeam)  throw new ConflictException ($"The user with ID {dto.UserId} is already a member of the team with ID {teamId}");
 
             var teamMember = mapper.Map<TeamMember>(dto);
+            teamMember.TeamId = teamId;
             unitOfWork.teamMembers.AddMember(teamMember);
             await unitOfWork.SaveChangesAsync();
         }
