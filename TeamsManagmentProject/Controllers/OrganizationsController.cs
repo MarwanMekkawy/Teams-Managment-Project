@@ -24,7 +24,8 @@ namespace TeamsManagmentProject.API.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> GetStats(int id)
         {
-            var orgStats = await _service.GetStatsAsync(id);
+            var ctx = UserClaimsFactory.From(User);
+            var orgStats = await _service.GetStatsAsync(id, ctx);
             var statsObject = new
             {
                 totalUsers = orgStats.totalUsers,

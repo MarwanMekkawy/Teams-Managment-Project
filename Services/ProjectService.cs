@@ -104,8 +104,10 @@ namespace Services
                     throw new ForbiddenException("You are not allowed to update this project");
             }
 
-            project.Status = dto.Status ?? project.Status;
-            project.Name = dto.Name ?? project.Name;
+            if (string.IsNullOrWhiteSpace(dto.Name)) throw new ForbiddenException("project name cant be white or empty space");
+            project.Name = dto.Name;
+
+            project.Status = dto.Status ?? project.Status; 
             unitOfWork.projects.Update(project);
             await unitOfWork.SaveChangesAsync();
             return mapper.Map<ProjectDto>(project);
@@ -175,7 +177,7 @@ namespace Services
         public async Task RestoreAsync(int id, UserClaims userCredentials)
         {
             var project = await unitOfWork.projects.GetIncludingDeletedAsync(id);
-            if (project == null) throw new NotFoundException($"project with ID {id} not found");
+            if (project == null) throw new NotFoundException($"Project with ID {id} not found");
             if (!project.IsDeleted) throw new BadRequestException("the Entity is Not a deleted Entity");
 
             if (userCredentials.Role == UserRole.Manager)

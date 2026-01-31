@@ -21,8 +21,7 @@ namespace Persistance.Security
             {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Name),
-            new Claim(ClaimTypes.Role, user.Role.ToString()),           
-            new Claim("creationDate", user.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"))
+            new Claim(ClaimTypes.Role, user.Role.ToString())           
             };
             // if org id is not null add it if not add palceholder
             if (user.OrganizationId.HasValue) claims.Add(new Claim("OrgId", user.OrganizationId.Value.ToString()));

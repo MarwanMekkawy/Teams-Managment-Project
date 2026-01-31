@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Exceptions;
 using Services.Abstractions;
+using Shared.Claims;
 using Shared.OrganizationDTOs;
 
 
@@ -18,8 +20,9 @@ namespace Services
             this.mapper = mapper;
         }
         // Get status //
-        public async Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)> GetStatsAsync(int orgId)
+        public async Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, int completedTasks, int overdueTasks)> GetStatsAsync(int orgId, UserClaims userCredentials)
         {
+            if (userCredentials.Role == UserRole.Manager && userCredentials.OrgId != orgId) throw new ForbiddenException("Mangers can only access their Org");
             return await unitOfWork.organizations.GetOrganizationStatsAsync(orgId) ?? throw new NotFoundException($"No status found for oraganiztion with ID {orgId}");              //empty tuple
         }
 

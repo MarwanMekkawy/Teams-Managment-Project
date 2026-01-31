@@ -40,6 +40,12 @@ namespace Persistance.Repositories
                                        .ThenInclude(t => t.Members).FirstOrDefaultAsync(t => t.Id == taskId);
         }
 
+        public async Task<TaskEntity?> GetByIdWithProjectAndTeamAndMembersIncludingDeletedAsync(int taskId)
+        {
+            return await _context.Tasks.IgnoreQueryFilters().AsNoTracking().Include(t => t.Project).ThenInclude(p => p.Team)
+                                       .ThenInclude(t => t.Members).FirstOrDefaultAsync(t => t.Id == taskId);
+        }
+
         public async Task<List<TaskEntity>> GetAllSoftDeletedByOrganizationIncludingProjectsAndTeamsAsync(int organizationId, int pageNumber = 1, int pageSize = 10, bool tracked = false)
         {
             if (pageNumber <= 0) pageNumber = 1;

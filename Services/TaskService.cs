@@ -24,8 +24,7 @@ namespace Services
         public async Task<TaskDto> GetByIdAsync(int id, UserClaims userCredentials)
         {
             var task = await unitOfWork.tasks.GetByIdWithProjectAndTeamAndMembersAsync(id);
-            if (task == null)
-                throw new NotFoundException($"Task with ID {id} not found");
+            if (task == null) throw new NotFoundException($"Task with ID {id} not found");
 
             switch (userCredentials.Role)
             {
@@ -115,6 +114,7 @@ namespace Services
             task.Description = dto.Description ?? task.Description;
             task.DueDate = dto.DueDate ?? task.DueDate;
             task.Status = dto.Status ?? task.Status;
+            task.AssigneeId = dto.AssigneeId?? task.AssigneeId;
             if (dto.AssigneeId.HasValue && dto.AssigneeId != task.AssigneeId)
             {
                 var newUser = await unitOfWork.users.GetAsync(dto.AssigneeId.Value);
@@ -192,7 +192,7 @@ namespace Services
 
         public async Task RestoreAsync(int id, UserClaims userCredentials)
         {
-            var task = await unitOfWork.tasks.GetByIdWithProjectAndTeamAndMembersAsync(id);
+            var task = await unitOfWork.tasks.GetByIdWithProjectAndTeamAndMembersIncludingDeletedAsync(id);
             if (task == null) throw new NotFoundException($"Task with ID {id} not found");
             if (!task.IsDeleted)throw new BadRequestException("The task is not a deleted entity");
 

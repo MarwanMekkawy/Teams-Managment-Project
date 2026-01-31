@@ -19,11 +19,10 @@ namespace Services
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
-        public async Task AddMemberAsync(CreateTeamMemberDto dto, UserClaims userCredentials)
+        public async Task AddMemberAsync(int teamId, CreateTeamMemberDto dto, UserClaims userCredentials)
         {
-            var team = await unitOfWork.teams.GetAsync(dto.TeamId);
-            if (team == null)
-                throw new NotFoundException($"Team with ID {dto.TeamId} not found");
+            var team = await unitOfWork.teams.GetAsync(teamId);
+            if (team == null) throw new NotFoundException($"Team with ID {teamId} not found");
 
             switch (userCredentials.Role)
             {
@@ -36,7 +35,7 @@ namespace Services
                     break;
 
                 case UserRole.TeamLeader:
-                    var isLeaderInTeam = await unitOfWork.teamMembers.ExistsInTeamAsync(dto.TeamId, userCredentials.UserId);
+                    var isLeaderInTeam = await unitOfWork.teamMembers.ExistsInTeamAsync(teamId, userCredentials.UserId);
                     if (!isLeaderInTeam)throw new ForbiddenException("Team leaders can only add members to teams they belong to");
                     break;
 
@@ -44,10 +43,9 @@ namespace Services
                     throw new ForbiddenException("You are not allowed to access team members");
             }
 
-            var userExistsInTeam = await unitOfWork.teamMembers.ExistsInTeamAsync(dto.TeamId, dto.UserId);
+            var userExistsInTeam = await unitOfWork.teamMembers.ExistsInTeamAsync(teamId, dto.UserId);
 
-            if (userExistsInTeam)  throw new ConflictException
-                    ($"The user with ID {dto.UserId} is already a member of the team with ID {dto.TeamId}");
+            if (userExistsInTeam)  throw new ConflictException ($"The user with ID {dto.UserId} is already a member of the team with ID {teamId}");
 
             var teamMember = mapper.Map<TeamMember>(dto);
             unitOfWork.teamMembers.AddMember(teamMember);

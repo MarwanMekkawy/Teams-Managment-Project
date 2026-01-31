@@ -21,11 +21,11 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="400">Invalid input data.</response>
         [HttpPost]
         [Authorize(Roles = "Admin,Manager,TeamLeader")]
-        public async Task<IActionResult> Add(CreateTeamMemberDto dto)
+        public async Task<IActionResult> Add(int teamId, CreateTeamMemberDto dto)
         {
             var ctx = UserClaimsFactory.From(User);
-            await _service.AddMemberAsync(dto, ctx);
-            return Created($"/api/v1/teams/{dto.TeamId}/members/{dto.UserId}",null);
+            await _service.AddMemberAsync(teamId, dto, ctx);
+            return Created($"/api/v1/teams/{teamId}/members/{dto.UserId}",null);
         }
 
         /// <summary>
