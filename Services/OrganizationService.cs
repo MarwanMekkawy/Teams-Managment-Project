@@ -43,6 +43,9 @@ namespace Services
 
         public async Task<OrganizationDto> CreateAsync(CreateOrganizationDto dto)
         {
+            var isExistingOrgName =await unitOfWork.organizations.IsOrgNameExistsAsync(dto.Name);
+            if (isExistingOrgName) throw new ForbiddenException($"The org {dto.Name} already exists");
+
             var organization = mapper.Map<Organization>(dto);
             unitOfWork.organizations.Add(organization);
             await unitOfWork.SaveChangesAsync();

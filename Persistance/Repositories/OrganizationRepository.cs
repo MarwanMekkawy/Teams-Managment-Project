@@ -29,5 +29,9 @@ namespace Persistance.Repositories
             if (stats == null) return null;
             return (stats.TotalUsers, stats.TotalTeams, stats.ActiveProjects, stats.ArchivedProjects, stats.TotalTasks, stats.CompletedTasks, stats.OverdueTasks);
         }
+        public async Task<bool> IsOrgNameExistsAsync(string orgName)
+        {
+            return await _context.Organizations.AnyAsync(o => o.Name == orgName);
+        }
     }
 }

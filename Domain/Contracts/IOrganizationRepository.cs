@@ -12,5 +12,8 @@ namespace Domain.Contracts
         // Get organization status as tuble
         Task<(int totalUsers, int totalTeams, int activeProjects, int archivedProjects, int totalTasks, 
               int completedTasks, int overdueTasks)?> GetOrganizationStatsAsync(int organizationId);
+
+        // checks for existance by name
+        Task<bool> IsOrgNameExistsAsync(string orgName);
     }
 }

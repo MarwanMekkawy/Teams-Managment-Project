@@ -37,7 +37,7 @@ namespace TeamsManagmentProject.API.Controllers
         /// <response code="404">User not found.</response>
         [HttpGet("by-email")]
         [Authorize(Roles = "Admin,Manager,TeamLeader")]
-        public async Task<ActionResult<UserDto>> GetByEmail(string email)
+        public async Task<ActionResult<UserDto>> GetByEmail([FromQuery] string email)
         {
             var ctx = UserClaimsFactory.From(User);
             return Ok(await _service.GetByEmailAsync(email, ctx));

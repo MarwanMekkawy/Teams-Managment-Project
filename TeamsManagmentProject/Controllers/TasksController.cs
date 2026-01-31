@@ -133,15 +133,15 @@ namespace TeamsManagmentProject.API.Controllers
         /// Changes the status of a task.
         /// </summary>
         /// <param name="id">The task identifier.</param>
-        /// <param name="status">The new status to apply.</param>
+        /// <param name="dto">The new status to apply.</param>
         /// <response code="204">Task status updated successfully.</response>
         /// <response code="404">Task not found.</response>
         [HttpPatch("{id}/status")]
         [Authorize(Roles = "Admin,Manager,TeamLeader,Member")]
-        public async Task<IActionResult> ChangeStatus(int id, TaskEntityStatus? status)
+        public async Task<IActionResult> ChangeStatus(int id, ChangeTaskStatusDto dto)
         {
             var ctx = UserClaimsFactory.From(User);
-            await _service.ChangeStatusAsync(id, status, ctx);
+            await _service.ChangeStatusAsync(id, dto.Status, ctx);
             return NoContent();
         }
 
