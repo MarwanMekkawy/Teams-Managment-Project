@@ -1,54 +1,28 @@
 [
-  {
-    "Name": "Team1 Org1",
-    "OrganizationId": 1
-  },
-  {
-    "Name": "Team1 Org2",
-    "OrganizationId": 2
-  },
-  {
-    "Name": "Team1 Org3",
-    "OrganizationId": 3
-  },
-  {
-    "Name": "Team1 Org4",
-    "OrganizationId": 4
-  },
-  {
-    "Name": "Team1 Org5",
-    "OrganizationId": 5
-  },
-  {
-    "Name": "Team1 Org6",
-    "OrganizationId": 6
-  },
-  {
-    "Name": "Team1 Org7",
-    "OrganizationId": 7
-  },
-  {
-    "Name": "Team1 Org8",
-    "OrganizationId": 8
-  },
-  {
-    "Name": "Team1 Org9",
-    "OrganizationId": 9
-  },
-  {
-    "Name": "Team1 Org10",
-    "OrganizationId": 10
-  },
-  {
-    "Name": "Team1 Org11",
-    "OrganizationId": 11
-  },
-  {
-    "Name": "Team1 Org12",
-    "OrganizationId": 12
-  },
-  {
-    "Name": "Team1 Org13",
-    "OrganizationId": 13
-  }
+  {"Name": "Team1 Org1", "OrganizationId": 1},
+  {"Name": "Team1 Org2", "OrganizationId": 2},
+  {"Name": "Team1 Org3", "OrganizationId": 3},
+  {"Name": "Team1 Org4", "OrganizationId": 4},
+  {"Name": "Team1 Org5", "OrganizationId": 5},
+  {"Name": "Team1 Org6", "OrganizationId": 6},
+  {"Name": "Team1 Org7", "OrganizationId": 7},
+  {"Name": "Team1 Org8", "OrganizationId": 8},
+  {"Name": "Team1 Org9", "OrganizationId": 9},
+  {"Name": "Team1 Org10", "OrganizationId": 10},
+  {"Name": "Team1 Org11", "OrganizationId": 11},
+  {"Name": "Team1 Org12", "OrganizationId": 12},
+  {"Name": "Team1 Org13", "OrganizationId": 13},
+  {"Name": "Team2 Org1", "OrganizationId": 1},
+  {"Name": "Team2 Org2", "OrganizationId": 2},
+  {"Name": "Team2 Org3", "OrganizationId": 3},
+  {"Name": "Team2 Org4", "OrganizationId": 4},
+  {"Name": "Team2 Org5", "OrganizationId": 5},
+  {"Name": "Team2 Org6", "OrganizationId": 6},
+  {"Name": "Team2 Org7", "OrganizationId": 7},
+  {"Name": "Team2 Org8", "OrganizationId": 8},
+  {"Name": "Team2 Org9", "OrganizationId": 9},
+  {"Name": "Team2 Org10", "OrganizationId": 10},
+  {"Name": "Team2 Org11", "OrganizationId": 11},
+  {"Name": "Team2 Org12", "OrganizationId": 12},
+  {"Name": "Team2 Org13", "OrganizationId": 13}
 ]

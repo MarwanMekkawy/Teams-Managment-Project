@@ -1,275 +1,83 @@
 [
-  {
-    "Name": "User1 Org1",
-    "Email": "user1org1@example.com",
-    "Role": 3,
-    "OrganizationId": 1,
-    "PasswordHash": "hash1"
-  },
-  {
-    "Name": "User2 Org1",
-    "Email": "user2org1@example.com",
-    "Role": 3,
-    "OrganizationId": 1,
-    "PasswordHash": "hash2"
-  },
-  {
-    "Name": "User3 Org1",
-    "Email": "user3org1@example.com",
-    "Role": 3,
-    "OrganizationId": 1,
-    "PasswordHash": "hash3"
-  },
-  {
-    "Name": "User1 Org2",
-    "Email": "user1org2@example.com",
-    "Role": 3,
-    "OrganizationId": 2,
-    "PasswordHash": "hash4"
-  },
-  {
-    "Name": "User2 Org2",
-    "Email": "user2org2@example.com",
-    "Role": 1,
-    "OrganizationId": 2,
-    "PasswordHash": "hash5"
-  },
-  {
-    "Name": "User3 Org2",
-    "Email": "user3org2@example.com",
-    "Role": 2,
-    "OrganizationId": 2,
-    "PasswordHash": "hash6"
-  },
-  {
-    "Name": "User1 Org3",
-    "Email": "user1org3@example.com",
-    "Role": 3,
-    "OrganizationId": 3,
-    "PasswordHash": "hash7"
-  },
-  {
-    "Name": "User2 Org3",
-    "Email": "user2org3@example.com",
-    "Role": 1,
-    "OrganizationId": 3,
-    "PasswordHash": "hash8"
-  },
-  {
-    "Name": "User3 Org3",
-    "Email": "user3org3@example.com",
-    "Role": 2,
-    "OrganizationId": 3,
-    "PasswordHash": "hash9"
-  },
-  {
-    "Name": "User1 Org4",
-    "Email": "user1org4@example.com",
-    "Role": 3,
-    "OrganizationId": 4,
-    "PasswordHash": "hash10"
-  },
-  {
-    "Name": "User2 Org4",
-    "Email": "user2org4@example.com",
-    "Role": 1,
-    "OrganizationId": 4,
-    "PasswordHash": "hash11"
-  },
-  {
-    "Name": "User3 Org4",
-    "Email": "user3org4@example.com",
-    "Role": 2,
-    "OrganizationId": 4,
-    "PasswordHash": "hash12"
-  },
-  {
-    "Name": "User1 Org5",
-    "Email": "user1org5@example.com",
-    "Role": 3,
-    "OrganizationId": 5,
-    "PasswordHash": "hash13"
-  },
-  {
-    "Name": "User2 Org5",
-    "Email": "user2org5@example.com",
-    "Role": 1,
-    "OrganizationId": 5,
-    "PasswordHash": "hash14"
-  },
-  {
-    "Name": "User3 Org5",
-    "Email": "user3org5@example.com",
-    "Role": 2,
-    "OrganizationId": 5,
-    "PasswordHash": "hash15"
-  },
-  {
-    "Name": "User1 Org6",
-    "Email": "user1org6@example.com",
-    "Role": 3,
-    "OrganizationId": 6,
-    "PasswordHash": "hash16"
-  },
-  {
-    "Name": "User2 Org6",
-    "Email": "user2org6@example.com",
-    "Role": 1,
-    "OrganizationId": 6,
-    "PasswordHash": "hash17"
-  },
-  {
-    "Name": "User3 Org6",
-    "Email": "user3org6@example.com",
-    "Role": 2,
-    "OrganizationId": 6,
-    "PasswordHash": "hash18"
-  },
-  {
-    "Name": "User1 Org7",
-    "Email": "user1org7@example.com",
-    "Role": 3,
-    "OrganizationId": 7,
-    "PasswordHash": "hash19"
-  },
-  {
-    "Name": "User2 Org7",
-    "Email": "user2org7@example.com",
-    "Role": 1,
-    "OrganizationId": 7,
-    "PasswordHash": "hash20"
-  },
-  {
-    "Name": "User3 Org7",
-    "Email": "user3org7@example.com",
-    "Role": 2,
-    "OrganizationId": 7,
-    "PasswordHash": "hash21"
-  },
-  {
-    "Name": "User1 Org8",
-    "Email": "user1org8@example.com",
-    "Role": 3,
-    "OrganizationId": 8,
-    "PasswordHash": "hash22"
-  },
-  {
-    "Name": "User2 Org8",
-    "Email": "user2org8@example.com",
-    "Role": 1,
-    "OrganizationId": 8,
-    "PasswordHash": "hash23"
-  },
-  {
-    "Name": "User3 Org8",
-    "Email": "user3org8@example.com",
-    "Role": 2,
-    "OrganizationId": 8,
-    "PasswordHash": "hash24"
-  },
-  {
-    "Name": "User1 Org9",
-    "Email": "user1org9@example.com",
-    "Role": 3,
-    "OrganizationId": 9,
-    "PasswordHash": "hash25"
-  },
-  {
-    "Name": "User2 Org9",
-    "Email": "user2org9@example.com",
-    "Role": 1,
-    "OrganizationId": 9,
-    "PasswordHash": "hash26"
-  },
-  {
-    "Name": "User3 Org9",
-    "Email": "user3org9@example.com",
-    "Role": 2,
-    "OrganizationId": 9,
-    "PasswordHash": "hash27"
-  },
-  {
-    "Name": "User1 Org10",
-    "Email": "user1org10@example.com",
-    "Role": 3,
-    "OrganizationId": 10,
-    "PasswordHash": "hash28"
-  },
-  {
-    "Name": "User2 Org10",
-    "Email": "user2org10@example.com",
-    "Role": 1,
-    "OrganizationId": 10,
-    "PasswordHash": "hash29"
-  },
-  {
-    "Name": "User3 Org10",
-    "Email": "user3org10@example.com",
-    "Role": 2,
-    "OrganizationId": 10,
-    "PasswordHash": "hash30"
-  },
-  {
-    "Name": "User1 Org11",
-    "Email": "user1org11@example.com",
-    "Role": 3,
-    "OrganizationId": 11,
-    "PasswordHash": "hash31"
-  },
-  {
-    "Name": "User2 Org11",
-    "Email": "user2org11@example.com",
-    "Role": 1,
-    "OrganizationId": 11,
-    "PasswordHash": "hash32"
-  },
-  {
-    "Name": "User3 Org11",
-    "Email": "user3org11@example.com",
-    "Role": 2,
-    "OrganizationId": 11,
-    "PasswordHash": "hash33"
-  },
-  {
-    "Name": "User1 Org12",
-    "Email": "user1org12@example.com",
-    "Role": 3,
-    "OrganizationId": 12,
-    "PasswordHash": "hash34"
-  },
-  {
-    "Name": "User2 Org12",
-    "Email": "user2org12@example.com",
-    "Role": 1,
-    "OrganizationId": 12,
-    "PasswordHash": "hash35"
-  },
-  {
-    "Name": "User3 Org12",
-    "Email": "user3org12@example.com",
-    "Role": 2,
-    "OrganizationId": 12,
-    "PasswordHash": "hash36"
-  },
-  {
-    "Name": "User1 Org13",
-    "Email": "user1org13@example.com",
-    "Role": 3,
-    "OrganizationId": 13,
-    "PasswordHash": "hash37"
-  },
-  {
-    "Name": "User2 Org13",
-    "Email": "user2org13@example.com",
-    "Role": 1,
-    "OrganizationId": 13,
-    "PasswordHash": "hash38"
-  },
-  {
-    "Name": "User3 Org13",
-    "Email": "user3org13@example.com",
-    "Role": 2,
-    "OrganizationId": 13,
-    "PasswordHash": "hash39"
-  }
+   {"Name": "Admin", "Email": "Admin@example.com", "Role": 0, "OrganizationId": -1, "PasswordHash": "AQAAAAIAAYagAAAAEI76o3pzOKxR5zQW93cws+wD0lwcQ1bRlv9A1U1aZaO3HwElAGWQj7GU0CNaL0eUfw=="},
+   {"Name": "Manger", "Email": "Manger@example.com", "Role": 1, "OrganizationId": -1, "PasswordHash": "AQAAAAIAAYagAAAAEFCKTbyZiI5BGMalEp2hj3Q/ywEuyDgckXxqC9JI/Z2HxAmnzw7STXs58AFK8rwxzA=="},
+   {"Name": "Teamleader", "Email": "Teamleader@example.com", "Role": 2, "OrganizationId": -1, "PasswordHash": "AQAAAAIAAYagAAAAEMHXO0FFkokp0x874HvpnS0WL6PyQa1ws0Uo3Y0amaDeDEM0au9YWhfbaNt647p81Q=="},
+  {"Name": "User1 Org1", "Email": "user1org1@example.com", "Role": 3, "OrganizationId": 1, "PasswordHash": "hash1"},
+  {"Name": "User2 Org1", "Email": "user2org1@example.com", "Role": 3, "OrganizationId": 1, "PasswordHash": "hash2"},
+  {"Name": "User3 Org1", "Email": "user3org1@example.com", "Role": 3, "OrganizationId": 1, "PasswordHash": "hash3"},
+  {"Name": "User1 Org2", "Email": "user1org2@example.com", "Role": 3, "OrganizationId": 2, "PasswordHash": "hash4"},
+  {"Name": "User2 Org2", "Email": "user2org2@example.com", "Role": 1, "OrganizationId": 2, "PasswordHash": "hash5"},
+  {"Name": "User3 Org2", "Email": "user3org2@example.com", "Role": 2, "OrganizationId": 2, "PasswordHash": "hash6"},
+  {"Name": "User1 Org3", "Email": "user1org3@example.com", "Role": 3, "OrganizationId": 3, "PasswordHash": "hash7"},
+  {"Name": "User2 Org3", "Email": "user2org3@example.com", "Role": 1, "OrganizationId": 3, "PasswordHash": "hash8"},
+  {"Name": "User3 Org3", "Email": "user3org3@example.com", "Role": 2, "OrganizationId": 3, "PasswordHash": "hash9"},
+  {"Name": "User1 Org4", "Email": "user1org4@example.com", "Role": 3, "OrganizationId": 4, "PasswordHash": "hash10"},
+  {"Name": "User2 Org4", "Email": "user2org4@example.com", "Role": 1, "OrganizationId": 4, "PasswordHash": "hash11"},
+  {"Name": "User3 Org4", "Email": "user3org4@example.com", "Role": 2, "OrganizationId": 4, "PasswordHash": "hash12"},
+  {"Name": "User1 Org5", "Email": "user1org5@example.com", "Role": 3, "OrganizationId": 5, "PasswordHash": "hash13"},
+  {"Name": "User2 Org5", "Email": "user2org5@example.com", "Role": 1, "OrganizationId": 5, "PasswordHash": "hash14"},
+  {"Name": "User3 Org5", "Email": "user3org5@example.com", "Role": 2, "OrganizationId": 5, "PasswordHash": "hash15"},
+  {"Name": "User1 Org6", "Email": "user1org6@example.com", "Role": 3, "OrganizationId": 6, "PasswordHash": "hash16"},
+  {"Name": "User2 Org6", "Email": "user2org6@example.com", "Role": 1, "OrganizationId": 6, "PasswordHash": "hash17"},
+  {"Name": "User3 Org6", "Email": "user3org6@example.com", "Role": 2, "OrganizationId": 6, "PasswordHash": "hash18"},
+  {"Name": "User1 Org7", "Email": "user1org7@example.com", "Role": 3, "OrganizationId": 7, "PasswordHash": "hash19"},
+  {"Name": "User2 Org7", "Email": "user2org7@example.com", "Role": 1, "OrganizationId": 7, "PasswordHash": "hash20"},
+  {"Name": "User3 Org7", "Email": "user3org7@example.com", "Role": 2, "OrganizationId": 7, "PasswordHash": "hash21"},
+  {"Name": "User1 Org8", "Email": "user1org8@example.com", "Role": 3, "OrganizationId": 8, "PasswordHash": "hash22"},
+  {"Name": "User2 Org8", "Email": "user2org8@example.com", "Role": 1, "OrganizationId": 8, "PasswordHash": "hash23"},
+  {"Name": "User3 Org8", "Email": "user3org8@example.com", "Role": 2, "OrganizationId": 8, "PasswordHash": "hash24"},
+  {"Name": "User1 Org9", "Email": "user1org9@example.com", "Role": 3, "OrganizationId": 9, "PasswordHash": "hash25"},
+  {"Name": "User2 Org9", "Email": "user2org9@example.com", "Role": 1, "OrganizationId": 9, "PasswordHash": "hash26"},
+  {"Name": "User3 Org9", "Email": "user3org9@example.com", "Role": 2, "OrganizationId": 9, "PasswordHash": "hash27"},
+  {"Name": "User1 Org10", "Email": "user1org10@example.com", "Role": 3, "OrganizationId": 10, "PasswordHash": "hash28"},
+  {"Name": "User2 Org10", "Email": "user2org10@example.com", "Role": 1, "OrganizationId": 10, "PasswordHash": "hash29"},
+  {"Name": "User3 Org10", "Email": "user3org10@example.com", "Role": 2, "OrganizationId": 10, "PasswordHash": "hash30"},
+  {"Name": "User1 Org11", "Email": "user1org11@example.com", "Role": 3, "OrganizationId": 11, "PasswordHash": "hash31"},
+  {"Name": "User2 Org11", "Email": "user2org11@example.com", "Role": 1, "OrganizationId": 11, "PasswordHash": "hash32"},
+  {"Name": "User3 Org11", "Email": "user3org11@example.com", "Role": 2, "OrganizationId": 11, "PasswordHash": "hash33"},
+  {"Name": "User1 Org12", "Email": "user1org12@example.com", "Role": 3, "OrganizationId": 12, "PasswordHash": "hash34"},
+  {"Name": "User2 Org12", "Email": "user2org12@example.com", "Role": 1, "OrganizationId": 12, "PasswordHash": "hash35"},
+  {"Name": "User3 Org12", "Email": "user3org12@example.com", "Role": 2, "OrganizationId": 12, "PasswordHash": "hash36"},
+  {"Name": "User1 Org13", "Email": "user1org13@example.com", "Role": 3, "OrganizationId": 13, "PasswordHash": "hash37"},
+  {"Name": "User2 Org13", "Email": "user2org13@example.com", "Role": 1, "OrganizationId": 13, "PasswordHash": "hash38"},
+  {"Name": "User3 Org13", "Email": "user3org13@example.com", "Role": 2, "OrganizationId": 13, "PasswordHash": "hash39"},
+  {"Name": "User4 Org1", "Email": "user4org1@example.com", "Role": 3, "OrganizationId": 1, "PasswordHash": "hash40"},
+  {"Name": "User5 Org1", "Email": "user5org1@example.com", "Role": 1, "OrganizationId": 1, "PasswordHash": "hash41"},
+  {"Name": "User6 Org1", "Email": "user6org1@example.com", "Role": 2, "OrganizationId": 1, "PasswordHash": "hash42"},
+  {"Name": "User4 Org2", "Email": "user4org2@example.com", "Role": 3, "OrganizationId": 2, "PasswordHash": "hash43"},
+  {"Name": "User5 Org2", "Email": "user5org2@example.com", "Role": 1, "OrganizationId": 2, "PasswordHash": "hash44"},
+  {"Name": "User6 Org2", "Email": "user6org2@example.com", "Role": 2, "OrganizationId": 2, "PasswordHash": "hash45"},
+  {"Name": "User4 Org3", "Email": "user4org3@example.com", "Role": 3, "OrganizationId": 3, "PasswordHash": "hash46"},
+  {"Name": "User5 Org3", "Email": "user5org3@example.com", "Role": 1, "OrganizationId": 3, "PasswordHash": "hash47"},
+  {"Name": "User6 Org3", "Email": "user6org3@example.com", "Role": 2, "OrganizationId": 3, "PasswordHash": "hash48"},
+  {"Name": "User4 Org4", "Email": "user4org4@example.com", "Role": 3, "OrganizationId": 4, "PasswordHash": "hash49"},
+  {"Name": "User5 Org4", "Email": "user5org4@example.com", "Role": 1, "OrganizationId": 4, "PasswordHash": "hash50"},
+  {"Name": "User6 Org4", "Email": "user6org4@example.com", "Role": 2, "OrganizationId": 4, "PasswordHash": "hash51"},
+  {"Name": "User4 Org5", "Email": "user4org5@example.com", "Role": 3, "OrganizationId": 5, "PasswordHash": "hash52"},
+  {"Name": "User5 Org5", "Email": "user5org5@example.com", "Role": 1, "OrganizationId": 5, "PasswordHash": "hash53"},
+  {"Name": "User6 Org5", "Email": "user6org5@example.com", "Role": 2, "OrganizationId": 5, "PasswordHash": "hash54"},
+  {"Name": "User4 Org6", "Email": "user4org6@example.com", "Role": 3, "OrganizationId": 6, "PasswordHash": "hash55"},
+  {"Name": "User5 Org6", "Email": "user5org6@example.com", "Role": 1, "OrganizationId": 6, "PasswordHash": "hash56"},
+  {"Name": "User6 Org6", "Email": "user6org6@example.com", "Role": 2, "OrganizationId": 6, "PasswordHash": "hash57"},
+  {"Name": "User4 Org7", "Email": "user4org7@example.com", "Role": 3, "OrganizationId": 7, "PasswordHash": "hash58"},
+  {"Name": "User5 Org7", "Email": "user5org7@example.com", "Role": 1, "OrganizationId": 7, "PasswordHash": "hash59"},
+  {"Name": "User6 Org7", "Email": "user6org7@example.com", "Role": 2, "OrganizationId": 7, "PasswordHash": "hash60"},
+  {"Name": "User4 Org8", "Email": "user4org8@example.com", "Role": 3, "OrganizationId": 8, "PasswordHash": "hash61"},
+  {"Name": "User5 Org8", "Email": "user5org8@example.com", "Role": 1, "OrganizationId": 8, "PasswordHash": "hash62"},
+  {"Name": "User6 Org8", "Email": "user6org8@example.com", "Role": 2, "OrganizationId": 8, "PasswordHash": "hash63"},
+  {"Name": "User4 Org9", "Email": "user4org9@example.com", "Role": 3, "OrganizationId": 9, "PasswordHash": "hash64"},
+  {"Name": "User5 Org9", "Email": "user5org9@example.com", "Role": 1, "OrganizationId": 9, "PasswordHash": "hash65"},
+  {"Name": "User6 Org9", "Email": "user6org9@example.com", "Role": 2, "OrganizationId": 9, "PasswordHash": "hash66"},
+  {"Name": "User4 Org10", "Email": "user4org10@example.com", "Role": 3, "OrganizationId": 10, "PasswordHash": "hash67"},
+  {"Name": "User5 Org10", "Email": "user5org10@example.com", "Role": 1, "OrganizationId": 10, "PasswordHash": "hash68"},
+  {"Name": "User6 Org10", "Email": "user6org10@example.com", "Role": 2, "OrganizationId": 10, "PasswordHash": "hash69"},
+  {"Name": "User4 Org11", "Email": "user4org11@example.com", "Role": 3, "OrganizationId": 11, "PasswordHash": "hash70"},
+  {"Name": "User5 Org11", "Email": "user5org11@example.com", "Role": 1, "OrganizationId": 11, "PasswordHash": "hash71"},
+  {"Name": "User6 Org11", "Email": "user6org11@example.com", "Role": 2, "OrganizationId": 11, "PasswordHash": "hash72"},
+  {"Name": "User4 Org12", "Email": "user4org12@example.com", "Role": 3, "OrganizationId": 12, "PasswordHash": "hash73"},
+  {"Name": "User5 Org12", "Email": "user5org12@example.com", "Role": 1, "OrganizationId": 12, "PasswordHash": "hash74"},
+  {"Name": "User6 Org12", "Email": "user6org12@example.com", "Role": 2, "OrganizationId": 12, "PasswordHash": "hash75"},
+  {"Name": "User4 Org13", "Email": "user4org13@example.com", "Role": 3, "OrganizationId": 13, "PasswordHash": "hash76"},
+  {"Name": "User5 Org13", "Email": "user5org13@example.com", "Role": 1, "OrganizationId": 13, "PasswordHash": "hash77"},
+  {"Name": "User6 Org13", "Email": "user6org13@example.com", "Role": 2, "OrganizationId": 13, "PasswordHash": "hash78"}
 ]

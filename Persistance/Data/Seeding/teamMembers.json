@@ -1,158 +1,80 @@
 [
-  {
-    "TeamId": 1,
-    "UserId": 1
-  },
-  {
-    "TeamId": 1,
-    "UserId": 2
-  },
-  {
-    "TeamId": 1,
-    "UserId": 3
-  },
-  {
-    "TeamId": 2,
-    "UserId": 4
-  },
-  {
-    "TeamId": 2,
-    "UserId": 5
-  },
-  {
-    "TeamId": 2,
-    "UserId": 6
-  },
-  {
-    "TeamId": 3,
-    "UserId": 7
-  },
-  {
-    "TeamId": 3,
-    "UserId": 8
-  },
-  {
-    "TeamId": 3,
-    "UserId": 9
-  },
-  {
-    "TeamId": 4,
-    "UserId": 10
-  },
-  {
-    "TeamId": 4,
-    "UserId": 11
-  },
-  {
-    "TeamId": 4,
-    "UserId": 12
-  },
-  {
-    "TeamId": 5,
-    "UserId": 13
-  },
-  {
-    "TeamId": 5,
-    "UserId": 14
-  },
-  {
-    "TeamId": 5,
-    "UserId": 15
-  },
-  {
-    "TeamId": 6,
-    "UserId": 16
-  },
-  {
-    "TeamId": 6,
-    "UserId": 17
-  },
-  {
-    "TeamId": 6,
-    "UserId": 18
-  },
-  {
-    "TeamId": 7,
-    "UserId": 19
-  },
-  {
-    "TeamId": 7,
-    "UserId": 20
-  },
-  {
-    "TeamId": 7,
-    "UserId": 21
-  },
-  {
-    "TeamId": 8,
-    "UserId": 22
-  },
-  {
-    "TeamId": 8,
-    "UserId": 23
-  },
-  {
-    "TeamId": 8,
-    "UserId": 24
-  },
-  {
-    "TeamId": 9,
-    "UserId": 25
-  },
-  {
-    "TeamId": 9,
-    "UserId": 26
-  },
-  {
-    "TeamId": 9,
-    "UserId": 27
-  },
-  {
-    "TeamId": 10,
-    "UserId": 28
-  },
-  {
-    "TeamId": 10,
-    "UserId": 29
-  },
-  {
-    "TeamId": 10,
-    "UserId": 30
-  },
-  {
-    "TeamId": 11,
-    "UserId": 31
-  },
-  {
-    "TeamId": 11,
-    "UserId": 32
-  },
-  {
-    "TeamId": 11,
-    "UserId": 33
-  },
-  {
-    "TeamId": 12,
-    "UserId": 34
-  },
-  {
-    "TeamId": 12,
-    "UserId": 35
-  },
-  {
-    "TeamId": 12,
-    "UserId": 36
-  },
-  {
-    "TeamId": 13,
-    "UserId": 37
-  },
-  {
-    "TeamId": 13,
-    "UserId": 38
-  },
-  {
-    "TeamId": 13,
-    "UserId": 39
-  }
+  {"TeamId": 1, "UserId": 1},
+  {"TeamId": 1, "UserId": 2},
+  {"TeamId": 1, "UserId": 3},
+  {"TeamId": 2, "UserId": 4},
+  {"TeamId": 2, "UserId": 5},
+  {"TeamId": 2, "UserId": 6},
+  {"TeamId": 3, "UserId": 7},
+  {"TeamId": 3, "UserId": 8},
+  {"TeamId": 3, "UserId": 9},
+  {"TeamId": 4, "UserId": 10},
+  {"TeamId": 4, "UserId": 11},
+  {"TeamId": 4, "UserId": 12},
+  {"TeamId": 5, "UserId": 13},
+  {"TeamId": 5, "UserId": 14},
+  {"TeamId": 5, "UserId": 15},
+  {"TeamId": 6, "UserId": 16},
+  {"TeamId": 6, "UserId": 17},
+  {"TeamId": 6, "UserId": 18},
+  {"TeamId": 7, "UserId": 19},
+  {"TeamId": 7, "UserId": 20},
+  {"TeamId": 7, "UserId": 21},
+  {"TeamId": 8, "UserId": 22},
+  {"TeamId": 8, "UserId": 23},
+  {"TeamId": 8, "UserId": 24},
+  {"TeamId": 9, "UserId": 25},
+  {"TeamId": 9, "UserId": 26},
+  {"TeamId": 9, "UserId": 27},
+  {"TeamId": 10, "UserId": 28},
+  {"TeamId": 10, "UserId": 29},
+  {"TeamId": 10, "UserId": 30},
+  {"TeamId": 11, "UserId": 31},
+  {"TeamId": 11, "UserId": 32},
+  {"TeamId": 11, "UserId": 33},
+  {"TeamId": 12, "UserId": 34},
+  {"TeamId": 12, "UserId": 35},
+  {"TeamId": 12, "UserId": 36},
+  {"TeamId": 13, "UserId": 37},
+  {"TeamId": 13, "UserId": 38},
+  {"TeamId": 13, "UserId": 39},
+  {"TeamId": 1, "UserId": 40},
+  {"TeamId": 1, "UserId": 41},
+  {"TeamId": 1, "UserId": 42},
+  {"TeamId": 2, "UserId": 43},
+  {"TeamId": 2, "UserId": 44},
+  {"TeamId": 2, "UserId": 45},
+  {"TeamId": 3, "UserId": 46},
+  {"TeamId": 3, "UserId": 47},
+  {"TeamId": 3, "UserId": 48},
+  {"TeamId": 4, "UserId": 49},
+  {"TeamId": 4, "UserId": 50},
+  {"TeamId": 4, "UserId": 51},
+  {"TeamId": 5, "UserId": 52},
+  {"TeamId": 5, "UserId": 53},
+  {"TeamId": 5, "UserId": 54},
+  {"TeamId": 6, "UserId": 55},
+  {"TeamId": 6, "UserId": 56},
+  {"TeamId": 6, "UserId": 57},
+  {"TeamId": 7, "UserId": 58},
+  {"TeamId": 7, "UserId": 59},
+  {"TeamId": 7, "UserId": 60},
+  {"TeamId": 8, "UserId": 61},
+  {"TeamId": 8, "UserId": 62},
+  {"TeamId": 8, "UserId": 63},
+  {"TeamId": 9, "UserId": 64},
+  {"TeamId": 9, "UserId": 65},
+  {"TeamId": 9, "UserId": 66},
+  {"TeamId": 10, "UserId": 67},
+  {"TeamId": 10, "UserId": 68},
+  {"TeamId": 10, "UserId": 69},
+  {"TeamId": 11, "UserId": 70},
+  {"TeamId": 11, "UserId": 71},
+  {"TeamId": 11, "UserId": 72},
+  {"TeamId": 12, "UserId": 73},
+  {"TeamId": 12, "UserId": 74},
+  {"TeamId": 12, "UserId": 75},
+  {"TeamId": 13, "UserId": 76},
+  {"TeamId": 13, "UserId": 77},
+  {"TeamId": 13, "UserId": 78}
 ]
