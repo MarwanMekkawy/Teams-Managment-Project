@@ -5,6 +5,11 @@
 > All core functionality is implemented.  
 > Minor improvements and optimizations may be introduced in future updates.
 
+## API Base URL
+
+The base URL for all API requests is:  
+
+[http://teamsmanage.runasp.net/api/v1/](http://teamsmanage.runasp.net/api/v1/)
 
 # Teams Management API
 ![Status](https://img.shields.io/badge/status-feature%20complete-success)
@@ -174,3 +179,4 @@ dotnet run
 ## 👨‍💻 Author
 
 **Marwan** – Software Engineer (.NET)
+
