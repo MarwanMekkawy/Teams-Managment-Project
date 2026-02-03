@@ -1,11 +1,5 @@
-## ✅ Project Status
-
-> **Feature Complete**  
-> This project has reached a stable and feature-complete state.  
-> All core functionality is implemented.  
-> Minor improvements and optimizations may be introduced in future updates.
-
 ## API Base URL
+![CI/CD](https://github.com/MarwanMekkawy/Teams-Managment-Project/actions/workflows/DevDeploy.yml/badge.svg)
 
 The base URL for all API requests is:  
 
@@ -15,6 +9,7 @@ The base URL for all API requests is:
 ![Status](https://img.shields.io/badge/status-feature%20complete-success)
 ![.NET](https://img.shields.io/badge/.NET-8.0-blue)
 ![Architecture](https://img.shields.io/badge/architecture-Clean%20Onion-informational)
+![Deployment](https://img.shields.io/badge/deployment-live-success)
 
 A **production‑ready Team Management REST API** built with **ASP.NET Core (.NET 8)** following **Clean / Onion Architecture** principles. The API manages **organizations, teams, users, projects, and tasks** with full lifecycle support, **soft deletion**, and clear separation of concerns.
 
@@ -179,4 +174,5 @@ dotnet run
 ## 👨‍💻 Author
 
 **Marwan** – Software Engineer (.NET)
+
 
