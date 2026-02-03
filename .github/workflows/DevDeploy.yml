@@ -1,12 +1,17 @@
 name: Build, publish and deploy to MonsterASP.NET
+
 on:
   push:
     branches: [ "main" ]
+
 jobs:
   build_and_deploy:
+    name: Build and deploy
     runs-on: windows-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -14,18 +19,19 @@ jobs:
           dotnet-version: 8.0
 
       - name: Install dependencies
-        run:  dotnet restore TeamsManagmentProject/TeamsManagmentProject/TeamsManagmentProject.sln
+        run: dotnet restore TeamsManagmentProject/TeamsManagmentProject.sln
 
       - name: Build
-        run:  dotnet build TeamsManagmentProject/TeamsManagmentProject/TeamsManagmentProject.sln --configuration Release --no-restore
+        run: dotnet build TeamsManagmentProject/TeamsManagmentProject.sln --configuration Release --no-restore
 
       - name: Publish
-        run:  dotnet publish TeamsManagmentProject/TeamsManagmentProject/TeamsManagmentProject.csproj --configuration Release --output ./publish
+        run: dotnet publish TeamsManagmentProject/TeamsManagmentProject.API.csproj -c Release -o ./publish --no-build          
 
       - name: Deploy to MonsterASP.NET via WebDeploy
         uses: rasmusbuchholdt/simply-web-deploy@2.1.0
         with:
-          website-name: ${{ secrets.WEBSITE_NAME }}
-          server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
-          server-username: ${{ secrets.SERVER_USERNAME }}
-          server-password: ${{ secrets.SERVER_PASSWORD }}
+              website-name:       ${{ secrets.WEBSITE_NAME }}       
+              server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}  
+              server-username:    ${{ secrets.SERVER_USERNAME }}   
+              server-password:    ${{ secrets.SERVER_PASSWORD }}
+              source-path:        ./publish

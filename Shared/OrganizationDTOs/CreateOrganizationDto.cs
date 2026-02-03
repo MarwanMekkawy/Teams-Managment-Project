@@ -8,6 +8,6 @@ namespace Shared.OrganizationDTOs
 {
     public class CreateOrganizationDto  
     {
-        public string Name { get; set; }
+        public required string Name { get; set; }
     }
 }

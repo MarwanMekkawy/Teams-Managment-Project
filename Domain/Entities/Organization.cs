@@ -9,7 +9,7 @@ namespace Domain.Entities
 {
     public class Organization:BaseEntity<int>
     {
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         // Navigation
         public ICollection<User> Users { get; set; } = new List<User>();

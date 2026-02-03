@@ -4,7 +4,7 @@ namespace Domain.Entities
 {
     public class TaskEntity : BaseEntity<int>
     {
-        public string Title { get; set; }
+        public required string Title { get; set; }
         public string? Description { get; set; }
         public DateTime? DueDate { get; set; }
         public TaskEntityStatus Status { get; set; }
@@ -12,7 +12,7 @@ namespace Domain.Entities
         public int? AssigneeId { get; set; }
 
         // Navigation
-        public Project Project { get; set; }
-        public User Assignee { get; set; }
+        public required Project Project { get; set; }
+        public required User Assignee { get; set; }
     }
 }

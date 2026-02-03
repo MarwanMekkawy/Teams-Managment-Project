@@ -9,15 +9,15 @@ namespace Domain.Entities
 {
     public class User: BaseEntity<int>
     {
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
-        public string Email { get; set; }
+        public required string Email { get; set; }
 
         public UserRole Role { get; set; } = UserRole.Member;
 
         public int? OrganizationId { get; set; }
 
-        public string PasswordHash { get; set; }
+        public required string PasswordHash { get; set; }
 
         // Navigation
         public Organization? Organization { get; set; }

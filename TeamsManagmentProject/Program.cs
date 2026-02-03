@@ -60,11 +60,10 @@ namespace TeamsManagmentProject
 
 
 
-            // seeding data & migrations for [monster Asp.net] hosting//
+            // seeding data [monster Asp.net] hosting//
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                db.Database.Migrate();
                 var seeder = new DbInitializer(db);
                 await seeder.InitializeAsync();
             }

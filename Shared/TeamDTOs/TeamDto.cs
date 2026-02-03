@@ -13,7 +13,7 @@ namespace Shared.TeamDTOs
         public DateTime? UpdatedAt { get; set; }
         public bool IsDeleted { get; set; }
 
-        public string Name { get; set; } 
+        public required string Name { get; set; } 
         public int OrganizationId { get; set; }
     }
 }
