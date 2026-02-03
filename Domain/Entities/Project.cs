@@ -9,7 +9,7 @@ namespace Domain.Entities
         public int TeamId { get; set; }
 
         // Navigation
-        public required Team Team { get; set; }
+        public Team? Team { get; set; }
         public ICollection<TaskEntity> Tasks { get; set; } = new List<TaskEntity>();
     }
 }

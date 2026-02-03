@@ -7,7 +7,7 @@ namespace Domain.Entities
         public int UserId { get; set; }
 
         // Navigation
-        public required Team Team { get; set; }
-        public required User User { get; set; }
+        public Team? Team { get; set; }
+        public User? User { get; set; }
     }
 }

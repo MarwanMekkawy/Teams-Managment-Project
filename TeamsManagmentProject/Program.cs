@@ -59,19 +59,29 @@ namespace TeamsManagmentProject
             var app = builder.Build();
 
 
-
-            // seeding data [monster Asp.net] hosting//
-            using (var scope = app.Services.CreateScope())
+            if (!app.Environment.IsDevelopment())
             {
-                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                var seeder = new DbInitializer(db);
-                await seeder.InitializeAsync();
+                // seeding data [monster Asp.net] hosting//
+                using (var scope = app.Services.CreateScope())
+                {
+                    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    var DepSeeder = new DeploymentDbInitializer(db);
+                    await DepSeeder.InitializeAsync();
+                }
             }
 
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                // seeding data devolopment//
+                using (var scope = app.Services.CreateScope())
+                {
+                    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    var seeder = new DbInitializer(db);
+                    await seeder.InitializeAsync();
+                }
+
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
