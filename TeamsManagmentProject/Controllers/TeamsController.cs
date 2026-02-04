@@ -16,15 +16,17 @@ namespace TeamsManagmentProject.API.Controllers
     public class TeamsController(ITeamService _service) : ControllerBase
     {
         /// <summary>
-        /// Retrieves all teams accessible to the authenticated user based on role.
+        /// Retrieves all teams accessible to the authenticated user based on role.[paginated]
         /// </summary>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">The page size.</param>
         /// <response code="200">Teams retrieved successfully.</response>
         [HttpGet]
-        [Authorize(Roles = "Manager,Member")]
-        public async Task<ActionResult<List<TeamDto>>> Get()
+        [Authorize(Roles = "Admin,Manager,TeamLeader,Member")]
+        public async Task<ActionResult<List<TeamDto>>> Get(int pageNumber = 1, int pageSize = 10)
         {
             var ctx = UserClaimsFactory.From(User);
-            return Ok(await _service.GetTeamsByUserCredentialsAsync(ctx));
+            return Ok(await _service.GetTeamsByUserCredentialsAsync(ctx, pageNumber, pageSize));
         }
 
         /// <summary>
@@ -122,29 +124,33 @@ namespace TeamsManagmentProject.API.Controllers
             => Ok(await _service.GetAllDeletedTeamsAsync(pageNumber, pageSize));
 
         /// <summary>
-        /// Retrieves teams belonging to a specific organization.
+        /// Retrieves teams belonging to a specific organization.[paginated]
         /// </summary>
         /// <param name="organizationId">The organization identifier.</param>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">The page size.</param>
         /// <response code="200">Teams retrieved successfully.</response>
         [HttpGet("by-organization/{organizationId}")]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult<List<TeamDto>>> GetByOrganization(int organizationId)
+        public async Task<ActionResult<List<TeamDto>>> GetByOrganization(int organizationId, int pageNumber = 1, int pageSize = 10)
         {
             var ctx = UserClaimsFactory.From(User);
-            return Ok(await _service.GetTeamsByOrganizationAsync(organizationId,ctx));
+            return Ok(await _service.GetTeamsByOrganizationAsync(organizationId, ctx, pageNumber, pageSize));
         }
 
         /// <summary>
-        /// Retrieves teams associated with a specific user.
+        /// Retrieves teams associated with a specific user.[paginated]
         /// </summary>
         /// <param name="userId">The user identifier.</param>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">The page size.</param>
         /// <response code="200">Teams retrieved successfully.</response>
         [HttpGet("by-user/{userId}")]
         [Authorize(Roles = "Admin,Manager,TeamLeader,Member")]
-        public async Task<ActionResult<List<TeamDto>>> GetByUser(int userId)
+        public async Task<ActionResult<List<TeamDto>>> GetByUser(int userId, int pageNumber = 1, int pageSize = 10)
         {
             var ctx = UserClaimsFactory.From(User);
-            return Ok(await _service.GetTeamsByUserAsync(userId,ctx));
+            return Ok(await _service.GetTeamsByUserAsync(userId, ctx, pageNumber, pageSize));
         }
     }
 }

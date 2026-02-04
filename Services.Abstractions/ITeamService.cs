@@ -20,8 +20,8 @@ namespace Services.Abstractions
         Task RestoreAsync(int id, UserClaims userCredentials);
         Task<List<TeamDto>> GetAllDeletedTeamsAsync(int pageNumber, int pageSize);
 
-        Task<List<TeamDto>> GetTeamsByOrganizationAsync(int organizationId, UserClaims userCredentials);      
-        Task<List<TeamDto>> GetTeamsByUserAsync(int userId, UserClaims userCredentials);
-        Task<List<TeamDto>> GetTeamsByUserCredentialsAsync(UserClaims userCredentials);
+        Task<List<TeamDto>> GetTeamsByOrganizationAsync(int organizationId, UserClaims userCredentials,int pageNumber, int pageSize);      
+        Task<List<TeamDto>> GetTeamsByUserAsync(int userId, UserClaims userCredentials, int pageNumber, int pageSize);
+        Task<List<TeamDto>> GetTeamsByUserCredentialsAsync(UserClaims userCredentials, int pageNumber, int pageSize);
     }
 }

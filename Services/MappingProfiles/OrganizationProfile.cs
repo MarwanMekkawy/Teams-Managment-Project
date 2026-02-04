@@ -10,6 +10,7 @@ namespace Services.MappingProfiles
         public OrganizationProfile()
         { 
             CreateMap<Organization, OrganizationDto>();
+            CreateMap<Organization, GetAllOrganizationDto>();
             CreateMap<CreateOrganizationDto, Organization>();
             CreateMap<UpdateOrganizationDto, Organization>();
         }

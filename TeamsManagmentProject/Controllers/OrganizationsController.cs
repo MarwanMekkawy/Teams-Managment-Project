@@ -40,14 +40,14 @@ namespace TeamsManagmentProject.API.Controllers
         }
 
         /// <summary>
-        /// [Admin] Retrieves organizations names with pagination.
+        /// [Admin] Retrieves organizations names and IDs with pagination.[paginated]
         /// </summary>
         /// <param name="pageNumber">Page number.</param>
         /// <param name="pageSize">Number of items per page.</param>
         /// <response code="200">Organizations retrieved successfully.</response>
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<string>>> GetAll(int pageNumber = 1, int pageSize = 10)
+        public async Task<ActionResult<IEnumerable<GetAllOrganizationDto>>> GetAll(int pageNumber = 1, int pageSize = 10)
             => Ok(await _service.GetAllAsync(pageNumber, pageSize));
 
         /// <summary>
