@@ -8,6 +8,7 @@ The base URL for all API requests is:
 # Teams Management API
 ![Status](https://img.shields.io/badge/status-feature%20complete-success)
 ![.NET](https://img.shields.io/badge/.NET-8.0-blue)
+![Databases](https://img.shields.io/badge/databases-PostgreSQL%20|%20SQL%20Server-blue)
 ![Architecture](https://img.shields.io/badge/architecture-Clean%20Onion-informational)
 ![Deployment](https://img.shields.io/badge/deployment-live-success)
 
@@ -174,6 +175,7 @@ dotnet run
 ## 👨‍💻 Author
 
 **Marwan** – Software Engineer (.NET)
+
 
 
 
