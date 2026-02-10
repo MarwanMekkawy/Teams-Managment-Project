@@ -30,9 +30,23 @@ This project is designed to be **CV‑ready**: clean architecture, scalable stru
 
 ---
 
+## 🗄️ Databases
+
+* Edit the `appsettings.json` file to configure your database:
+* DatabaseProvider => ["SqlServer" | "PostgreSql"]
+* configure the corrisponding connection string to your desired database 
+  
+```json
+{
+  "DatabaseProvider": "SqlServer",        // or "PostgreSql"
+}
+```
+---
+
 ## 🧱 Architecture Overview
 
 This project follows **Onion Architecture**, where **dependencies always point inward** toward the domain. The domain layer is completely independent of frameworks and infrastructure concerns.
+
 ---
 
 ## 🧠 Domain Model
@@ -175,6 +189,7 @@ dotnet run
 ## 👨‍💻 Author
 
 **Marwan** – Software Engineer (.NET)
+
 
 
 
