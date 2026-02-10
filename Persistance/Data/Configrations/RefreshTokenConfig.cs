@@ -24,8 +24,7 @@ namespace Persistance.Data.Configrations
             builder.HasIndex(rt => rt.TokenHash)
                    .IsUnique();
 
-            builder.Property(rt => rt.CreatedAt)
-                    .HasDefaultValueSql("GETUTCDATE()");
+            builder.Property(rt => rt.CreatedAt);
 
             builder.Property(rt => rt.ExpiresAt)
                    .IsRequired();

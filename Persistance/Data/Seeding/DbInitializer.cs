@@ -85,10 +85,17 @@ namespace Persistance.Data.Seeding
 
                 if (tasks is not null && tasks.Any())
                 {
+                    // Convert all dates to UTC [adding zones for postgre]
+                    foreach (var task in tasks)
+                    {
+                        if (task.DueDate.HasValue) task.DueDate = DateTime.SpecifyKind(task.DueDate.Value, DateTimeKind.Utc);
+                        if (task.CreatedAt != default) task.CreatedAt = DateTime.SpecifyKind(task.CreatedAt, DateTimeKind.Utc);
+                        if (task.UpdatedAt.HasValue) task.UpdatedAt = DateTime.SpecifyKind(task.UpdatedAt.Value, DateTimeKind.Utc);
+                    }
+
                     await _context.Tasks.AddRangeAsync(tasks);
                     await _context.SaveChangesAsync();
                     Console.WriteLine("Tasks Seeded [6/6]");
-
                 }
             }
         }

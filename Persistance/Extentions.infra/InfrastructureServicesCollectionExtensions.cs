@@ -1,7 +1,7 @@
 ﻿using Domain.Contracts;
 using Domain.Contracts.IRefreshTokens;
 using Domain.Contracts.Security;
-using Microsoft.EntityFrameworkCore;
+using Infrastructure.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistance.Repositories;
@@ -20,7 +20,7 @@ namespace Persistance.Extentions
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration config) 
         {
             //DbContext Connection String 
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
+            services.AddAppDbContext(config);
           
             // repositories registering
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
